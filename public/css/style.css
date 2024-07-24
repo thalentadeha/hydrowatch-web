@@ -1,0 +1,1457 @@
+@font-face {
+    font-family: "IBMPlexMono Bold";
+    src: url("/fonts/IBMPlexMono-Bold.ttf");
+}
+
+@font-face {
+    font-family: "IBMPlexMono SemiBold";
+    src: url("/fonts/IBMPlexMono-SemiBold.ttf");
+}
+
+@font-face {
+    font-family: "IBMPlexMono Medium";
+    src: url("/fonts/IBMPlexMono-Medium.ttf");
+}
+
+@font-face {
+    font-family: "IBMPlexMono";
+    src: url("/fonts/IBMPlexMono-Regular.ttf");
+}
+
+@font-face {
+    font-family: "IBMPlexMono Thin";
+    src: url("/fonts/IBMPlexMono-Thin.ttf");
+}
+
+@font-face {
+    font-family: "IBMPlexMono Light";
+    src: url("/fonts/IBMPlexMono-Light.ttf");
+}
+
+:root {
+    --color-background: #111016;
+    --color-foreground: #1F1E23;
+    --color-accent: #506384;
+    --color-invalid: #845050;
+    --color-primary: #F3F0E5;
+    --color-secondary: #B1B1A7;
+
+    --font-bold: "IBMPlexMono Bold";
+    --font-semibold: "IBMPlexMono SemiBold";
+    --font-medium: "IBMPlexMono Medium";
+    --font-regular: "IBMPlexMono";
+    --font-thin: "IBMPlexMono Thin";
+    --font-light: "IBMPlexMono Light";
+
+    --s1: min(68px, 15vmin);
+    --s2: min(56px, 14vmin);
+    --s3: min(48px, 13vmin);
+    --s4: min(32px, 10vmin);
+    --s5: min(24px, 6vmin);
+    --s6: min(20px, 5vmin);
+    --s7: min(16px, 4vmin);
+    --s8: min(12px, 3vmin);
+    --s9: min(10px, 2vmin);
+
+    --t1: min(5vw, 80px);
+    --t3: min(3vw, 48px);
+    --t5: min(1.5vw, 24px);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+    width: 3px;
+}
+
+::-webkit-scrollbar-track {
+    border: solid 5px transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--color-secondary);
+    cursor: pointer;
+}
+
+html, body {
+    width: 100%;
+    height: 100svh;
+    background: var(--color-background);
+}
+
+header {
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 20;
+    display: flex;
+    position: fixed;
+    align-items: center;
+    background: var(--color-background);
+}
+
+header nav {
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: var(--s5);
+}
+
+header nav img.logo {
+    height: var(--s2);
+    position: relative;
+    padding-right: 5px;
+    left: min(-6px, -.1vmin);
+    border-right: 2px var(--color-primary) solid;
+}
+
+menu {
+    width: 100%;
+    height: auto;
+    margin-left: var(--s8);
+    margin-bottom: 5px;
+    font-size: var(--s5);
+    font-family: var(--font-regular);
+}
+
+menu ul {
+    display: flex;
+    gap: var(--s5);
+    list-style: none;
+    flex-direction: row;
+}
+
+menu ul li  {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+menu ul li a {
+    position: relative;
+    text-decoration: none;
+    color: var(--color-primary);
+    transition: color .2s ease;
+}
+
+menu ul li a span::after {
+    left: 0;
+    width: 0;
+    bottom: -1px;
+    height: 2px;
+    content: "";
+    position: absolute;
+    background: var(--color-primary);
+    transition: width .2s ease-out;
+}
+
+menu ul li img.arrow {
+    height: 0;
+    transition: height .2s ease;
+}
+
+menu ul li:is(:hover, .active) img.arrow {
+    height: var(--s5);
+    transition: height .2s ease;
+}
+
+menu ul li:is(:hover, .active) a span::after {
+    width: 100%;
+    transition: width .2s ease-out;
+}
+
+menu ul li.active a {
+    cursor: default;
+}
+
+header nav #profile {
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+}
+
+header nav #profile .names {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    margin-right: var(--s7);
+}
+
+header nav #profile .names .nickname{
+    font-size: var(--s6);
+    color: var(--color-primary);
+    font-family: var(--font-semibold);
+}
+
+header nav #profile .names .full-name{
+    font-size: var(--s8);
+    color: var(--color-secondary);
+    font-family: var(--font-regular);
+}
+
+header nav #profile img {
+    height: var(--s2);
+    border-radius: 50%;
+    object-fit: contain;
+}
+
+menu .close {
+    display: none;
+}
+
+button {
+    border: none;
+    outline: none;
+    font-size:  var(--s7);
+    font-family: var(--font-semibold);
+}
+
+button.blue {
+    color: var(--color-primary);
+    background-color: var(--color-accent);
+}
+
+button.red {
+    color: var(--color-primary);
+    background-color: var(--color-invalid);
+}
+
+main {
+    z-index: 10;
+    width: 100%;
+    height: 100svh;
+    max-height: 100%;
+    padding-top: 110px;
+    position: relative;
+    max-height: 100svh;
+}
+
+section {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    max-width: 2400px;
+    padding: var(--s5);
+    flex-direction: column;
+    padding-top: 0;
+}
+
+section .title {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    flex-direction: row;
+    align-items: center;
+    padding-bottom: var(--s7);
+    justify-content: space-between;
+    gap: var(--s8);
+}
+
+section .title h1 {
+    flex-grow: .7;
+    text-align: left;
+    font-size: var(--s3);
+    padding-right: var(--s8);
+    color: var(--color-primary);
+    font-family: var(--font-bold);
+    background-color: var(--color-background);
+}
+
+section .title .buttons {
+    flex-grow: .3;
+    height: var(--s3);
+}
+
+section .title .buttons form {
+    width: 100%;
+    height: 100%;
+    gap: var(--s7);
+    display: flex;
+    flex-direction: row;
+}
+
+section .title .buttons form button {
+    height: 100%;
+    width: 100%;
+    padding: 0 var(--s9);
+}
+
+section .table-data {
+    width: 100%;
+    height: 100%;
+    padding: var(--s5);
+    padding-top: 0px;
+    overflow-y: auto;
+    position: relative;
+    background-color: var(--color-foreground);
+}
+
+section .table-data table {
+    width: 100%;
+    max-height: 80svh;
+    border-collapse: collapse;
+}
+
+section table tr {
+    text-align: center;
+    font-size: var(--s5);
+    border-bottom: 1pt solid #F3F0E520;
+}
+
+section table tr th {
+    top: 0;
+    position: sticky;
+    color: var(--color-primary);
+    padding: var(--s5) var(--s7);
+    font-family: var(--font-semibold);
+    background-color: var(--color-foreground);
+}
+
+section table tr th:nth-child(1) {
+    border-left: none;
+}
+
+section table tr td {
+    padding: var(--s7) var(--s9);
+    color: var(--color-secondary);
+    font-family: var(--font-regular);
+}
+
+form {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+form form .password-field {
+    width: 100%;
+    position: relative;
+}
+
+form input, form textarea {
+    border: none;
+    width: 100%;
+    opacity: 0.5;
+    margin: 5px 0;
+    padding: var(--s7);
+    font-size: var(--s7);
+    color: var(--color-secondary);
+    font-family: var(--font-regular);
+    background-color: var(--color-foreground);
+    transition: opacity .4s ease, background-color .5s ease;
+}
+
+form input:not(:placeholder-shown),
+form textarea:not(:placeholder-shown) {
+    opacity: 1;
+    transition: opacity .4s ease;
+}
+
+
+form input:not([value=""]):not(:focus):invalid,
+form textarea:not([value=""]):not(:focus):invalid {
+    background-color: var(--color-invalid);
+    transition: background-color .5s ease;
+}
+
+form input:focus,
+form textarea:focus {
+    opacity: 1;
+    border: none;
+    outline: none;
+    transition: opacity .4s ease, background-color .5s ease;
+}
+
+form input.password {
+    padding-right: min(56px, 14vmin);
+}
+
+form .password-field {
+    position: relative;
+    width: 100%;
+}
+
+form .password-field .eye {
+    top: 0;
+    height: 100%;
+    display: flex;
+    cursor: pointer;
+    right: var(--s7);
+    position: absolute;
+    align-items: center;
+}
+
+form .password-field .eye img{
+    height: var(--s5);
+}
+
+form .password-field .eye img.show {
+    display: block;
+}
+
+form .password-field .eye img.hide {
+    display: none;
+}
+
+form .password-field .eye.active img.show {
+    display: none;
+}
+
+form .password-field .eye.active img.hide {
+    display: block;
+}
+
+dialog {
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+}
+
+dialog .content {
+    margin: 0;
+    top: 50%;
+    left: 50%;
+    width: 90%;
+    height: auto;
+    max-width: 800px;
+    padding: var(--s6);
+    position: absolute;
+    transform: translate(-50%, -50%);
+    background-color: var(--color-background);
+}
+
+dialog .content .text-area {
+    width: 100%;
+    display: flex;
+    gap: var(--s8);
+    align-items: start;
+    flex-direction: row;
+    margin-bottom: var(--s5);
+    justify-content: space-between;
+}
+
+dialog .content .text-area span {
+    font-size: var(--s4);
+    color: var(--color-primary);
+    font-family: var(--font-semibold);
+}
+
+dialog .content .text-area .close {
+    width: var(--s5);
+    cursor: pointer;
+}
+
+dialog .content .time-in-out,
+dialog .content .nfc {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    flex-direction: row;
+    gap: var(--s9);
+}
+
+dialog .content .time-in-out span,
+dialog .content .nfc span {
+    font-size: var(--s7);
+    color: var(--color-primary);
+    font-family: var(--font-semibold);
+}
+
+dialog .content .time-in-out,
+dialog .content .time-in-out span {
+    width: 100%;
+}
+
+dialog .content .buttons {
+    width: 100%;
+    display: flex;
+    gap: var(--s9);
+    flex-direction: row;
+}
+
+input[type=time]::-webkit-calendar-picker-indicator {
+    filter: invert(60%);
+}
+
+dialog .content .desc {
+    height: 20svh;
+    width: 100%;
+    resize: none;
+}
+
+dialog button {
+    width: 100%;
+    padding: var(--s8) 0;
+    margin-top: var(--s5);
+}
+
+main.login {
+    display: flex;
+    padding-top: 0;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+main.login section{
+    width: 100%;
+    height: auto;
+    display: flex;
+    max-width: 450px;
+    position: relative;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+main.login section span.logo {
+    font-size: var(--s1);
+    margin-bottom: var(--s6);
+    color: var(--color-primary);
+    font-family: var(--font-bold);
+}
+
+main.login section span.warning {
+    font-size: var(--s7);
+    margin-top: var(--s7);
+    color: var(--color-primary);
+    font-family: var(--font-semibold);
+    background-color: var(--color-invalid);
+}
+
+button.login {
+    width: 100%;
+    padding: var(--s8) 0;
+    margin-top: var(--s5);
+}
+
+main.home section {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    gap: var(--s9);
+    padding-top: var(--s5);
+    position: relative;
+    grid-auto-columns: 1fr;
+    justify-content: center;
+    grid-template-areas:
+        "b1 b1 b3 b3 b3 b3 b3"
+        "b1 b1 b3 b3 b3 b3 b3"
+        "b2 b2 b3 b3 b3 b3 b3"
+        "b2 b2 b5 b5 b6 b6 b6"
+        "b2 b2 b5 b5 b6 b6 b6"
+        "b2 b2 b5 b5 b6 b6 b6"
+    ;
+    color: var(--color-primary);
+    font-family: var(--font-regular);
+}
+
+main.home section .grid-item {
+    padding: var(--s5);
+    background: var(--color-foreground);
+    transition: all .5s ease;
+}
+
+main.home section .g1 {
+    padding: 0;
+    height: 100%;
+    grid-area: b1;
+    gap: var(--s8);
+    display: flex;
+    flex-direction: column;
+    background: none;
+    font-size: var(--t5);
+}
+
+main.home section .g1 .g11 {
+    display: flex;
+    flex-grow: 1;
+    padding: var(--s5);
+    flex-direction: column;
+    background: var(--color-accent);
+}
+
+main.home section .g1 .g12 {
+    display: flex;
+    flex-grow: 1;
+    padding: var(--s5);
+    flex-direction: column;
+    background: var(--color-foreground);
+}
+
+main.home section .g1 span {
+    flex-grow: 1;
+}
+main.home section .g1 .text-container {
+    display: flex;
+    align-items: end;
+    position: relative;
+    bottom: calc(var(--s9) * -1);
+    justify-content: space-between;
+}
+
+main.home section .g1 .text-container span:nth-child(1) {
+    font-size: var(--t1);
+    font-family: var(--font-semibold);
+}
+
+main.home section .g1 .text-container span:nth-child(2) {
+    text-align: right;
+    margin-bottom: min(16px, 1.2vw);
+    color: var(--color-secondary);
+}
+
+main.home section .g2 {
+    height: 100%;
+    display: flex;
+    grid-area: b2;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+main.home section .g2 .table-data {
+    padding: 0;
+    height: 100%;
+    overflow: auto;
+}
+
+main.home section .g2 .table-data tr {
+    font-size: var(--t5);
+}
+
+main.home section .g2 .table-data tr td:nth-child(1) {
+    text-align: left;
+    color: var(--color-primary);
+    font-family: var(--font-bold);
+}
+
+main.home section .g2 .table-data tr td:nth-child(2) {
+    text-align: right;
+}
+
+main.home section .g2 .table-data tr td:nth-child(2)::after {
+    content: "mL";
+}
+
+main.home section .g2 .text-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--s7);
+    font-size: var(--t5);
+}
+
+main.home section .g2 .goto {
+    cursor: pointer;
+    padding: min(.5vw, 5px);
+    border-radius: 50%;
+    height: min(3vw, 34px);
+    background: var(--color-primary);
+    transition: background .2s ease;
+}
+
+main.home section .g3 {
+    height: 100%;
+    width: 100%;
+    grid-area: b3;
+    display: flex;
+    flex-direction: column;
+    color: var(--color-background);
+    background-color: var(--color-secondary);
+}
+main.home section .g3 .text-container {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--s6);
+}
+
+main.home section .g3 .text-container img {
+    cursor: pointer;
+    height: var(--s7);
+}
+
+main.home section .g5 {
+    grid-area: b5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+main.home section .g5 .chart {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+}
+
+main.home section .g5 .text-container {
+    display: flex;
+    position: absolute;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+main.home section .g5 .text-container span {
+    font-size: var(--t5);
+}
+
+main.home section .g5 .text-container span.percentage {
+    font-family: var(--font-bold);
+    font-size: var(--t1);
+}
+
+main.home section .g6 {
+    height: 100%;
+    display: flex;
+    grid-area: b6;
+    overflow: hidden;
+    font-size: var(--t5);
+    flex-direction: column;
+}
+
+main.home section .g6 .table-data {
+    padding: 0;
+    height: 100%;
+    overflow: auto;
+}
+
+main.home section .g6 .table-data tr {
+    font-size: var(--t5);
+}
+
+main.home section .g6 .table-data tr td:nth-child(1) {
+    text-align: left;
+    color: var(--color-primary);
+    font-family: var(--font-bold);
+}
+
+main.home section .g6 .table-data tr td:nth-child(2) {
+    text-align: right;
+}
+
+main.home section .g6 .text-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--s7);
+    font-size: var(--t5);
+}
+
+main.home section .g3 .apexcharts-tooltip.apexcharts-theme-light {
+    border: 0;
+    box-shadow: none;
+    border-radius: 0%;
+    padding: var(--s9);
+    font-size: var(--s3);
+    letter-spacing: 0.5px;
+    color: var(--color-primary);
+    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.6);
+  }
+
+main.home section .g3 .apexcharts-tooltip-title {
+    font-size: 18px;
+    box-shadow: none;
+    background: none;
+    letter-spacing: 0.5px;
+    text-align: center;
+    color: var(--color-primary);
+    border-bottom: 1px solid var(--color-secondary);
+}
+
+main.home section .g3 .apexcharts-xaxistooltip-bottom.apexcharts-theme-light {
+    display: none;
+}
+
+main.home section .g3 .apexcharts-bar-area {
+    fill: var(--color-foreground) !important;
+    transition: fill .2s ease;
+}
+
+main.home section .g3 .apexcharts-bar-area:hover {
+    fill: var(--color-accent) !important;
+    transition: all .2s ease;
+}
+
+main.home section .g5 .apexcharts-xaxistooltip-bottom.apexcharts-theme-light {
+    display: none;
+}
+
+table#container-list tr th:nth-child(1) {
+    width: 20vw;
+}
+
+table#container-list tr th:nth-child(4) {
+    width: 50vw;
+}
+
+table#user-list tr th:nth-child(1) {
+    width: 20vw;
+}
+
+table#user-list tr th:nth-child(2) {
+    width: 40vw;
+}
+
+table#user-list tr th:nth-child(4) {
+    width: 20vw;
+}
+
+main.setting section {
+    display: flex;
+    gap: var(--s8);
+    position: relative;
+    flex-direction: row;
+}
+
+main.setting section .profile {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--s8) var(--s7);
+    background-color: var(--color-foreground);
+}
+
+main.setting section .profile .avatar {
+    border-radius: 50%;
+    margin: var(--s5) 0;
+    width: calc(var(--t1) * 3);
+}
+
+main.setting section .profile .text-area {
+    width: 100%;
+    display: flex;
+    margin-bottom: var(--s8);
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+main.setting section .profile .text-area .name {
+    text-align: center;
+    font-size: var(--t3);
+    color: var(--color-primary);
+    font-family: var(--font-semibold);
+}
+
+main.setting section .profile .text-area .email {
+    text-align: center;
+    font-size: var(--t5);
+    color: var(--color-secondary);
+    font-family: var(--font-regular);
+}
+
+main.setting section button {
+    width: 100%;
+    padding: var(--s8) 0;
+    margin-top: var(--s5);
+    margin-bottom: calc(var(--s9) / 2);
+}
+
+main.setting section .profile .table-data {
+    padding: 0;
+    margin-bottom: var(--s9);
+}
+
+main.setting section .profile table tr {
+    font-size: var(--s5);
+}
+
+main.setting section .profile table tr td:nth-child(1){
+    color: var(--color-primary);
+    font-family: var(--font-semibold);
+    text-align: left;
+}
+
+main.setting section .profile table tr td:nth-child(2){
+    text-align: right;
+}
+
+main.setting section .profile table tr td .arrow {
+    height: calc(var(--t5) * 6 / 9);
+}
+
+main.setting section .schedule {
+    width: 100%;
+    height: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+main.setting section .schedule .text-area {
+    width: 100%;
+    height: auto;
+    margin-bottom: var(--s8);
+}
+
+main.setting section .schedule .text-area span {
+    font-size: var(--s4);
+    color: var(--color-primary);
+    font-family: var(--font-semibold);
+}
+
+main.setting section .schedule .text-area .notification {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+main.setting section .schedule .text-area .notification span {
+    font-size: var(--s5);
+    color: var(--color-secondary);
+    font-family: var(--font-regular);
+}
+
+main.setting section .schedule button {
+    margin-top: var(--s8);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: var(--s1);
+    height: calc(var(--s5) + min(12px, 2vmin));
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+    position: absolute;
+    border-radius: var(--s6);
+    background-color: var(--color-foreground);
+    transition: .4s ease;
+}
+
+.slider:before {
+    left: 10%;
+    top: 50%;
+    content: "";
+    width: var(--s6);
+    height: var(--s6);
+    position: absolute;
+    border-radius: 50%;
+    transform: translate(0%, -50%);
+    background-color: var(--color-primary);
+    transition: .4s ease;
+}
+
+.switch input:checked + .slider {
+    background-color: var(--color-accent);
+}
+
+.switch input:focus + .slider {
+    box-shadow: 0 0 1px var(--color-accent);
+}
+
+.switch input:checked + .slider:before {
+    left: 60%;
+}
+
+
+@media (hover: hover) {
+    button {
+        opacity: 0.8;
+        transition: opacity .4s ease;
+    }
+
+    button:hover {
+        opacity: 1;
+        transition: opacity .4s ease;
+        cursor: pointer;
+    }
+
+    main.home section .g2 .goto {
+        background: var(--color-secondary);
+        transition: background .2s ease;
+    }
+
+    main.home section .g2 .goto:hover {
+        background: var(--color-primary);
+        transition: background .2s ease;
+    }
+}
+
+@media (max-height: 960px) {
+    main.home section {
+        grid-template-areas:
+            "b1 b1 b3 b3 b3 b3 b3"
+            "b1 b1 b3 b3 b3 b3 b3"
+            "b2 b2 b5 b5 b6 b6 b6"
+            "b2 b2 b5 b5 b6 b6 b6"
+            "b2 b2 b5 b5 b6 b6 b6"
+            "b2 b2 b5 b5 b6 b6 b6"
+            "b2 b2 b5 b5 b6 b6 b6"
+        ;
+    }
+}
+
+@media (max-height: 600px) {
+    main.home section {
+        grid-template-areas:
+            "b1 b1 b3 b3 b3 b3 b3"
+            "b1 b1 b5 b5 b6 b6 b6"
+            "b1 b1 b5 b5 b6 b6 b6"
+            "b2 b2 b5 b5 b6 b6 b6"
+            "b2 b2 b5 b5 b6 b6 b6"
+            "b2 b2 b5 b5 b6 b6 b6"
+            "b2 b2 b5 b5 b6 b6 b6"
+        ;
+    }
+
+    main.setting {
+        overflow: hidden;
+    }
+
+    main.setting section {
+        overflow: auto;
+        max-height: max-content;
+        flex-direction: column;
+    }
+
+    main.setting section .profile .table-data {
+        height: max-content;
+    }
+
+    main.setting section .profile .avatar {
+        width: calc(var(--s2) * 3);
+    }
+
+    main.setting section .schedule table tr {
+        font-size: var(--s6);
+    }
+}
+
+@media (min-width: 960px) {
+    main.home {
+        display: flex;
+        justify-content: center;
+    }
+
+    main.setting section .schedule .table-data table{
+        height: 100%;
+    }
+}
+
+@media (max-width: 960px) {
+    main {
+        padding-top: 85px;
+    }
+
+    header {
+        align-items: start;
+        background: transparent;
+    }
+
+    header nav {
+        background: var(--color-background);
+        justify-content: space-between;
+        padding: var(--s7);
+    }
+
+    header nav img.logo {
+        left: 0;
+        border-right: none;
+    }
+
+    section {
+        padding: var(--s7);
+    }
+
+    menu {
+        top: 0;
+        left: -108vw;
+        width: 105%;
+        height: 100%;
+        display: flex;
+        position: fixed;
+        align-items: center;
+        justify-content: space-between;
+        background-color: var(--color-background);
+        transition: left 1s ease .9s;
+    }
+
+    menu ul {
+        display: flex;
+        gap: var(--s2);
+        margin-left: min(56px, 10vmin);
+        flex-direction: column;
+    }
+
+    menu .close {
+        right: 0;
+        opacity: 0;
+        display: block;
+        margin-right: var(--s2);
+        margin-left: min(32px, 6vmin);
+        height: min(32px, 7vmin);
+        transition: opacity 1s;
+    }
+
+    menu ul li {
+        opacity: 0;
+        transform: translateX(-60vw);
+        transition: transform 1s ease-out, opacity .4s;
+    }
+
+    menu ul li:nth-child(1) {
+        transition-delay: .5s;
+    }
+
+    menu ul li:nth-child(2) {
+        transition-delay: .4s;
+    }
+
+    menu ul li:nth-child(3) {
+        transition-delay: .3s;
+    }
+
+    .show-menu {
+        left: -3vw;
+        transition: left 1s ease;
+    }
+
+    .show-menu .close {
+        opacity: 1;
+        transition: opacity 1s;
+    }
+
+    .show-menu ul li {
+        opacity: 1;
+        transform: translateX(0);
+        transition: transform 1s ease-out, opacity 2s;
+    }
+
+    .show-menu ul li:nth-child(1) {
+        transition-delay: .7s;
+    }
+
+    .show-menu ul li:nth-child(2) {
+        transition-delay: .8s;
+    }
+
+    .show-menu ul li:nth-child(3) {
+        transition-delay: .9s;
+    }
+
+    header nav #profile .names {
+        display: none;
+    }
+
+    header nav img.logo {
+        left: min(-6px, -.1vmin);
+    }
+
+    header nav #profile img {
+        padding: 3px;
+    }
+
+    section .title h1 {
+        flex-grow: 1;
+    }
+
+    section .title .buttons {
+        flex-grow: 1;
+    }
+
+    section .table-data table tr {
+        font-size: clamp(12px, 2.3vmin, 20px);
+    }
+
+    main.home section .g1 {
+        flex-direction: row;
+    }
+
+    main.home section {
+        padding-top: var(--s7);
+        grid-template-areas:
+            "b1 b1"
+            "b3 b3"
+            "b3 b3"
+            "b3 b3"
+            "b2 b6"
+        ;
+    }
+
+    main.home section .g5 {
+        display: none;
+    }
+
+    main.home section .g1 {
+        font-size: var(--s6);
+    }
+
+    main.home section .g1 .text-container span:nth-child(1) {
+        font-size: var(--s2);
+    }
+
+    main.home section .g2 .text-container {
+        font-size: var(--s6);
+    }
+
+    main.home section .g2 .table-data tr {
+        font-size: var(--s7);
+    }
+
+    main.home section .g2 .goto {
+        padding: calc(var(--s9) / 1.5);
+        height: var(--s4);
+    }
+
+    main.home section .g2 .table-data {
+        min-height: 20svh;
+    }
+
+    main.home section .g6 {
+        font-size: var(--s6);
+    }
+
+    main.home section .g6 .table-data tr {
+        font-size: var(--s7);
+    }
+
+    main.setting section .profile .text-area .name {
+        font-size: var(--s5);
+    }
+
+    main.setting section .profile .text-area .email {
+        font-size: var(--s7);
+    }
+
+    main.setting section .profile table tr {
+        font-size: var(--s6);
+    }
+
+    main.setting section .profile table tr td .arrow {
+        height: var(--s8);
+    }
+}
+
+@media (max-width: 750px) {
+    main.setting {
+        overflow: hidden;
+    }
+
+    main.setting section {
+        overflow: auto;
+        max-height: max-content;
+        flex-direction: column;
+    }
+
+    main.setting section .profile .table-data {
+        height: max-content;
+    }
+
+    main.setting section .profile .avatar {
+        width: calc(var(--s2) * 3);
+    }
+
+    main.setting section .schedule table tr {
+        font-size: var(--s6);
+    }
+}
+
+@media (max-width: 540px) {
+    main {
+        padding-top: min(70px, 17vmin);
+    }
+
+    header nav {
+        padding: var(--s8);
+    }
+
+    header nav img.logo {
+        height: var(--s3);
+    }
+
+    header nav #profile img {
+        height: var(--s3);
+    }
+
+    section {
+        padding: var(--s8);
+    }
+
+    menu ul {
+        display: flex;
+        gap: var(--s2);
+        margin-left: min(56px, 8vmin);
+        flex-direction: column;
+    }
+
+    main.container section .table-data,
+    main.admin section .table-data {
+        background: none;
+        padding: 0;
+    }
+
+    main.container section table#container-list tr,
+    table#user-list tr{
+        border: none;
+        background-color: var(--color-foreground);
+    }
+
+    main.container section table#container-list tr th,
+    table#user-list tr th {
+        display: none;
+    }
+
+    main.container section table#container-list tr td,
+    table#user-list tr td {
+        display: block;
+        text-align: left;
+        padding: 0 var(--s5);
+        color: var(--color-secondary);
+        font-family: var(--font-regular);
+    }
+
+    main.container section table#container-list tr td:nth-child(1) {
+        text-align: center;
+        padding: var(--s8);
+        margin: 0 var(--s6);
+        font-size: var(--s5);
+        margin-bottom: var(--s7);
+        color: var(--color-primary);
+        font-family: var(--font-bold);
+        border-bottom: 1pt solid #F3F0E520;
+    }
+
+    main.container section table#container-list tr td:nth-child(2) {
+        font-size: var(--s7);
+    }
+
+    main.container section table#container-list tr td:nth-child(3) {
+        font-size: var(--s7);
+        margin-bottom: var(--s6);
+    }
+
+    main.container section table#container-list tr td:nth-child(4) {
+        gap: 3px;
+        text-align: justify;
+        font-size: var(--s8);
+        padding-bottom: var(--s5);
+        color: var(--color-secondary);
+        font-family: var(--font-regular);
+        border-bottom: var(--s8) var(--color-background) solid;
+    }
+
+    main.container section table#container-list tr:last-child td:nth-child(4) {
+        border-bottom: none;
+    }
+
+    main.container section table#container-list tr td:nth-child(2)::before {
+        content: "Weight(gram): ";
+        color: var(--color-primary);
+        font-family: var(--font-semibold);
+    }
+
+    main.container section table#container-list tr td:nth-child(3)::before {
+        content: "Volume(mL): ";
+        color: var(--color-primary);
+        font-family: var(--font-semibold);
+    }
+
+    main.container section table#container-list tr td:nth-child(4)::before {
+        content: "Description: ";
+        color: var(--color-primary);
+    }
+
+
+    table#user-list tr td:nth-child(1) {
+        text-align: center;
+        margin: 0 var(--s6);
+        font-size: var(--s5);
+        padding-top: var(--s8);
+        color: var(--color-primary);
+        font-family: var(--font-bold);
+    }
+
+    table#user-list tr td:nth-child(2) {
+        text-align: center;
+        font-size: var(--s7);
+        margin-bottom: var(--s6);
+        padding-bottom: var(--s6);
+        font-family: var(--font-regular);
+        border-bottom: 1pt solid #F3F0E520;
+    }
+
+    table#user-list tr td:nth-child(3) {
+        font-size: var(--s7);
+        font-family: var(--font-regular);
+    }
+
+    table#user-list tr td:nth-child(4) {
+        font-size: var(--s7);
+        padding-bottom: var(--s6);
+        font-family: var(--font-regular);
+        border-bottom: var(--s8) var(--color-background) solid;
+    }
+
+    table#user-list tr:last-child td:nth-child(4) {
+        border-bottom: none;
+    }
+
+    table#user-list tr td:nth-child(3)::before {
+        content: "Nickname: ";
+        color: var(--color-primary);
+        font-family: var(--font-semibold);
+    }
+
+    table#user-list tr td:nth-child(4)::before {
+        content: "Drink Water (mL): ";
+        color: var(--color-primary);
+        font-family: var(--font-semibold);
+    }
+
+    main.home section {
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-wrap: wrap;
+        min-height: 100%;
+        justify-content: start;
+        padding-top: var(--s7);
+    }
+
+    main.home section .g2 .table-data {
+        max-height: 30svh;
+    }
+
+    main.home section .g1 {
+        flex-wrap: wrap;
+        flex-direction: row;
+    }
+}
