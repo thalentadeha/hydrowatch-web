@@ -43,14 +43,14 @@ class AdminMiddleware
             $snapshot = $this->database->getReference('users')->getChild($uid)->getSnapshot();
             $userDoc = $snapshot->getValue();
 
-            if (!$userDoc['isAdmin']) {
+            if ($userDoc['userType'] === 'user') {
                 return redirect()->route('user-dashboard')->withErrors(['error' => 'Unauthorized']);
             }
 
             return $next($request);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return redirect()->route('login')->withErrors(['error' => 'Unauthorized']);
+            return redirect()->route('login_GET')->withErrors(['error' => 'Unauthorized']);
         }
     }
 }
