@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Kreait\Firebase\Contract\Firestore;
 use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Contract\Database;
+use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
 
 class AuthController extends Controller
 {
@@ -50,16 +51,21 @@ class AuthController extends Controller
             $idToken = $signInResult->idToken();
             session(['idToken' => $idToken]);
 
-            $verifiedIdToken = $this->auth->verifyIdToken($idToken);
+            $leewayInSeconds = 360; // 5 minutes
+
+            $verifiedIdToken = $this->auth->verifyIdToken($idToken, $leewayInSeconds);
             $uid = $verifiedIdToken->claims()->get('sub');
             // $userDoc = $this->db->collection('users')->document($uid)->snapshot();
             $snapshot = $this->database->getReference('users')->getChild($uid)->getSnapshot();
             $userDoc = $snapshot->getValue();
 
-            if ($userDoc['isAdmin']) {
+            if ($userDoc['userType'] === 'admin') {
+                if (!$request->has('idToken')) {
+                    return redirect()->route('admin-dashboard-pass-token');
+                }
                 return redirect()->route('admin-dashboard');
             } else {
-                return redirect()->route('welcome');
+                return view('welcome');
             }
         } catch (\Kreait\Firebase\Exception\Auth\InvalidPassword $e) {
             return back()->withErrors(['password' => 'Invalid email or password.']);
