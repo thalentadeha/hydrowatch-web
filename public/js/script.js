@@ -15,7 +15,7 @@ passField.forEach(x => {
 
 const menu = document.querySelector("menu")
 const openMenu = document.querySelector("header nav img.logo")
-const closeMenu = document.querySelector("menu .close") 
+const closeMenu = document.querySelector("menu .close")
 
 
 openMenu.addEventListener("click", () => {
@@ -75,43 +75,43 @@ function getDialogBoxContent(target) {
                 </div>
             `
             break
-        case "AddUser":
-            return `
-                <div class="content">
-                    <div class="text-area">
-                        <span>New User</span>
-                        <img class="close" src="./asset/img/close.png" alt="">
-                    </div>
-                    <form action="">
-                        <input type="text" placeholder="Name">
-                        <input type="text" placeholder="Nickname (Max 20 Character)" maxlength="20">
-                        <input type="email" placeholder="Email">
-                        <div class="password-field">
-                            <input class="password" type="Password" placeholder="Password">
-                            <div class="eye">
-                                <img class="show" src="./asset/img/view.png" alt="">
-                                <img class="hide" src="./asset/img/hide.png" alt="">
-                            </div>
-                        </div>
-                        <button type="button" class="addUser blue">Save New User</button>
-                    </form>
-                </div>
-            `
-            break
-        case "DeleteUser":
-            return `
-                <div class="content">
-                    <div class="text-area">
-                        <span>Delete User</span>
-                        <img class="close" src="./asset/img/close.png" alt="">
-                    </div>
-                    <form action="">
-                        <input type="email" placeholder="Email">
-                        <button type="button" class="deleteUser red">Delete User</button>
-                    </form>
-                </div>
-            `
-            break
+        // case "AddUser":
+        //     return `
+        //         <div class="content">
+        //             <div class="text-area">
+        //                 <span>New User</span>
+        //                 <img class="close" src="./asset/img/close.png" alt="">
+        //             </div>
+        //             <form action="">
+        //                 <input type="text" placeholder="Name">
+        //                 <input type="text" placeholder="Nickname (Max 20 Character)" maxlength="20">
+        //                 <input type="email" placeholder="Email">
+        //                 <div class="password-field">
+        //                     <input class="password" type="Password" placeholder="Password">
+        //                     <div class="eye">
+        //                         <img class="show" src="./asset/img/view.png" alt="">
+        //                         <img class="hide" src="./asset/img/hide.png" alt="">
+        //                     </div>
+        //                 </div>
+        //                 <button type="button" class="addUser blue">Save New User</button>
+        //             </form>
+        //         </div>
+        //     `
+        //     break
+        // case "DeleteUser":
+        //     return `
+        //         <div class="content">
+        //             <div class="text-area">
+        //                 <span>Delete User</span>
+        //                 <img class="close" src="./asset/img/close.png" alt="">
+        //             </div>
+        //             <form action="">
+        //                 <input type="email" placeholder="Email">
+        //                 <button type="button" class="deleteUser red">Delete User</button>
+        //             </form>
+        //         </div>
+        //     `
+        //     break
         case "Nickname":
             return `
                 <div class="content">
@@ -205,19 +205,19 @@ if(DeleteContainer !== null) {
     })
 }
 
-const AddUser = document.querySelector(".AddUser")
-if(AddUser !== null) {
-    AddUser.addEventListener("click", () => {
-        showDialogBox("AddUser")
-    })
-}
+// const AddUser = document.querySelector(".AddUser")
+// if(AddUser !== null) {
+//     AddUser.addEventListener("click", () => {
+//         showDialogBox("AddUser")
+//     })
+// }
 
-const DeleteUser = document.querySelector(".DeleteUser")
-if(DeleteUser !== null) {
-    DeleteUser.addEventListener("click", () => {
-        showDialogBox("DeleteUser")
-    })
-}
+// const DeleteUser = document.querySelector(".DeleteUser")
+// if(DeleteUser !== null) {
+//     DeleteUser.addEventListener("click", () => {
+//         showDialogBox("DeleteUser")
+//     })
+// }
 
 // Setting
 const SettingList = document.querySelector(".table-data #setting-list")
@@ -277,7 +277,7 @@ if(scheduleList !== null) {
             })
         }
     })
-} 
+}
 
 
 // Home
@@ -409,7 +409,7 @@ function createChart(drink, maxDrink) {
                 fontSize: fontSize,
               },
             },
-        
+
             axisBorder: {
               show: false,
             },
@@ -417,11 +417,11 @@ function createChart(drink, maxDrink) {
             axisTicks: {
                 show: false,
             },
-        
+
             crosshairs: {
               show: false,
             },
-        
+
             categories: label,
         },
 
@@ -474,7 +474,7 @@ function createDonut(x) {
         labels: [''],
     };
 
-      
+
       let chart = new ApexCharts(document.querySelector(".g5 .chart"), options);
       chart.render();
 }
@@ -483,4 +483,3 @@ function createDonut(x) {
 // Example for Home
 createDonut(75)
 createChart([1000, 2000, 3000, 5000, 3000, 1000, 2000, 3000, 5000, 3000, 1000, 2000, 3000, 5000, 3000, 1000, 2000, 3000, 5000, 3000, 1000, 2000, 3000, 5000, 3000,1000, 2000, 3000, 5000, 3000, 5000], [5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000])
-        
