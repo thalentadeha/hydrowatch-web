@@ -17,7 +17,7 @@ class UserManagerController extends Controller
     public function __construct(Firestore $firestore, Auth $auth, Database $database)
     {
         $this->auth = $auth;
-        $this->db = $firestore->database();
+        // $this->db = $firestore->database();
         $this->database = $database;
 
         // $firestore = app('firebase.firestore');
@@ -82,13 +82,18 @@ class UserManagerController extends Controller
             return back()->with('error', $th->getMessage());
         }
     }
-    public function deleteUser($emp_id)
+    public function deleteUser(Request $request)
     {
-        try {
-            $this->auth->deleteUser($emp_id);
-            $this->db->collection('users')->document($emp_id)->delete();
+        $email = $request->input('email');
 
-            return back()->with('status', 'User deleted successfully');
+        try {
+            $user = $this->auth->getUserByEmail($email);
+
+            // $this->db->collection('users')->document($user->uid)->delete();
+            $this->database->getReference('users')->getChild($user->uid)->remove();
+            $this->auth->deleteUser($user->uid);
+
+            return redirect()->route('admin-dashboard-pass-token')->with('status', 'User deleted successfully');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'User deletion failed']);
         }

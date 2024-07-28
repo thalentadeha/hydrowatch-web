@@ -49,6 +49,13 @@
             })
         }
 
+        const DeleteUser = document.querySelector(".DeleteUser")
+        if(DeleteUser !== null) {
+            DeleteUser.addEventListener("click", () => {
+                showDialogBox("DeleteUser")
+            })
+        }
+
         function showDialogBox(target) {
             const dialogBox = document.querySelector("dialog")
             const innerDialog = getDialogBoxContent(target)
@@ -100,11 +107,13 @@
                             <div class="content">
                                 <div class="text-area">
                                     <span>Delete User</span>
-                                    <img class="close" src="./asset/img/close.png" alt="">
+                                    <img class="close" src="{{ asset('img/close.png') }}" alt="">
                                 </div>
-                                <form action="">
-                                    <input type="email" placeholder="Email">
-                                    <button type="button" class="deleteUser red">Delete User</button>
+                                <form action="{{ route('deleteUser_POST') }}" method="POST">
+                                    @csrf
+
+                                    <input type="email" placeholder="Email" name="email" required>
+                                    <button type="submit" class="deleteUser red">Delete User</button>
                                 </form>
                             </div>
                             `
