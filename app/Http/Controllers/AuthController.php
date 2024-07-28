@@ -28,6 +28,19 @@ class AuthController extends Controller
 
     public function showLogin()
     {
+        $idToken = session('idToken');
+        $verifiedIdToken = $this->auth->verifyIdToken($idToken);
+        $uid = $verifiedIdToken->claims()->get('sub');
+        // $userDoc = $this->firestore->collection('users')->document($uid)->snapshot();
+        $snapshot = $this->database->getReference('users')->getChild($uid)->getSnapshot();
+        $userDoc = $snapshot->getValue();
+
+        if($userDoc['userType'] === 'admin'){
+            return redirect()->route('admin-dashboard-pass-token');
+        }elseif($userDoc['userType'] === 'user'){
+            // return redirect()->route('admin-dashboard-pass-token');
+        }
+
         return view('auth.login');
     }
 

@@ -19,19 +19,19 @@ class UserMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
 
-     protected $auth;
+    protected $auth;
     protected $db;
     protected $database;
 
     public function __construct(Firestore $firestore, Auth $auth, Database $database)
-   {
-       $this->auth = $auth;
-       // $this->db = $firestore->database();
-       $this->database = $database;
+    {
+        $this->auth = $auth;
+        // $this->db = $firestore->database();
+        $this->database = $database;
 
-       $firestore = app('firebase.firestore');
-       $this->db = $firestore->database();
-   }
+        $firestore = app('firebase.firestore');
+        $this->db = $firestore->database();
+    }
     public function handle(Request $request, Closure $next): Response
     {
         try {
@@ -42,11 +42,13 @@ class UserMiddleware
             $snapshot = $this->database->getReference('users')->getChild($uid)->getSnapshot();
             $userDoc = $snapshot->getValue();
 
-            if ($userDoc['isAdmin'] === 'admin') {
-                return redirect()->route('admin-dashboard')->withErrors(['error' => 'Unauthorized']);
+            if ($userDoc['userType'] === 'user') {
+                return $next($request);
             }
 
-            return $next($request);
+            session()->forget('idToken');
+
+            return redirect()->route('login_GET')->withErrors(['error' => 'Unauthorized, Please re-Login']);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return redirect()->route('login_GET')->withErrors(['error' => 'Unauthorized']);
