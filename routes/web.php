@@ -17,8 +17,9 @@ Route::middleware('login')->group(function () {
         Route::get('admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin-dashboard');
 
         //user management
-        Route::get('admin/register-user', [UserManagerController::class, 'showRegister'])->name('register_GET');
+        // Route::get('admin/register-user', [UserManagerController::class, 'showRegister'])->name('register_GET');
         Route::post('admin/register-user', [UserManagerController::class, 'register'])->name('register_POST');
+        Route::post('admin/delete-user', [UserManagerController::class, 'deleteUser'])->name('deleteUser_POST');
 
         //setting
         Route::get('admin/toSetting', [AdminSettingController::class, 'passToken'])->name('admin-setting-pass-token');
