@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Kreait\Firebase\Contract\Auth;
@@ -33,6 +34,12 @@ class AdminDashboardController extends Controller
     public function index(Request $request)
     {
         $idToken = session('idToken');
+
+        if(!$request->has('idToken')){
+            session()->forget('idToken');
+
+            return redirect()->route('login_GET')->withErrors(['error' => 'No session found. Please login first']);
+        }
 
         $snapshot = $this->database->getReference('users')->getSnapshot();
         $users = $snapshot->getValue();

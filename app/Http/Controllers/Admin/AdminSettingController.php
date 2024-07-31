@@ -36,6 +36,13 @@ class AdminSettingController extends Controller
     public function showSetting(Request $request)
     {
         $idToken = session('idToken');
+
+        if(!$request->has('idToken')){
+            session()->forget('idToken');
+
+            return redirect()->route('login_GET')->withErrors(['error' => 'No session found. Please login first']);
+        }
+
         $verifiedIdToken = $this->auth->verifyIdToken($idToken);
         $uid = $verifiedIdToken->claims()->get('sub');
         // $userDoc = $this->firestore->collection('users')->document($uid)->snapshot();
