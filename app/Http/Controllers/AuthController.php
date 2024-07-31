@@ -29,16 +29,19 @@ class AuthController extends Controller
     public function showLogin()
     {
         $idToken = session('idToken');
-        $verifiedIdToken = $this->auth->verifyIdToken($idToken);
-        $uid = $verifiedIdToken->claims()->get('sub');
-        // $userDoc = $this->firestore->collection('users')->document($uid)->snapshot();
-        $snapshot = $this->database->getReference('users')->getChild($uid)->getSnapshot();
-        $userDoc = $snapshot->getValue();
 
-        if($userDoc['userType'] === 'admin'){
-            return redirect()->route('admin-dashboard-pass-token');
-        }elseif($userDoc['userType'] === 'user'){
-            // return redirect()->route('admin-dashboard-pass-token');
+        if ($idToken !== null) {
+            $verifiedIdToken = $this->auth->verifyIdToken($idToken);
+            $uid = $verifiedIdToken->claims()->get('sub');
+            // $userDoc = $this->firestore->collection('users')->document($uid)->snapshot();
+            $snapshot = $this->database->getReference('users')->getChild($uid)->getSnapshot();
+            $userDoc = $snapshot->getValue();
+
+            if ($userDoc['userType'] === 'admin') {
+                return redirect()->route('admin-dashboard-pass-token');
+            } elseif ($userDoc['userType'] === 'user') {
+                return redirect()->route('user-dashboard-pass-token');
+            }
         }
 
         return view('auth.login');
@@ -73,12 +76,9 @@ class AuthController extends Controller
             $userDoc = $snapshot->getValue();
 
             if ($userDoc['userType'] === 'admin') {
-                if (!$request->has('idToken')) {
-                    return redirect()->route('admin-dashboard-pass-token');
-                }
-                return redirect()->route('admin-dashboard');
+                return redirect()->route('admin-dashboard-pass-token');
             } else {
-                return view('welcome');
+                return redirect()->route('user-dashboard-pass-token');;
             }
         } catch (\Kreait\Firebase\Exception\Auth\InvalidPassword $e) {
             return back()->withErrors(['password' => 'Invalid email or password.']);
