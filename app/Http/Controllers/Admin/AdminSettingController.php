@@ -38,7 +38,7 @@ class AdminSettingController extends Controller
         $idToken = session('idToken');
 
         if(!$request->has('idToken')){
-            session()->forget('idToken');
+            $request->session()->forget('idToken');
 
             return redirect()->route('login_GET')->withErrors(['error' => 'No session found. Please login first']);
         }
