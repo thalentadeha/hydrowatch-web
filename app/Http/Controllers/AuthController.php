@@ -91,10 +91,10 @@ class AuthController extends Controller
         }
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         if (session() != null) {
-            session()->forget('idToken');
+            $request->session()->forget('idToken');
         }
 
         return redirect()->route('login_GET');
