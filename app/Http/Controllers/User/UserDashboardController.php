@@ -59,7 +59,9 @@ class UserDashboardController extends Controller
         $percentage = ($drankWater/$targetDrink) * 100;
 
         return view('user.dashboard', [
-
+            'userDoc' => $userDoc,
+            'drankWater' => $drankWater,
+            'percentage' => $percentage,
         ]);
     }
 }

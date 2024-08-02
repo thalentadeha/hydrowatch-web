@@ -48,16 +48,12 @@ class UserSettingController extends Controller
         $snapshot = $this->database->getReference('users')->getChild($uid)->getSnapshot();
         $userDoc = $snapshot->getValue();
 
-        if(empty($userDoc['drankWater'])){
-            $drankWater = 0;
-        }else{
-            $drankWater = $userDoc['drankWater'];
-        }
-        $targetDrink = 2500;
-
-        $percentage = ($drankWater/$targetDrink) * 100;
+        $userAuth = $this->auth->getUser($uid);
+        $email = $userAuth->email;
 
         return view('user.setting', [
+            'userDoc' => $userDoc,
+            'email' => $email,
         ]);
     }
 }

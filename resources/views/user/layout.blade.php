@@ -38,7 +38,15 @@
                 </ul>
                 <img class="close" src="{{ asset('img/close.png') }}" alt="">
             </menu>
-            @yield('profile')
+            {{-- @yield('profile') --}}
+            <div id="profile">
+                <div class="names">
+                    <span class="nickname">{{ $userDoc['nickname'] }}</span>
+                    <span class="full-name">{{ $userDoc['fullname'] }}</span>
+                </div>
+                <img class="avatar" src="asset{{ asset('img/no-avatar.png') }}" alt="">
+            </div>
+
         </nav>
     </header>
     @yield('content')

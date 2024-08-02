@@ -1,6 +1,6 @@
 @extends('user.layout')
 
-@section('profile')
+{{-- @section('profile')
     <div id="profile">
         <div class="names">
             <span class="nickname">{{ $userDoc['nickname'] }}</span>
@@ -8,7 +8,7 @@
         </div>
         <img class="avatar" src="asset{{ asset('img/no-avatar.png') }}" alt="">
     </div>
-@endsection
+@endsection --}}
 
 @section('content')
     <main class="home">

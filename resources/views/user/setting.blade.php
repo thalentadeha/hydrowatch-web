@@ -6,8 +6,8 @@
             <div class="profile">
                 <img class="avatar" src="{{ asset('img/no-avatar.png') }}" alt="">
                 <div class="text-area">
-                    <span class="name">Muhammad Thalenta</span>
-                    <span class="email">m.allen@email.com</span>
+                    <span class="name">{{ $userDoc['fullname'] }}</span>
+                    <span class="email">{{ $email }}</span>
                 </div>
                 <div class="table-data">
                     <table id="setting-list">
@@ -15,7 +15,7 @@
                             <tr class="Nickname">
                                 <td>Nickname</td>
                                 <td>
-                                    <span>Allen</span>
+                                    <span>{{ $userDoc['nicknames'] }}</span>
                                     <img class="arrow" src="{{ asset('img/next.png') }}" alt="">
                                 </td>
                             </tr>
