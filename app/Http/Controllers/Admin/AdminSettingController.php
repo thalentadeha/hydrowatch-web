@@ -13,15 +13,10 @@ class AdminSettingController extends Controller
 {
     protected $auth;
     protected $db;
-    protected $database;
 
-    public function __construct(Firestore $firestore, Auth $auth, Database $database)
+    public function __construct(Firestore $firestore, Auth $auth)
     {
         $this->auth = $auth;
-        // $this->db = $firestore->database();
-        $this->database = $database;
-
-        $firestore = app('firebase.firestore');
         $this->db = $firestore->database();
     }
 
@@ -54,11 +49,9 @@ class AdminSettingController extends Controller
     }
 
     public function getUserData($uid){
-        // $userDoc = $this->firestore->collection('users')->document($uid)->snapshot();
-        $snapshot = $this->database->getReference('users')->getChild($uid)->getSnapshot();
-        $userDoc = $snapshot->getValue();
+        $userData = $this->db->collection('user')->document($uid)->snapshot()->data();
 
-        return $userDoc;
+        return $userData;
     }
 
     public function showSetting(Request $request)
@@ -67,13 +60,13 @@ class AdminSettingController extends Controller
 
         $uid = $this->getUID($idToken);
 
-        $userDoc = $this->getUserData($uid);
+        $userData = $this->getUserData($uid);
 
         $userAuth = $this->auth->getUser($uid);
         $email = $userAuth->email;
 
         return view('admin.setting', [
-            'userDoc' => $userDoc,
+            'userData' => $userData,
             'email' => $email,
         ]);
     }
@@ -129,9 +122,6 @@ class AdminSettingController extends Controller
         }
 
         try {
-
-            // $this->db->collection('users')->document($user->uid)->set($userData);
-
             $this->auth->changeUserPassword($uid, $validated['newPassword']);
 
             return redirect()->route('admin-setting-pass-token')->with('success', 'User registered successfully!');

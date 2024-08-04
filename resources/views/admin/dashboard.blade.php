@@ -23,12 +23,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($usersAuth as $uid => $userAuth)
-                            @if ($users[$uid]['userType'] === 'user')
+                        @foreach ($users as $uid => $user)
+                            @if ($user['role'] === 'user')
                                 <tr>
-                                    <td>{{ $users[$uid]['fullname'] }}</td>
-                                    <td>{{ $userAuth['email'] }}</td>
-                                    <td>{{ $users[$uid]['nickname'] }}</td>
+                                    <td>{{ $user['fullname'] }}</td>
+                                    <td>{{ $email[$uid]['email'] }}</td>
+                                    <td>{{ $user['nickname'] }}</td>
                                     <td>0</td>
                                 </tr>
                             @endif
@@ -91,11 +91,11 @@
                                         </div>
                                     </div>
                                     <div class="radio-group">
-                                        <label>User Type:</label>
+                                        <label>Role:</label>
                                         <div class="options">
-                                            <label><input type="radio" name="userType" value="user" required> User</label>
-                                            <label><input type="radio" name="userType" value="admin" required> Admin</label>
-                                            <label><input type="radio" name="userType" value="dispenser" required> Dispenser</label>
+                                            <label><input type="radio" name="role" value="user" required> User</label>
+                                            <label><input type="radio" name="role" value="admin" required> Admin</label>
+                                            <label><input type="radio" name="role" value="dispenser" required> Dispenser</label>
                                         </div>
                                     </div>
                                     <button type="submit" class="addUser blue">Save New User</button>

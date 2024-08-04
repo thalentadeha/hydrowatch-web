@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Kreait\Firebase\Contract\Auth;
-use Kreait\Firebase\Contract\Database;
 use Kreait\Firebase\Contract\Firestore;
 
 class AdminDashboardController extends Controller
@@ -15,16 +13,13 @@ class AdminDashboardController extends Controller
     protected $db;
     protected $database;
 
-    public function __construct(Firestore $firestore, Auth $auth, Database $database)
+    public function __construct(Firestore $firestore, Auth $auth)
     {
         $this->auth = $auth;
-        // $this->db = $firestore->database();
-        $this->database = $database;
-
-        $firestore = app('firebase.firestore');
         $this->db = $firestore->database();
     }
-    public function passToken(Request $request){
+    public function passToken(Request $request)
+    {
         $idToken = session('idToken');
 
         return redirect()->route('admin-dashboard', [
@@ -35,28 +30,32 @@ class AdminDashboardController extends Controller
     {
         $idToken = session('idToken');
 
-        if(!$request->has('idToken')){
+        if (!$request->has('idToken')) {
             $request->session()->forget('idToken');
 
             return redirect()->route('login_GET')->withErrors(['error' => 'No session found. Please login first']);
         }
 
-        $snapshot = $this->database->getReference('users')->getSnapshot();
-        $users = $snapshot->getValue();
+        $userDocs = $this->db->collection('user')->documents();
 
-        $usersAuth = [];
+        foreach($userDocs as $user){
+            if($user->exists()){
+                $users[$user->id()] = $user->data();
+            }
+        }
+
 
         $listUsersAuth = $this->auth->listUsers();
-
+        $email = [];
         foreach ($listUsersAuth as $userAuth) {
-            $usersAuth[$userAuth->uid] = [
+            $email[$userAuth->uid] = [
                 'email' => $userAuth->email,
             ];
         }
 
         return view('admin.dashboard', [
             'users' => $users,
-            'usersAuth' => $usersAuth,
+            'email' => $email,
         ]);
     }
 }

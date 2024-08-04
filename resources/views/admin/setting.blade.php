@@ -6,8 +6,8 @@
             <div class="profile">
                 <img class="avatar" src="{{ asset('img/no-avatar.png') }}" alt="">
                 <div class="text-area">
-                    <span class="name">{{ $userDoc['fullname'] }}</span>
-                    <span class="name">(ADMIN)</span>
+                    <span class="name">{{ $userData['fullname'] }}</span>
+                    <span class="name">ADMIN</span>
                     <span class="email">{{ $email }}</span>
                 </div>
                 <div class="table-data">

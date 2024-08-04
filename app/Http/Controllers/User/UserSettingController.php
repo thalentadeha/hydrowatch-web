@@ -12,15 +12,9 @@ class UserSettingController extends Controller
 {
     protected $auth;
     protected $db;
-    protected $database;
-
-    public function __construct(Firestore $firestore, Auth $auth, Database $database)
+    public function __construct(Firestore $firestore, Auth $auth)
     {
         $this->auth = $auth;
-        // $this->db = $firestore->database();
-        $this->database = $database;
-
-        $firestore = app('firebase.firestore');
         $this->db = $firestore->database();
     }
     public function passToken(Request $request)
@@ -44,15 +38,13 @@ class UserSettingController extends Controller
 
         $verifiedIdToken = $this->auth->verifyIdToken($idToken);
         $uid = $verifiedIdToken->claims()->get('sub');
-        // $userDoc = $this->firestore->collection('users')->document($uid)->snapshot();
-        $snapshot = $this->database->getReference('users')->getChild($uid)->getSnapshot();
-        $userDoc = $snapshot->getValue();
+        $userData = $this->db->collection('user')->document($uid)->snapshot()->data();
 
         $userAuth = $this->auth->getUser($uid);
         $email = $userAuth->email;
 
         return view('user.setting', [
-            'userDoc' => $userDoc,
+            'userData' => $userData,
             'email' => $email,
         ]);
     }

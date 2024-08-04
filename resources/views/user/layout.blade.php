@@ -41,8 +41,8 @@
             {{-- @yield('profile') --}}
             <div id="profile">
                 <div class="names">
-                    <span class="nickname">{{ $userDoc['nickname'] }}</span>
-                    <span class="full-name">{{ $userDoc['fullname'] }}</span>
+                    <span class="nickname">{{ $userData['nickname'] }}</span>
+                    <span class="full-name">{{ $userData['fullname'] }}</span>
                 </div>
                 <img class="avatar" src="asset{{ asset('img/no-avatar.png') }}" alt="">
             </div>

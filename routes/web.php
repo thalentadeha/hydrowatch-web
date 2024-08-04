@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\UserManagerController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MigrationController;
 use App\Http\Controllers\User\UserContainerController;
 use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\User\UserSettingController;
@@ -45,6 +46,8 @@ Route::middleware('login')->group(function () {
         Route::get('/setting', [UserSettingController::class, 'index'])->name('user-setting');
 
     });
+
+    Route::get('migrate', [MigrationController::class, 'migrate_realtime_firestore']);
 
     Route::post('logout}', [AuthController::class, 'logout'])->name('logout_POST');
 });

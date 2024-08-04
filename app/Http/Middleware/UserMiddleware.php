@@ -21,15 +21,10 @@ class UserMiddleware
 
     protected $auth;
     protected $db;
-    protected $database;
 
-    public function __construct(Firestore $firestore, Auth $auth, Database $database)
+    public function __construct(Firestore $firestore, Auth $auth)
     {
         $this->auth = $auth;
-        // $this->db = $firestore->database();
-        $this->database = $database;
-
-        $firestore = app('firebase.firestore');
         $this->db = $firestore->database();
     }
     public function handle(Request $request, Closure $next): Response
@@ -38,15 +33,13 @@ class UserMiddleware
             $idToken = session('idToken');
             $verifiedIdToken = $this->auth->verifyIdToken($idToken);
             $uid = $verifiedIdToken->claims()->get('sub');
-            // $userDoc = $this->firestore->collection('users')->document($uid)->snapshot();
-            $snapshot = $this->database->getReference('users')->getChild($uid)->getSnapshot();
-            $userDoc = $snapshot->getValue();
+            $userData = $this->db->collection('user')->document($uid)->snapshot()->data();
 
-            if ($userDoc['userType'] === 'user') {
+            if ($userData['role'] === 'user') {
                 return $next($request);
             }
 
-            session()->forget('idToken');
+            $request->session()->forget('idToken');
 
             return redirect()->route('login_GET')->withErrors(['error' => 'Unauthorized, Please re-Login']);
         } catch (\Exception $e) {

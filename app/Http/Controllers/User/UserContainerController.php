@@ -12,15 +12,10 @@ class UserContainerController extends Controller
 {
     protected $auth;
     protected $db;
-    protected $database;
 
-    public function __construct(Firestore $firestore, Auth $auth, Database $database)
+    public function __construct(Firestore $firestore, Auth $auth)
     {
         $this->auth = $auth;
-        // $this->db = $firestore->database();
-        $this->database = $database;
-
-        $firestore = app('firebase.firestore');
         $this->db = $firestore->database();
     }
     public function passToken(Request $request)
@@ -44,21 +39,19 @@ class UserContainerController extends Controller
 
         $verifiedIdToken = $this->auth->verifyIdToken($idToken);
         $uid = $verifiedIdToken->claims()->get('sub');
-        // $userDoc = $this->firestore->collection('users')->document($uid)->snapshot();
-        $snapshot = $this->database->getReference('users')->getChild($uid)->getSnapshot();
-        $userDoc = $snapshot->getValue();
+        $userData = $this->db->collection('user')->document($uid)->snapshot()->data();
 
-        if(empty($userDoc['drankWater'])){
-            $drankWater = 0;
-        }else{
-            $drankWater = $userDoc['drankWater'];
+        $drankWater = 0;
+        if(!empty($userData['drankWater'])){
+            $drankWater = $userData['drankWater'];
         }
+
         $targetDrink = 2500;
 
         $percentage = ($drankWater/$targetDrink) * 100;
 
         return view('user.container', [
-            'userDoc' => $userDoc,
+            'userData' => $userData,
             'drankWater' => $drankWater,
             'percentage' => $percentage
         ]);
