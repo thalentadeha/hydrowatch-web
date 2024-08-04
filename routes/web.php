@@ -27,6 +27,7 @@ Route::middleware('login')->group(function () {
         //setting
         Route::get('admin/toSetting', [AdminSettingController::class, 'passToken'])->name('admin-setting-pass-token');
         Route::get('admin/setting', [AdminSettingController::class, 'showSetting'])->name('admin-setting');
+        Route::post('admin/changePassword', [AdminSettingController::class, 'changePassword'])->name('resetPassword_POST');
     });
 
     //USER
