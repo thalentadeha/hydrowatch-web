@@ -11,7 +11,6 @@ class AdminDashboardController extends Controller
 {
     protected $auth;
     protected $db;
-    protected $database;
 
     public function __construct(Firestore $firestore, Auth $auth)
     {
