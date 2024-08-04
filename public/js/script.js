@@ -140,40 +140,40 @@ function getDialogBoxContent(target) {
                 </div>
             `
             break
-        case "Change Password":
-            return `
-                <div class="content">
-                    <div class="text-area">
-                        <span>Change Password</span>
-                        <img class="close" src="./asset/img/close.png" alt="">
-                    </div>
-                    <form action="">
-                        <div class="password-field">
-                            <input class="password oldPassword" type="Password" placeholder="Old Password">
-                            <div class="eye">
-                                <img class="show" src="./asset/img/view.png" alt="">
-                                <img class="hide" src="./asset/img/hide.png" alt="">
-                            </div>
-                        </div>
-                        <div class="password-field">
-                            <input class="password newPassword" type="Password" placeholder="New Password">
-                            <div class="eye">
-                                <img class="show" src="./asset/img/view.png" alt="">
-                                <img class="hide" src="./asset/img/hide.png" alt="">
-                            </div>
-                        </div>
-                        <div class="password-field">
-                            <input class="password rePassword" type="Password" placeholder="Re-enter new Password">
-                            <div class="eye">
-                                <img class="show" src="./asset/img/view.png" alt="">
-                                <img class="hide" src="./asset/img/hide.png" alt="">
-                            </div>
-                        </div>
-                        <button type="button" class="changePassword blue">Change Password</button>
-                    </form>
-                </div>
-            `
-            break
+        // case "Change Password":
+        //     return `
+        //         <div class="content">
+        //             <div class="text-area">
+        //                 <span>Change Password</span>
+        //                 <img class="close" src="./asset/img/close.png" alt="">
+        //             </div>
+        //             <form action="">
+        //                 <div class="password-field">
+        //                     <input class="password oldPassword" type="Password" placeholder="Old Password">
+        //                     <div class="eye">
+        //                         <img class="show" src="./asset/img/view.png" alt="">
+        //                         <img class="hide" src="./asset/img/hide.png" alt="">
+        //                     </div>
+        //                 </div>
+        //                 <div class="password-field">
+        //                     <input class="password newPassword" type="Password" placeholder="New Password">
+        //                     <div class="eye">
+        //                         <img class="show" src="./asset/img/view.png" alt="">
+        //                         <img class="hide" src="./asset/img/hide.png" alt="">
+        //                     </div>
+        //                 </div>
+        //                 <div class="password-field">
+        //                     <input class="password rePassword" type="Password" placeholder="Re-enter new Password">
+        //                     <div class="eye">
+        //                         <img class="show" src="./asset/img/view.png" alt="">
+        //                         <img class="hide" src="./asset/img/hide.png" alt="">
+        //                     </div>
+        //                 </div>
+        //                 <button type="button" class="changePassword blue">Change Password</button>
+        //             </form>
+        //         </div>
+        //     `
+        //     break
     }
     return ``
 }
@@ -351,7 +351,7 @@ function createChart(drink, maxDrink) {
                 data: drink,
             },
             {
-                name: "Max Drink",
+                name: "Target Drink",
                 type: 'line',
                 data: maxDrink,
             },
@@ -447,39 +447,39 @@ function createChart(drink, maxDrink) {
     chart.render()
 }
 
-function createDonut(x) {
-    let data = []
-    data.push(x)
-    var options = {
-        series: data,
-        chart: {
-            height: 'auto',
-            width: '125%',
-            type: 'radialBar',
-        },
-        plotOptions: {
-            radialBar: {
-                hollow: {
-                    size: '70%',
-                },
-                track: {
-                    background: white,
-                },
-                dataLabels: {
-                    show: false
-                }
-            },
-        },
-        colors: [blue],
-        labels: [''],
-    };
+// function createDonut(x) {
+//     let data = []
+//     data.push(x)
+//     var options = {
+//         series: data,
+//         chart: {
+//             height: 'auto',
+//             width: '125%',
+//             type: 'radialBar',
+//         },
+//         plotOptions: {
+//             radialBar: {
+//                 hollow: {
+//                     size: '70%',
+//                 },
+//                 track: {
+//                     background: white,
+//                 },
+//                 dataLabels: {
+//                     show: false
+//                 }
+//             },
+//         },
+//         colors: [blue],
+//         labels: [''],
+//     };
 
 
-      let chart = new ApexCharts(document.querySelector(".g5 .chart"), options);
-      chart.render();
-}
+//       let chart = new ApexCharts(document.querySelector(".g5 .chart"), options);
+//       chart.render();
+// }
 
 
 // Example for Home
-createDonut(75)
+// createDonut(75)
 createChart([1000, 2000, 3000, 5000, 3000, 1000, 2000, 3000, 5000, 3000, 1000, 2000, 3000, 5000, 3000, 1000, 2000, 3000, 5000, 3000, 1000, 2000, 3000, 5000, 3000,1000, 2000, 3000, 5000, 3000, 5000], [5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000])
