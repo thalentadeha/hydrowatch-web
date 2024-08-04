@@ -35,6 +35,13 @@ class AuthController extends Controller
             } elseif ($userData['role'] === 'user') {
                 return redirect()->route('user-dashboard-pass-token');
             }
+            } catch (FailedToVerifyToken $e) {
+                return view('auth.login')->with('error', $request->input('error'));
+            }
+        }
+
+        if ($request->has('error')) {
+            return view('auth.login')->with('error', $request->input('error'));
         }
 
         return view('auth.login');

@@ -15,17 +15,22 @@ class LoginMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
 
-     protected $auth;
+    protected $auth;
 
-     public function __construct(Auth $auth)
+    public function __construct(Auth $auth)
     {
         $this->auth = $auth;
     }
     public function handle(Request $request, Closure $next): Response
     {
         $idToken = session('idToken');
+        $idTokenURL = $request->input('idToken');
 
-        if (!$idToken) {
+        if (!$idTokenURL) {
+            if (!$idToken) {
+                return response()->view('auth.tokenExpired');
+            }
+
             return redirect()->route('login_GET')->withErrors(['error' => 'You need to log in.']);
         }
 

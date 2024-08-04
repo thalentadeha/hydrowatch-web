@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Contract\Database;
 use Kreait\Firebase\Contract\Firestore;
+use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
 use Kreait\Firebase\Factory;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -31,6 +32,9 @@ class UserMiddleware
     {
         try {
             $idToken = session('idToken');
+            if (!$idToken) {
+                return response()->view('auth.tokenExpired');
+            }
             $verifiedIdToken = $this->auth->verifyIdToken($idToken);
             $uid = $verifiedIdToken->claims()->get('sub');
             $userData = $this->db->collection('user')->document($uid)->snapshot()->data();
@@ -42,6 +46,8 @@ class UserMiddleware
             $request->session()->forget('idToken');
 
             return redirect()->route('login_GET')->withErrors(['error' => 'Unauthorized, Please re-Login']);
+        } catch (FailedToVerifyToken $e) {
+            return response()->view('auth.tokenExpired');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return redirect()->route('login_GET')->withErrors(['error' => 'Unauthorized']);
