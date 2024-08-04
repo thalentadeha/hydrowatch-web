@@ -19,19 +19,19 @@
                 <ul>
                     <li class="{{ request()->routeIs('user-dashboard') ? 'active' : '' }}">
                         <img class="arrow" src="{{ asset('img/arrow-1.png') }}" alt="">
-                        <a href="{{ route('user-dashboard-pass-token') }}">
+                        <a href="{{ route('user-dashboard', ['idToken' => session('idToken')]) }}">
                             <span>Home</span>
                         </a>
                     </li>
                     <li class="{{ request()->routeIs('user-container') ? 'active' : '' }}">
                         <img class="arrow" src="{{ asset('img/arrow-1.png') }}" alt="">
-                        <a href="{{ route('user-container-pass-token') }}">
+                        <a href="{{ route('user-container', ['idToken' => session('idToken')]) }}">
                             <span>Container</span>
                         </a>
                     </li>
                     <li class="{{ request()->routeIs('user-setting') ? 'active' : '' }}">
                         <img class="arrow" src="{{ asset('img/arrow-1.png') }}" alt="">
-                        <a href="{{ route('user-setting-pass-token') }}">
+                        <a href="{{ route('user-setting', ['idToken' => session('idToken')]) }}">
                             <span>Setting</span>
                         </a>
                     </li>

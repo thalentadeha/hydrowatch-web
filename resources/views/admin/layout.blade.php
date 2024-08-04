@@ -18,13 +18,13 @@
                 <ul>
                     <li class="{{ request()->routeIs('admin-dashboard') ? 'active' : ''}}">
                         <img class="arrow" src="{{ asset('img/arrow-1.png') }}" alt="">
-                        <a href="{{ route('admin-dashboard-pass-token') }}">
+                        <a href="{{ route('admin-dashboard', ['idToken' => session('idToken')]) }}">
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="{{ request()->routeIs('admin-setting') ? 'active' : ''}}">
                         <img class="arrow" src="{{ asset('img/arrow-1.png') }}" alt="">
-                        <a href="{{ route('admin-setting-pass-token') }}">
+                        <a href="{{ route('admin-setting', ['idToken' => session('idToken')]) }}">
                             <span>Setting</span>
                         </a>
                     </li>

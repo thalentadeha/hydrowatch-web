@@ -21,15 +21,6 @@ class AdminSettingController extends Controller
         $this->db = $firestore->database();
     }
 
-    public function passToken(Request $request)
-    {
-        $idToken = session('idToken');
-
-        return redirect()->route('admin-setting', [
-            'idToken' => $idToken
-        ]);
-    }
-
     public function checkToken($request){
         $idToken = session('idToken');
 

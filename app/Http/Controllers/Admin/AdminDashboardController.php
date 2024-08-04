@@ -17,14 +17,6 @@ class AdminDashboardController extends Controller
         $this->auth = $auth;
         $this->db = $firestore->database();
     }
-    public function passToken(Request $request)
-    {
-        $idToken = session('idToken');
-
-        return redirect()->route('admin-dashboard', [
-            'idToken' => $idToken
-        ]);
-    }
     public function index(Request $request)
     {
         $idToken = session('idToken');

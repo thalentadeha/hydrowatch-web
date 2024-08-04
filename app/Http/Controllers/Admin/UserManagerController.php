@@ -53,7 +53,7 @@ class UserManagerController extends Controller
 
             $this->db->collection('user')->document($user->uid)->set($userData);
 
-            return redirect()->route('admin-dashboard-pass-token')->with('success', 'User registered successfully!');
+            return back()->with('success', 'User registered successfully!');
         } catch (\Throwable $th) {
 
             return back()->with('error', $th->getMessage());
@@ -69,7 +69,7 @@ class UserManagerController extends Controller
             $this->db->collection('user')->document($user->uid)->delete();
             $this->auth->deleteUser($user->uid);
 
-            return redirect()->route('admin-dashboard-pass-token')->with('status', 'User deleted successfully');
+            return back()->with('status', 'User deleted successfully');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'User deletion failed']);
         }

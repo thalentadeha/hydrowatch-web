@@ -31,18 +31,16 @@ class AuthController extends Controller
             $userData = $this->db->collection('user')->document($uid)->snapshot()->data();
 
             if ($userData['role'] === 'admin') {
-                return redirect()->route('admin-dashboard-pass-token');
+                return redirect()->route('admin-dashboard', [
+                    'idToken' => $idToken
+                ]);
             } elseif ($userData['role'] === 'user') {
-                return redirect()->route('user-dashboard-pass-token');
-            }
-            } catch (FailedToVerifyToken $e) {
-                return view('auth.login')->with('error', $request->input('error'));
+                return redirect()->route('user-dashboard', [
+                    'idToken' => $idToken
+                ]);
             }
         }
 
-        if ($request->has('error')) {
-            return view('auth.login')->with('error', $request->input('error'));
-        }
 
         return view('auth.login');
     }
@@ -74,9 +72,13 @@ class AuthController extends Controller
             $userData = $this->db->collection('user')->document($uid)->snapshot()->data();
 
             if ($userData['role'] === 'admin') {
-                return redirect()->route('admin-dashboard-pass-token');
+                return redirect()->route('admin-dashboard', [
+                    'idToken' => $idToken
+                ]);
             } else {
-                return redirect()->route('user-dashboard-pass-token');;
+                return redirect()->route('user-dashboard', [
+                    'idToken' => $idToken
+                ]);;
             }
         } catch (\Kreait\Firebase\Exception\Auth\InvalidPassword $e) {
             return back()->withErrors(['password' => 'Invalid email or password.']);
