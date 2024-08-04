@@ -47,6 +47,12 @@
                 dialogBox.querySelector(".content .text-area .close").addEventListener("click", () => {
                     dialogBox.close()
                 })
+
+                const form = dialogBox.querySelector('form');
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    submitForm(new FormData(form));
+                });
             }
         }
 
@@ -85,6 +91,50 @@
                     </form>
                 </div>
             `
+        }
+
+        function submitForm(formData) {
+            fetch('{{ route('resetPassword_POST') }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                    },
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(data => {
+                            throw data;
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        document.querySelector('dialog').close();
+                        alert(data.success);
+                    }
+                })
+                .catch(error => {
+                    if (error.errors) {
+                        showErrors(error.errors);
+                    }
+                });
+        }
+
+        function showErrors(error) {
+            const existingWarning = document.querySelector('.warning-form');
+            if (existingWarning) {
+                existingWarning.remove();
+            }
+            if (error) {
+                const form = document.querySelector('form');
+                const errorSpan = document.createElement('span');
+                errorSpan.className = 'warning-form';
+                errorSpan.textContent = error;
+                form.appendChild(errorSpan);
+            }
         }
     </script>
 @endsection

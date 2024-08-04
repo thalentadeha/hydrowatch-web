@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Contract\Database;
 use Kreait\Firebase\Contract\Firestore;
@@ -72,7 +73,7 @@ class AdminSettingController extends Controller
     }
 
     public function changePassword(Request $request){
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'oldPassword' => [
                 'required',
                 'string',
@@ -100,34 +101,53 @@ class AdminSettingController extends Controller
                 'regex:/[0-9]/',      //atleast 1 number
                 'regex:/[@$!%*?&]/', //atleast 1 symbol
             ],
+        ], [
+            'oldPassword.required' => 'Old password is required.',
+            'oldPassword.min' => 'The old password field must be at least 8 characters.',
+            'oldPassword.regex' => 'The old password must include at least one lowercase letter, one uppercase letter, one number, and one special character.',
+            'newPassword.required' => 'New password is required.',
+            'newPassword.min' => 'The new password must be at least 8 characters.',
+            'newPassword.regex' => 'The new password must include at least one lowercase letter, one uppercase letter, one number, and one special character.',
+            'rePassword.required' => 'Re-entered password is required.',
+            'rePassword.min' => 'Re-entered password must be at least 8 characters.',
+            'rePassword.regex' => 'Re-entered password must include at least one lowercase letter, one uppercase letter, one number, and one special character.',
         ]);
 
-        $idToken = $this->checkToken($request);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->first()], 422);
+        }
+
+        $idToken = session('idToken');
 
         $uid = $this->getUID($idToken);
 
         $userAuth = $this->auth->getUser($uid);
-        $password = $userAuth->passwordHash;
+        $userEmail = $userAuth->email;
 
-        if(!Hash::check($validated['oldPassword'], $password)){
-            return back()->with('error', 'password not matched');
-        }
 
-        if($validated['newPassword'] === $validated['oldPassword']){
-            return back()->with('error', 'choose a different password');
-        }
+        try{
+            $signInResult = $this->auth->signInWithEmailAndPassword($userEmail, $request->oldPassword);
 
-        if($validated['rePassword'] !== $validated['newPassword']){
-            return back()->with('error', 'password not matched');
-        }
+            if($request->newPassword === $request->oldPassword){
+                return response()->json(['errors' => ['The new password must be different from the old password.']], 422);
+            }
 
-        try {
+            if($request->rePassword !== $request->newPassword){
+                return response()->json(['errors' => ['Re-entered password does not match the new password.']], 422);
+            }
+
+            $request->session()->forget('idToken');
+
+            $idToken = $signInResult->idToken();
+            session(['idToken' => $idToken]);
+
+            $validated = $validator->validate();
+
             $this->auth->changeUserPassword($uid, $validated['newPassword']);
 
-            return redirect()->route('admin-setting-pass-token')->with('success', 'User registered successfully!');
-        } catch (\Throwable $th) {
-
-            return back()->with('error', $th->getMessage());
+            return response()->json(['success' => 'Change password successful']);
+        } catch (\Kreait\Firebase\Auth\SignIn\FailedToSignIn $e) {
+            return response()->json(['errors' => ['Invalid old password.']], 422);
         }
     }
 }
