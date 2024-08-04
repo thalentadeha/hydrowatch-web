@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <button type="submit" class="login blue">Login</button>
-                <span class="warning">{{ $errors->first() }}</span>
+                <span class="warning-form">{{ $errors->first() }}</span>
             </form>
         </section>
     </main>

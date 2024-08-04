@@ -78,7 +78,8 @@
     cursor: pointer;
 }
 
-html, body {
+html,
+body {
     width: 100%;
     height: 100svh;
     background: var(--color-background);
@@ -128,7 +129,7 @@ menu ul {
     flex-direction: row;
 }
 
-menu ul li  {
+menu ul li {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -185,13 +186,13 @@ header nav #profile .names {
     margin-right: var(--s7);
 }
 
-header nav #profile .names .nickname{
+header nav #profile .names .nickname {
     font-size: var(--s6);
     color: var(--color-primary);
     font-family: var(--font-semibold);
 }
 
-header nav #profile .names .full-name{
+header nav #profile .names .full-name {
     font-size: var(--s8);
     color: var(--color-secondary);
     font-family: var(--font-regular);
@@ -210,7 +211,7 @@ menu .close {
 button {
     border: none;
     outline: none;
-    font-size:  var(--s7);
+    font-size: var(--s7);
     font-family: var(--font-semibold);
 }
 
@@ -339,7 +340,8 @@ form form .password-field {
     position: relative;
 }
 
-form input, form textarea {
+form input,
+form textarea {
     border: none;
     width: 100%;
     opacity: 0.5;
@@ -392,7 +394,7 @@ form .password-field .eye {
     align-items: center;
 }
 
-form .password-field .eye img{
+form .password-field .eye img {
     height: var(--s5);
 }
 
@@ -410,6 +412,31 @@ form .password-field .eye.active img.show {
 
 form .password-field .eye.active img.hide {
     display: block;
+}
+
+form .radio-group {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+form .radio-group label {
+    width: 150px;
+    text-align: left;
+    color: white;
+}
+
+form .options {
+    display: flex;
+    gap: 20px;
+}
+
+form .options label {
+    display: flex;
+    align-items: left;
+    color: white;
+    margin: 0;
 }
 
 dialog {
@@ -506,7 +533,7 @@ main.login {
     justify-content: center;
 }
 
-main.login section{
+main.login section {
     width: 100%;
     height: auto;
     display: flex;
@@ -524,12 +551,21 @@ main.login section span.logo {
     font-family: var(--font-bold);
 }
 
-main.login section span.warning {
+/* main.login section span.warning {
     font-size: var(--s7);
     margin-top: var(--s7);
     color: var(--color-primary);
     font-family: var(--font-semibold);
     background-color: var(--color-invalid);
+} */
+
+.warning-form {
+    font-size: var(--s7);
+    margin-top: var(--s7);
+    color: var(--color-primary);
+    font-family: var(--font-semibold);
+    background-color: var(--color-invalid);
+    text-align: center;
 }
 
 button.login {
@@ -595,6 +631,7 @@ main.home section .g1 .g12 {
 main.home section .g1 span {
     flex-grow: 1;
 }
+
 main.home section .g1 .text-container {
     display: flex;
     align-items: end;
@@ -672,6 +709,7 @@ main.home section .g3 {
     color: var(--color-background);
     background-color: var(--color-secondary);
 }
+
 main.home section .g3 .text-container {
     width: 100%;
     flex-grow: 1;
@@ -768,7 +806,7 @@ main.home section .g3 .apexcharts-tooltip.apexcharts-theme-light {
     color: var(--color-primary);
     backdrop-filter: blur(10px);
     background: rgba(0, 0, 0, 0.6);
-  }
+}
 
 main.home section .g3 .apexcharts-tooltip-title {
     font-size: 18px;
@@ -881,13 +919,13 @@ main.setting section .profile table tr {
     font-size: var(--s5);
 }
 
-main.setting section .profile table tr td:nth-child(1){
+main.setting section .profile table tr td:nth-child(1) {
     color: var(--color-primary);
     font-family: var(--font-semibold);
     text-align: left;
 }
 
-main.setting section .profile table tr td:nth-child(2){
+main.setting section .profile table tr td:nth-child(2) {
     text-align: right;
 }
 
@@ -969,15 +1007,15 @@ main.setting section .schedule button {
     transition: .4s ease;
 }
 
-.switch input:checked + .slider {
+.switch input:checked+.slider {
     background-color: var(--color-accent);
 }
 
-.switch input:focus + .slider {
+.switch input:focus+.slider {
     box-shadow: 0 0 1px var(--color-accent);
 }
 
-.switch input:checked + .slider:before {
+.switch input:checked+.slider:before {
     left: 60%;
 }
 
@@ -1061,7 +1099,7 @@ main.setting section .schedule button {
         justify-content: center;
     }
 
-    main.setting section .schedule .table-data table{
+    main.setting section .schedule .table-data table {
         height: 100%;
     }
 }
@@ -1319,7 +1357,7 @@ main.setting section .schedule button {
     }
 
     main.container section table#container-list tr,
-    table#user-list tr{
+    table#user-list tr {
         border: none;
         background-color: var(--color-foreground);
     }
