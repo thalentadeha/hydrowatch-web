@@ -98,6 +98,7 @@
                                             <label><input type="radio" name="role" value="dispenser" required> Dispenser</label>
                                         </div>
                                     </div>
+                                    <input type="hidden" name="idToken" value="{{ session('idToken') }}">
                                     <button type="submit" class="addUser blue">Save New User</button>
                                 </form>
                             </div>
@@ -113,6 +114,7 @@
                                     @csrf
 
                                     <input type="email" placeholder="Email" name="email" required>
+                                    <input type="hidden" name="idToken" value="{{ session('idToken') }}">
                                     <button type="submit" class="deleteUser red">Delete User</button>
                                 </form>
                             </div>

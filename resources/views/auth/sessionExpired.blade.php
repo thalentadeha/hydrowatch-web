@@ -7,13 +7,13 @@
     <link rel="icon" href="{{ asset('img/icon.png') }}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
     <script type="module" src=" {{ asset('js/script.js') }}"></script>
-    <title>Hydrowatch | Token Expired</title>
+    <title>Hydrowatch | Session Expired</title>
 </head>
 
 <body>
     <div class="content">
         <div class="text-area">
-            <span>Token Expired</span>
+            <span>Session Expired</span>
             <span class="small-span">Please re-login!</span>
         </div>
         <form action="{{ route('login_GET') }}" method="GET">

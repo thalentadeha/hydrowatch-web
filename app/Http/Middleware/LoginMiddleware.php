@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Kreait\Firebase\Contract\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -28,9 +29,9 @@ class LoginMiddleware
 
         if (!$idTokenURL) {
             if (!$idToken) {
-                return response()->view('auth.tokenExpired');
+                return response()->view('auth.sessionExpired');
             }
-
+            Log::debug("id token is not in url");
             return redirect()->route('login_GET')->withErrors(['error' => 'You need to log in.']);
         }
 

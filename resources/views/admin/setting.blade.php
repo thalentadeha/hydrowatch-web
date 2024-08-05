@@ -87,6 +87,7 @@
                                 <img class="hide" src="{{ asset('img/hide.png') }}" alt="">
                             </div>
                         </div>
+                        <input type="hidden" name="idToken" value="{{ session('idToken') }}">
                         <button type="submit" class="changePassword blue">Change Password</button>
                     </form>
                 </div>

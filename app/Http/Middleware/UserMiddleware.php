@@ -33,7 +33,7 @@ class UserMiddleware
         try {
             $idToken = session('idToken');
             if (!$idToken) {
-                return response()->view('auth.tokenExpired');
+                return response()->view('auth.sessionExpired');
             }
             $verifiedIdToken = $this->auth->verifyIdToken($idToken);
             $uid = $verifiedIdToken->claims()->get('sub');
@@ -47,7 +47,7 @@ class UserMiddleware
 
             return redirect()->route('login_GET')->withErrors(['error' => 'Unauthorized, Please re-Login']);
         } catch (FailedToVerifyToken $e) {
-            return response()->view('auth.tokenExpired');
+            return response()->view('auth.sessionExpired');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return redirect()->route('login_GET')->withErrors(['error' => 'Unauthorized']);
