@@ -27,10 +27,13 @@ class LoginMiddleware
         $idToken = session('idToken');
         $idTokenURL = $request->input('idToken');
 
+        if (!$idToken) {
+            return response()->view('auth.sessionExpired');
+        }
+
         if (!$idTokenURL) {
-            if (!$idToken) {
-                return response()->view('auth.sessionExpired');
-            }
+
+            $request->session()->forget('idToken');
             Log::debug("id token is not in url");
             return redirect()->route('login_GET')->withErrors(['error' => 'You need to log in.']);
         }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
@@ -13,33 +14,24 @@ class UserDashboardController extends Controller
 {
     protected $auth;
     protected $db;
+    protected $tokenController;
+    protected $authController;
 
-    public function __construct(Firestore $firestore, Auth $auth)
-    {
+    public function __construct(
+        Firestore $firestore,
+        Auth $auth,
+        AuthController $authController
+    ) {
         $this->auth = $auth;
         $this->db = $firestore->database();
-    }
-    public function passToken(Request $request)
-    {
-        $idToken = session('idToken');
-
-        return redirect()->route('user-dashboard', [
-            'idToken' => $idToken
-        ]);
+        $this->authController = $authController;
     }
 
     public function index(Request $request)
     {
         $idToken = session('idToken');
 
-        if (!$request->has('idToken')) {
-            $request->session()->forget('idToken');
-
-            return redirect()->route('login_GET')->withErrors(['error' => 'No session found. Please login first']);
-        }
-
-        $verifiedIdToken = $this->auth->verifyIdToken($idToken);
-        $uid = $verifiedIdToken->claims()->get('sub');
+        $uid = $this->authController->getUID($idToken);
         $userData = $this->db->collection('user')->document($uid)->snapshot();
 
         $drankWater = 0;

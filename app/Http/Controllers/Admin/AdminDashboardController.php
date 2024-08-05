@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Kreait\Firebase\Contract\Auth;
@@ -11,26 +12,25 @@ class AdminDashboardController extends Controller
 {
     protected $auth;
     protected $db;
+    protected $authController;
 
-    public function __construct(Firestore $firestore, Auth $auth)
-    {
+    public function __construct(
+        Firestore $firestore,
+        Auth $auth,
+        AuthController $authController
+    ) {
         $this->auth = $auth;
         $this->db = $firestore->database();
+        $this->authController = $authController;
     }
     public function index(Request $request)
     {
         $idToken = session('idToken');
 
-        if (!$request->has('idToken')) {
-            $request->session()->forget('idToken');
-
-            return redirect()->route('login_GET')->withErrors(['error' => 'No session found. Please login first']);
-        }
-
         $userDocs = $this->db->collection('user')->documents();
 
-        foreach($userDocs as $user){
-            if($user->exists()){
+        foreach ($userDocs as $user) {
+            if ($user->exists()) {
                 $users[$user->id()] = $user->data();
             }
         }

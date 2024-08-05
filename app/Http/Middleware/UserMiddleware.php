@@ -2,13 +2,14 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Controllers\AuthController;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Contract\Database;
 use Kreait\Firebase\Contract\Firestore;
-use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
+use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Factory;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -32,10 +33,8 @@ class UserMiddleware
     {
         try {
             $idToken = session('idToken');
-            if (!$idToken) {
-                return response()->view('auth.sessionExpired');
-            }
-            $verifiedIdToken = $this->auth->verifyIdToken($idToken);
+
+            $verifiedIdToken = $this->auth->verifyIdToken($idToken, 360);
             $uid = $verifiedIdToken->claims()->get('sub');
             $userData = $this->db->collection('user')->document($uid)->snapshot()->data();
 
@@ -43,14 +42,21 @@ class UserMiddleware
                 return $next($request);
             }
 
-            $request->session()->forget('idToken');
+            $this->logout($request);
 
             return redirect()->route('login_GET')->withErrors(['error' => 'Unauthorized, Please re-Login']);
-        } catch (FailedToVerifyToken $e) {
+        } catch (AuthException $e) {
+            $this->logout($request);
             return response()->view('auth.sessionExpired');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+            $this->logout($request);
             return redirect()->route('login_GET')->withErrors(['error' => 'Unauthorized']);
         }
+    }
+
+    public function logout($request)
+    {
+        $request->session()->forget('idToken');
     }
 }
