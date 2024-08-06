@@ -32,9 +32,15 @@ class UserSettingController extends Controller
         $userAuth = $this->auth->getUser($uid);
         $email = $userAuth->email;
 
+        $maxDrink = 0;
+        if(!empty($userData['maxDrink'])){
+            $maxDrink = $userData['maxDrink'];
+        }
+
         return view('user.setting', [
             'userData' => $userData,
             'email' => $email,
+            'maxDrink' => $maxDrink
         ]);
     }
 }

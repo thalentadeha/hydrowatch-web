@@ -16,7 +16,6 @@ Route::post('/login', [AuthController::class, 'login'])->name('login_POST');
 Route::middleware('login')->group(function () {
     //ADMIN
     Route::middleware('admin')->group(function () {
-        Route::get('admin/toDashboard', [AdminDashboardController::class, 'passToken'])->name('admin-dashboard-pass-token');
         Route::get('admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin-dashboard');
 
         //user management
@@ -26,24 +25,22 @@ Route::middleware('login')->group(function () {
 
         //setting
         Route::get('admin/setting', [AdminSettingController::class, 'showSetting'])->name('admin-setting');
-        Route::post('admin/changePassword', [AdminSettingController::class, 'changePassword'])->name('resetPassword_POST');
     });
 
     //USER
     Route::middleware('user')->group(function () {
         //dashboard
-        Route::get('/toDashboard', [UserDashboardController::class, 'passToken'])->name('user-dashboard-pass-token');
         Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user-dashboard');
 
         //container
-        Route::get('/toContainer', [UserContainerController::class, 'passToken'])->name('user-container-pass-token');
         Route::get('/container', [UserContainerController::class, 'index'])->name('user-container');
 
         //setting
-        Route::get('/toSetting', [UserSettingController::class, 'passToken'])->name('user-setting-pass-token');
         Route::get('/setting', [UserSettingController::class, 'index'])->name('user-setting');
-
+        Route::post('changeNickname', [UserManagerController::class, 'changeNickname'])->name('changeNickname_POST');
+        Route::post('setMaxDrink', [UserManagerController::class, 'setMaxDrink'])->name('setMaxDrink_POST');
     });
 
+    Route::post('changePassword', [UserManagerController::class, 'changePassword'])->name('resetPassword_POST');
     Route::post('logout', [AuthController::class, 'logout'])->name('logout_POST');
 });

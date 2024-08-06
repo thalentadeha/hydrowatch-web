@@ -12,6 +12,8 @@
 </head>
 
 <body>
+    <dialog data-modal>
+    </dialog>
     <header>
         <nav>
             <img class="logo" src="{{ asset('img/logo.png') }}" alt="">
