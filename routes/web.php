@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminSettingController;
-use App\Http\Controllers\Admin\UserManagerController;
+use App\Http\Controllers\UserManagerController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\User\UserContainerController;
 use App\Http\Controllers\User\UserDashboardController;
