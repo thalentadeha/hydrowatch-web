@@ -224,10 +224,13 @@ class UserManagerController extends Controller
             ]);
 
             //save in drinkHistory document
-            // $drinkHistoryDoc = $this->db->collection('user')->document($uid)->collection('drinkHistory')->document('2024')->collection('1')->document('1');
-            // $drinkHistoryDoc->update([
-            //     ['path' => 'maxDrink', 'value' => $validated['maxDrink']]
-            // ]);
+            $year = (string) date('Y');
+            $month = (string) date('n');
+            $date = (string) date('d');
+            $drinkHistoryDoc = $this->db->collection('user')->document($uid)->collection('drinkHistory')->document($year)->collection($month)->document($date);
+            $drinkHistoryDoc->set([
+                'maxDrink' => $validated['maxDrink']
+            ], ['merge' => true]);
 
             return response()->json(['success' => 'Set max drink successful']);
         } catch (Exception $e) {

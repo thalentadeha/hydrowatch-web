@@ -32,7 +32,8 @@ class UserDashboardController extends Controller
         $idToken = session('idToken');
 
         $uid = $this->authController->getUID($idToken);
-        $userData = $this->db->collection('user')->document($uid)->snapshot();
+        $userDoc = $this->db->collection('user')->document($uid);
+        $userData = $userDoc->snapshot();
 
         $containerQuery = $this->db->collection('container')->where('userID', '=', $uid);
         $containerDocs = $containerQuery->documents();
@@ -45,13 +46,24 @@ class UserDashboardController extends Controller
         }
 
         $maxDrink = 0;
-        if(!empty($userData['maxDrink'])){
+        if (!empty($userData['maxDrink'])) {
             $maxDrink = $userData['maxDrink'];
         }
 
+        $year = (string) date('Y');
+        $month = (string) date('n');
+        $date = (string) date('d');
+        $userDrinkHistory = $userDoc->collection('drinkHistory')->document($year)->collection($month)->document($date)
+            ->snapshot()->data();
+
+        $lastDrinkTime = '--:--';
+        if (!empty($userDrinkHistory['lastDrink'])) {
+            $lastDrinkTime = substr($userDrinkHistory['lastDrink'], 0, -3);
+        }
+
         $drankWater = 0;
-        if (!empty($userDoc['drankWater'])) {
-            $drankWater = $userData['drankWater'];
+        if (!empty($userDrinkHistory['drank'])) {
+            $drankWater = $userDrinkHistory['drank'];
         }
         $targetDrink = 2500;
 
@@ -63,6 +75,7 @@ class UserDashboardController extends Controller
             'percentage' => $percentage,
             'containerList' => $containerList,
             'maxDrink' => $maxDrink,
+            'lastDrinkTime' => $lastDrinkTime,
         ]);
     }
 }

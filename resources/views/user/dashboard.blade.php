@@ -24,7 +24,7 @@
                 <div class="g12">
                     <span>Last Drink</span>
                     <div class="text-container">
-                        <span>18:00</span>
+                        <span>{{ $lastDrinkTime }}</span>
                     </div>
                 </div>
             </div>
