@@ -313,7 +313,6 @@
                         }
 
                         if (formData.has('maxDrink')) {
-                            // Update the max drink in the UI
                             const maxDrinkElement = document.querySelector('.MaxDrink span');
                             if (maxDrinkElement) {
                                 maxDrinkElement.textContent = `${formData.get('maxDrink')}mL`;

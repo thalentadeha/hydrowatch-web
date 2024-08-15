@@ -34,6 +34,21 @@ class UserDashboardController extends Controller
         $uid = $this->authController->getUID($idToken);
         $userData = $this->db->collection('user')->document($uid)->snapshot();
 
+        $containerQuery = $this->db->collection('container')->where('userID', '=', $uid);
+        $containerDocs = $containerQuery->documents();
+
+        $containerList = [];
+        foreach ($containerDocs as $containerData) {
+            if ($containerData->exists()) {
+                $containerList[$containerData->id()] = $containerData->data();
+            }
+        }
+
+        $maxDrink = 0;
+        if(!empty($userData['maxDrink'])){
+            $maxDrink = $userData['maxDrink'];
+        }
+
         $drankWater = 0;
         if (!empty($userDoc['drankWater'])) {
             $drankWater = $userData['drankWater'];
@@ -46,6 +61,8 @@ class UserDashboardController extends Controller
             'userData' => $userData,
             'drankWater' => $drankWater,
             'percentage' => $percentage,
+            'containerList' => $containerList,
+            'maxDrink' => $maxDrink,
         ]);
     }
 }

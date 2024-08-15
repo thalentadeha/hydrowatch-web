@@ -18,7 +18,7 @@
                     <span>Drank Water</span>
                     <div class="text-container">
                         <span>{{ $drankWater }}</span>
-                        <span>/ 2500mL</span>
+                        <span>/ {{ $maxDrink }}mL</span>
                     </div>
                 </div>
                 <div class="g12">
@@ -41,39 +41,26 @@
             <div class="grid-item g2">
                 <div class="text-container">
                     <span>Container List</span>
-                    <a href="./container.html"><img class="goto" src="{{ asset('img/arrow-2.png') }}" alt=""></a>
+                    <a href="{{ route('user-container', ['idToken' => session('idToken')]) }}"><img class="goto"
+                            src="{{ asset('img/arrow-2.png') }}" alt=""></a>
                 </div>
                 <div class="table-data">
                     <table id="container-list">
                         <tbody>
-                            <tr>
-                                <td>15:AD:30:E3</td>
-                                <td>500</td>
-                            </tr>
-                            <tr>
-                                <td>15:AD:30:E3</td>
-                                <td>500</td>
-                            </tr>
-                            <tr>
-                                <td>15:AD:30:E3</td>
-                                <td>500</td>
-                            </tr>
-                            <tr>
-                                <td>15:AD:30:E3</td>
-                                <td>500</td>
-                            </tr>
-                            <tr>
-                                <td>15:AD:30:E3</td>
-                                <td>500</td>
-                            </tr>
-                            <tr>
-                                <td>15:AD:30:E3</td>
-                                <td>500</td>
-                            </tr>
-                            <tr>
-                                <td>15:AD:30:E3</td>
-                                <td>500</td>
-                            </tr>
+                            @if (!empty($containerList))
+                                @foreach ($containerList as $nfcid => $containerData)
+                                    <tr>
+                                        <td>{{ $nfcid }}</td>
+                                        <td>{{ $containerData['volume'] }}</td>
+                                        <td>{{ $containerData['weight'] }}g</td>
+                                        <td>{{ $containerData['description'] }}</td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="4" style="font-family: var(--font-regular);">No container found.</td>
+                                </tr>
+                            @endif
                         </tbody>
                     </table>
                 </div>

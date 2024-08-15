@@ -217,11 +217,17 @@ class UserManagerController extends Controller
         try {
             $validated = $validator->validate();
 
+            //save in user document
             $userDoc = $this->db->collection('user')->document($uid);
-
             $userDoc->update([
                 ['path' => 'maxDrink', 'value' => $validated['maxDrink']]
             ]);
+
+            //save in drinkHistory document
+            // $drinkHistoryDoc = $this->db->collection('user')->document($uid)->collection('drinkHistory')->document('2024')->collection('1')->document('1');
+            // $drinkHistoryDoc->update([
+            //     ['path' => 'maxDrink', 'value' => $validated['maxDrink']]
+            // ]);
 
             return response()->json(['success' => 'Set max drink successful']);
         } catch (Exception $e) {

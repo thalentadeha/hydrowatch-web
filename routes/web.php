@@ -34,6 +34,8 @@ Route::middleware('login')->group(function () {
 
         //container
         Route::get('/container', [UserContainerController::class, 'index'])->name('user-container');
+        Route::post('addContainer', [UserContainerController::class, 'addContainer'])->name('addContainer_POST');
+        Route::post('deleteContainer', [UserContainerController::class, 'deleteContainer'])->name('deleteContainer_POST');
 
         //setting
         Route::get('/setting', [UserSettingController::class, 'index'])->name('user-setting');
