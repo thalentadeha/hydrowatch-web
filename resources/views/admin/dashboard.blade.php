@@ -29,7 +29,7 @@
                                     <td>{{ $user['fullname'] }}</td>
                                     <td>{{ $email[$uid]['email'] }}</td>
                                     <td>{{ $user['nickname'] }}</td>
-                                    <td>0</td>
+                                    <td>{{ $user['maxDrink'] ?? '0' }}</td>
                                 </tr>
                             @endif
                         @endforeach
@@ -50,7 +50,7 @@
         }
 
         const DeleteUser = document.querySelector(".DeleteUser")
-        if(DeleteUser !== null) {
+        if (DeleteUser !== null) {
             DeleteUser.addEventListener("click", () => {
                 showDialogBox("DeleteUser")
             })
@@ -65,6 +65,12 @@
                 dialogBox.querySelector(".content .text-area .close").addEventListener("click", () => {
                     dialogBox.close()
                 })
+
+                const form = dialogBox.querySelector('form');
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    submitForm(new FormData(form), target);
+                });
             }
         }
 
@@ -119,6 +125,120 @@
                                 </form>
                             </div>
                             `
+            }
+        }
+
+        function submitForm(formData, target) {
+            let ACTION_URL;
+
+            switch (target) {
+                case "AddUser":
+                    ACTION_URL = '{{ route('register_POST') }}';
+                    break;
+                case "DeleteUser":
+                    ACTION_URL = '{{ route('deleteUser_POST') }}';
+                    break;
+            }
+
+
+            fetch(ACTION_URL, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                    },
+                    body: formData
+                }).then(response => {
+                    if (!response.ok) {
+                        return response.json().then(data => {
+                            throw data;
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        document.querySelector('dialog').close();
+                        alert(data.success);
+
+                        updateData(formData, target);
+                    }
+                })
+                .catch(error => {
+                    if (error.errors) {
+                        showErrors(error.errors);
+                    }
+                });
+        }
+
+        function updateData(formData, target) {
+            const email = formData.get('email');
+
+            if (target === "AddUser") {
+                const fullname = formData.get('fullname');
+                const nickname = formData.get('nickname');
+                const drinkWater = '0';
+
+                const userList = document.querySelector('.table-data #user-list tbody');
+                // console.log('userList:', userList);
+                if (userList) {
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = '<td>' + fullname + '</td>' +
+                        '<td>' + email + '</td>' +
+                        '<td>' + nickname + '</td>' +
+                        '<td>' + drinkWater + '</td>';
+
+                    // Get existing rows and convert to array
+                    const rowsArray = Array.from(userList.querySelectorAll('tr'));
+
+                    // Insert the new row in the correct position
+                    let inserted = false;
+                    for (let i = 0; i < rowsArray.length; i++) {
+                        const currentRow = rowsArray[i];
+                        const currentFullname = currentRow.cells[0].textContent.trim().toUpperCase();
+
+                        if (fullname.trim().toUpperCase() < currentFullname) {
+                            userList.insertBefore(newRow, currentRow);
+                            inserted = true;
+                            break;
+                        }
+                    }
+
+                    // If the new row is not inserted (meaning it is the last row), append it
+                    if (!inserted) {
+                        userList.appendChild(newRow);
+                    }
+                }
+            } else {
+                const userList = document.querySelector('.table-data #user-list tbody');
+                if (userList) {
+                    const rowsArray = Array.from(userList.querySelectorAll('tr'));
+
+                    // Find and delete the row with the matching email
+                    for (let i = 0; i < rowsArray.length; i++) {
+                        const currentRow = rowsArray[i];
+                        const currentEmail = currentRow.cells[1].textContent.trim();
+
+                        if (email === currentEmail) {
+                            userList.removeChild(currentRow);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        function showErrors(error) {
+            const existingWarning = document.querySelector('.warning-form');
+            if (existingWarning) {
+                existingWarning.remove();
+            }
+            if (error) {
+                const form = document.querySelector('form');
+                const errorSpan = document.createElement('span');
+                errorSpan.className = 'warning-form';
+                errorSpan.textContent = error;
+                form.appendChild(errorSpan);
             }
         }
     </script>

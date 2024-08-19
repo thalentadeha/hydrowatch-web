@@ -31,7 +31,7 @@ class UserManagerController extends Controller
 
     public function register(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'fullname' => 'required|string',
             'nickname' => 'required|string|max:20',
             'email' => 'required|email',
@@ -45,7 +45,31 @@ class UserManagerController extends Controller
                 'regex:/[@$!%*?&]/', //atleast 1 symbol
             ],
             'role' => 'required|string'
+        ], [
+            'fullname.required' => 'The fullname field is required.',
+            'fullname.string' => 'The fullname must be a string.',
+
+            'nickname.required' => 'The nickname field is required.',
+            'nickname.string' => 'The nickname must be a string.',
+            'nickname.max' => 'The nickname may not be greater than 20 characters.',
+
+            'email.required' => 'The email field is required.',
+            'email.email' => 'The email must be a valid email address.',
+
+            'password.required' => 'The password field is required.',
+            'password.string' => 'The password must be a string.',
+            'password.min' => 'The password must be at least 8 characters.',
+            'password.regex' => 'The password must include at least one lowercase letter, one uppercase letter, one number, and one symbol.',
+
+            'role.required' => 'The role field is required.',
+            'role.string' => 'The role must be a string.',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->first()], 422);
+        }
+
+        $validated = $validator->validate();
 
         $user = $this->auth->createUserWithEmailAndPassword($validated['email'], $validated['password']);
 
@@ -58,10 +82,9 @@ class UserManagerController extends Controller
 
             $this->db->collection('user')->document($user->uid)->set($userData);
 
-            return back()->with('success', 'User registered successfully!');
+            return response()->json(['success' => 'User registered successfully.']);
         } catch (\Throwable $th) {
-
-            return back()->with('error', $th->getMessage());
+            return response()->json(['errors' => ['Something went wrong.']], 422);
         }
     }
     public function deleteUser(Request $request)
@@ -71,12 +94,31 @@ class UserManagerController extends Controller
         try {
             $user = $this->auth->getUserByEmail($email);
 
+            $this->deleteAllUserContainer($request, $user->uid);
+
             $this->db->collection('user')->document($user->uid)->delete();
             $this->auth->deleteUser($user->uid);
 
-            return back()->with('status', 'User deleted successfully');
-        } catch (\Exception $e) {
-            return back()->withErrors(['error' => 'User deletion failed']);
+            return response()->json(['success' => 'All datas associated with the user have been deleted successfully.']);
+        } catch (Exception $e) {
+            return response()->json(['errors' => ['User Not Found.']], 422);
+        }
+    }
+
+    private function deleteAllUserContainer(Request $request, $uid)
+    {
+        try {
+            $containers = $this->db->collection('container')->where('userID', '=', $uid)->documents();
+
+            if ($containers->isEmpty()) {
+                return response()->json(['errors' => ['No containers found for the given user.']], 422);
+            }
+
+            foreach ($containers as $container) {
+                $container->reference()->delete();
+            }
+        } catch (Exception $e) {
+            return response()->json(['errors' => ['User Not Found.']], 422);
         }
     }
 

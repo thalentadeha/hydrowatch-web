@@ -35,6 +35,9 @@ class AdminDashboardController extends Controller
             }
         }
 
+        uasort($users, function ($a, $b) {
+            return strcmp($a['fullname'], $b['fullname']);
+        });
 
         $listUsersAuth = $this->auth->listUsers();
         $email = [];
