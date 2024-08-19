@@ -214,7 +214,7 @@
                     <div class="content">
                         <div class="text-area">
                             <span>Change Working Time - ${j[0].innerText}</span>
-                            <img class="close" src="./asset/img/close.png" alt="">
+                            <img class="close" src="{{ asset('img/close.png') }}" alt="">
                         </div>
                         <form action="">
                             <div class="time-in-out">

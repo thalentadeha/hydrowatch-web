@@ -69,6 +69,68 @@ class UserDashboardController extends Controller
 
         $percentage = ($drankWater / $targetDrink) * 100;
 
+        $dates = $userDoc->collection('drinkHistory')->document($year)->collection($month)->documents();
+        $thisMonthDates = $this->getDatesForMonth($year, $month);
+
+        $allDrankData = [];
+        $allMaxDrinkData = [];
+        $datesDrank = [];
+        foreach ($thisMonthDates as $date) {
+            $dateExists = false;
+            foreach ($dates as $dateDoc) {
+                if ($dateDoc->exists() && $dateDoc->id() == $date) {
+                    $dateExists = true;
+                    $data = $dateDoc->data();
+                    $datesDrank[] = $date;
+
+                    $allDrankData[] = isset($data['drank']) ? $data['drank'] : "0";
+                    $allMaxDrinkData[] = isset($data['maxDrink']) ? $data['maxDrink'] : "0";
+
+                    break;
+                }
+            }
+
+            // set 0 when date is not in db
+            if (!$dateExists) {
+                $datesDrank[] = $date;
+                $allDrankData[] = "0";
+                $allMaxDrinkData[] = "0";
+            }
+        }
+
+        // foreach ($years as $yearDoc) {
+        //     if ($yearDoc->exists()) {
+        //         $months = $userDoc->collection('drinkHistory')
+        //             ->document($yearDoc->id())
+        //             ->collections();
+
+        //         foreach ($months as $monthDoc) {
+
+        //             $dates = $userDoc->collection('drinkHistory')
+        //                 ->document($yearDoc->id())
+        //                 ->collection($monthDoc->id())
+        //                 ->documents();
+
+        //             foreach ($dates as $dateDoc) {
+        //                 if ($dateDoc->exists()) {
+        //                     $data = $dateDoc->data();
+        //                     $dates[] = $dateDoc->id();
+
+        //                     if (isset($data['drank'])) {
+        //                         $allDrankData[] = $data['drank'];
+        //                     }
+
+        //                     if (isset($data['maxDrink'])) {
+        //                         $allMaxDrinkData[] = $data['maxDrink'];
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+        $month = (string) date('F');
+
         return view('user.dashboard', [
             'userData' => $userData,
             'drankWater' => $drankWater,
@@ -76,6 +138,20 @@ class UserDashboardController extends Controller
             'containerList' => $containerList,
             'maxDrink' => $maxDrink,
             'lastDrinkTime' => $lastDrinkTime,
+            'allDrankData' => $allDrankData,
+            'allMaxDrinkData' => $allMaxDrinkData,
+            'month' => $month,
+            'year' => $year,
+            'dates' => $datesDrank,
         ]);
+    }
+
+    function getDatesForMonth($year, $month) {
+        $dates = [];
+        $numDays = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+        for ($day = 1; $day <= $numDays; $day++) {
+            $dates[] = $day;
+        }
+        return $dates;
     }
 }

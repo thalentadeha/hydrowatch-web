@@ -31,7 +31,7 @@
             <div class="grid-item g3">
                 <div class="text-container">
                     <img class="prev" src="{{ asset('img/prev.png') }}" alt="">
-                    <span class="month-year">January 2024</span>
+                    <span class="month-year">{{ $month . " " . $year }}</span>
                     <img class="next" src="{{ asset('img/next_b.png') }}" alt="">
                 </div>
                 <div class="chart">
@@ -93,41 +93,9 @@
 
 @section('script')
     <script>
-        function createDonut(x) {
-            let data = []
-            data.push(x)
-            var options = {
-                series: data,
-                chart: {
-                    height: 'auto',
-                    width: '125%',
-                    type: 'radialBar',
-                },
-                plotOptions: {
-                    radialBar: {
-                        hollow: {
-                            size: '70%',
-                        },
-                        track: {
-                            background: white,
-                        },
-                        dataLabels: {
-                            show: false
-                        }
-                    },
-                },
-                colors: [blue],
-                labels: [''],
-            };
-
-
-            let chart = new ApexCharts(document.querySelector(".g5 .chart"), options);
-            chart.render();
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            let percentage = {{ number_format($percentage) }};
-            createDonut(100);
-        });
+        var dates = @json($dates);
+        var percentage = @json($percentage);
+        var allDrankData = @json($allDrankData);
+        var allMaxDrinkData = @json($allMaxDrinkData);
     </script>
 @endsection
