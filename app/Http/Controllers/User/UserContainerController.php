@@ -133,6 +133,10 @@ class UserContainerController extends Controller
             return response()->json(['errors' => $validator->errors()->first()], 422);
         }
 
+        $idToken = session('idToken');
+
+        $uid = $this->authController->getUID($idToken);
+
         try {
             $validated = $validator->validate();
 
@@ -142,7 +146,10 @@ class UserContainerController extends Controller
                 ":" . $validated['nfc_id4'];
 
             $containerDoc = $this->db->collection('container')->document(strtoupper($containerID));
-            if(!$containerDoc->snapshot()->exists()){
+            if (
+                !$containerDoc->snapshot()->exists() ||
+                $containerDoc->snapshot()->data()['userID'] !== $uid
+            ) {
                 return response()->json(['errors' => ['Container ID not found.']], 422);
             }
 

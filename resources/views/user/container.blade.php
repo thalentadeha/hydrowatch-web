@@ -171,7 +171,7 @@
                         document.querySelector('dialog').close();
                         alert(data.success);
 
-                        // updateData(formData);
+                        updateData(formData, target);
                     }
                 })
                 .catch(error => {
@@ -181,22 +181,22 @@
                 });
         }
 
-        function updateData(formData) {
-            if (formData.has('nfc_id1')) {
-                const nfcid = formData.get('nfc_id1') + ":" +
-                    formData.get('nfc_id2') + ":" +
-                    formData.get('nfc_id3') + ":" +
-                    formData.get('nfc_id4');
+        function updateData(formData, target) {
+            const nfcid = formData.get('nfc_id1') + ":" +
+                formData.get('nfc_id2') + ":" +
+                formData.get('nfc_id3') + ":" +
+                formData.get('nfc_id4');
+            const nfcid_uppercase = nfcid.toUpperCase();
+
+            if (target === "AddContainer") {
                 const weight = formData.get('weight');
                 const volume = formData.get('volume');
-                const description = formData.get('description') != null ? formData.get('description'): '';
+                const description = formData.get('description') != null ? formData.get('description') : '';
 
                 // console.log('NFC ID:', nfcid);
                 // console.log('Weight:', weight);
                 // console.log('Volume:', volume);
                 // console.log('Description:', description);
-
-                const nfcid_uppercase = nfcid.toUpperCase();
 
                 const containerList = document.querySelector('.table-data #container-list tbody');
                 // console.log('containerList:', containerList);
@@ -226,6 +226,22 @@
                     // If the new row is not inserted (meaning it is the last row), append it
                     if (!inserted) {
                         containerList.appendChild(newRow);
+                    }
+                }
+            } else {
+                const containerList = document.querySelector('.table-data #container-list tbody');
+                if (containerList) {
+                    const rowsArray = Array.from(containerList.querySelectorAll('tr'));
+
+                    // Find and delete the row with the matching NFC ID
+                    for (let i = 0; i < rowsArray.length; i++) {
+                        const currentRow = rowsArray[i];
+                        const currentNfcid = currentRow.cells[0].textContent.toUpperCase();
+
+                        if (nfcid_uppercase === currentNfcid) {
+                            containerList.removeChild(currentRow);
+                            break;
+                        }
                     }
                 }
             }
