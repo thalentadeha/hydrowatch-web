@@ -6,6 +6,7 @@ use App\Http\Controllers\UserManagerController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\User\UserContainerController;
 use App\Http\Controllers\User\UserDashboardController;
+use App\Http\Controllers\User\UserNotificationController;
 use App\Http\Controllers\User\UserSettingController;
 use DebugBar\DebugBar;
 use Illuminate\Support\Facades\Route;
@@ -41,6 +42,9 @@ Route::middleware('login')->group(function () {
         Route::get('/setting', [UserSettingController::class, 'index'])->name('user-setting');
         Route::post('changeNickname', [UserManagerController::class, 'changeNickname'])->name('changeNickname_POST');
         Route::post('setMaxDrink', [UserManagerController::class, 'setMaxDrink'])->name('setMaxDrink_POST');
+
+        //notification
+        Route::post('/update-notification-status', [UserNotificationController::class, 'updateNotificationStatus'])->name('updateNotificationStatus_POST');
     });
 
     Route::post('changePassword', [UserManagerController::class, 'changePassword'])->name('resetPassword_POST');

@@ -44,7 +44,8 @@
                     <div class="notification">
                         <span>Notification</span>
                         <label class="switch">
-                            <input type="checkbox">
+                            <input type="checkbox" id="notificationToggle" idToken="{{ session('idToken') }}"
+                                {{ $isNotificationEnabled ? 'checked' : '' }}>
                             <span class="slider round"></span>
                         </label>
                     </div>
@@ -339,6 +340,39 @@
                 errorSpan.textContent = error;
                 form.appendChild(errorSpan);
             }
+        }
+
+        //NOTIFICATION
+        document.getElementById('notificationToggle').addEventListener('change', function() {
+            const isEnabled = this.checked;
+            const sessionToken = this.getAttribute('idToken');
+            console.log('isEnabled:', isEnabled);
+            // console.log('sessionToken:', sessionToken);
+
+            updateNotificationStatus(isEnabled, sessionToken);
+        });
+
+        function updateNotificationStatus(isEnabled, token) {
+            fetch('{{ route('updateNotificationStatus_POST') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    },
+                    body: JSON.stringify({
+                        isNotificationEnabled: isEnabled,
+                        idToken: token,
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.success);
+                        console.log("success");
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         }
     </script>
 @endsection

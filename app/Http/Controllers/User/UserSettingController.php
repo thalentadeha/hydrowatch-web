@@ -37,10 +37,16 @@ class UserSettingController extends Controller
             $maxDrink = $userData['maxDrink'];
         }
 
+        $isNotificationEnabled = false;
+        if(!empty($userData['isNotificationEnabled'])){
+            $isNotificationEnabled = $userData['isNotificationEnabled'];
+        }
+
         return view('user.setting', [
             'userData' => $userData,
             'email' => $email,
-            'maxDrink' => $maxDrink
+            'maxDrink' => $maxDrink,
+            'isNotificationEnabled' => $isNotificationEnabled
         ]);
     }
 }
