@@ -81,43 +81,29 @@ class UserContainerController extends Controller
                 ":" . $validated['nfc_id3'] .
                 ":" . $validated['nfc_id4'];
 
-            $containerDoc = $this->db->collection('container')->document(strtoupper($containerID));
-            $snapshot = $containerDoc->snapshot();
-            $containerData = $snapshot->data();
-            // $containerList = $this->db->collection('container')->documents();
+            $containerDoc = $this->db->collection('container');
+            $containerList = $containerDoc->documents();
 
-            // $containerAvail = false;
-            // foreach ($containerList as $containerDoc) {
-            //     if ($containerDoc->id() === strtoupper($containerID)) {
-            //         $containerAvail = true;
-            //         continue;
-            //     }
-            // }
-
-            // if ($containerAvail) {
-            //     return response()->json(['errors' => ['Container ID already taken.']], 422);
-            // }
-            if (!$snapshot->exists()) {
-                return response()->json(['errors' => ['Container ID not Found.']], 422);
-            }
-
-            if (!empty($containerData['userID'])){
-                if ($containerData['userID'] === $uid){
-                    return response()->json(['errors' => ['Container already added.']], 422);
+            $containerAvail = false;
+            foreach ($containerList as $containerDoc) {
+                if ($containerDoc->id() === strtoupper($containerID)) {
+                    $containerAvail = true;
+                    continue;
                 }
-                return response()->json(['errors' => ['Container already taken.']], 422);
             }
 
-            // $containerData = [
-            //     'userID' => $uid,
-            //     'description' => $validated['containerDesc'],
-            // ];
+            if ($containerAvail) {
+                return response()->json(['errors' => ['Container ID already taken.']], 422);
+            }
 
-            // $this->db->collection('container')->document(strtoupper($containerID))->set($containerData);
-            $containerDoc->update([
-                ['path' => 'userID', 'value' => $uid],
-                ['path' => 'description', 'value' => $validated['containerDesc']]
-            ]);
+            $containerData = [
+                'userID' => $uid,
+                'volume' => -1,
+                'weight' => -1,
+                'description' => $validated['containerDesc'],
+            ];
+
+            $this->db->collection('container')->document(strtoupper($containerID))->set($containerData);
 
             return response()->json(['success' => 'Add container successful']);
         } catch (Exception $e) {

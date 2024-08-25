@@ -51,8 +51,8 @@
                                 @foreach ($containerList as $nfcid => $containerData)
                                     <tr>
                                         <td>{{ $nfcid }}</td>
-                                        <td>{{ $containerData['volume'] }}</td>
-                                        <td>{{ $containerData['weight'] }}g</td>
+                                        <td>{{ $containerData['volume'] !== -1 ? $containerData['volume'] : "set volume at dispenser!"}}</td>
+                                        <td>{{ $containerData['weight'] !== -1 ? $containerData['weight']."g" : "set weight at dispenser!"}}</td>
                                         <td>{{ $containerData['description'] }}</td>
                                     </tr>
                                 @endforeach
