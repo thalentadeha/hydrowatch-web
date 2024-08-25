@@ -99,12 +99,12 @@
                             <span>:</span>
                             <input type="text" placeholder="AA" maxlength="2" name="nfc_id4" required>
                         </div>
-                        {{-- <div class="container">
+                        <div class="container">
                             <span>Container Weight</span>
                             <input type="number" placeholder="gram" name="weight" required>
                             <span>Container Volume</span>
                             <input type="number" placeholder="(100 - 6000)mL" name="volume" required>
-                        </div> --}}
+                        </div>
                         <textarea name="containerDesc" class="desc" placeholder="Container Description"></textarea>
                         <input type="hidden" name="idToken" value="{{ session('idToken') }}">
                         <button type="submit" class="addContainer blue">Save Container</button>
@@ -189,46 +189,45 @@
             const nfcid_uppercase = nfcid.toUpperCase();
 
             if (target === "AddContainer") {
-                location.reload()
-                // const weight = formData.get('weight');
-                // const volume = formData.get('volume');
-                // const description = formData.get('containerDesc') != null ? formData.get('description') : '';
+                const weight = formData.get('weight');
+                const volume = formData.get('volume');
+                const description = formData.get('description') != null ? formData.get('description') : '';
 
                 // console.log('NFC ID:', nfcid);
                 // console.log('Weight:', weight);
                 // console.log('Volume:', volume);
                 // console.log('Description:', description);
 
-                // const containerList = document.querySelector('.table-data #container-list tbody');
+                const containerList = document.querySelector('.table-data #container-list tbody');
                 // console.log('containerList:', containerList);
-                // if (containerList) {
-                //     const newRow = document.createElement('tr');
-                //     newRow.innerHTML = '<td>' + nfcid_uppercase + '</td>' +
-                //         '<td>' + '100' + '</td>' +
-                //         '<td>' + '100' + '</td>' +
-                //         '<td>' + description + '</td>';
+                if (containerList) {
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = '<td>' + nfcid_uppercase + '</td>' +
+                        '<td>' + weight + '</td>' +
+                        '<td>' + volume + '</td>' +
+                        '<td>' + description + '</td>';
 
-                //     // Get existing rows and convert to array
-                //     const rowsArray = Array.from(containerList.querySelectorAll('tr'));
+                    // Get existing rows and convert to array
+                    const rowsArray = Array.from(containerList.querySelectorAll('tr'));
 
-                //     // Insert the new row in the correct position
-                //     let inserted = false;
-                //     for (let i = 0; i < rowsArray.length; i++) {
-                //         const currentRow = rowsArray[i];
-                //         const currentNfcid = currentRow.cells[0].textContent.toUpperCase();
+                    // Insert the new row in the correct position
+                    let inserted = false;
+                    for (let i = 0; i < rowsArray.length; i++) {
+                        const currentRow = rowsArray[i];
+                        const currentNfcid = currentRow.cells[0].textContent.toUpperCase();
 
-                //         if (nfcid_uppercase < currentNfcid) {
-                //             containerList.insertBefore(newRow, currentRow);
-                //             inserted = true;
-                //             break;
-                //         }
-                //     }
+                        if (nfcid_uppercase < currentNfcid) {
+                            containerList.insertBefore(newRow, currentRow);
+                            inserted = true;
+                            break;
+                        }
+                    }
 
-                //     // If the new row is not inserted (meaning it is the last row), append it
-                //     if (!inserted) {
-                //         containerList.appendChild(newRow);
-                //     }
-                // }
+                    // If the new row is not inserted (meaning it is the last row), append it
+                    if (!inserted) {
+                        containerList.appendChild(newRow);
+                    }
+                }
             } else {
                 const containerList = document.querySelector('.table-data #container-list tbody');
                 if (containerList) {
