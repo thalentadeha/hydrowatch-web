@@ -84,7 +84,7 @@ class UserContainerController extends Controller
             $containerDoc = $this->db->collection('container')->document(strtoupper($containerID));
             $snapshot = $containerDoc->snapshot();
             $containerData = $snapshot->data();
-            // $containerList = $this->db->collection('container')->documents();
+            // $containerList = $containerDoc->documents();
 
             // $containerAvail = false;
             // foreach ($containerList as $containerDoc) {
@@ -93,7 +93,6 @@ class UserContainerController extends Controller
             //         continue;
             //     }
             // }
-
             // if ($containerAvail) {
             //     return response()->json(['errors' => ['Container ID already taken.']], 422);
             // }
@@ -101,11 +100,8 @@ class UserContainerController extends Controller
                 return response()->json(['errors' => ['Container ID not Found.']], 422);
             }
 
-            if (!empty($containerData['userID'])){
-                if ($containerData['userID'] === $uid){
-                    return response()->json(['errors' => ['Container already added.']], 422);
-                }
-                return response()->json(['errors' => ['Container already taken.']], 422);
+            if (!empty($containerData['userID']) && $containerData['userID'] === $uid){
+                return response()->json(['errors' => ['Container already added.']], 422);
             }
 
             // $containerData = [
