@@ -4,7 +4,7 @@ passField.forEach(x => {
     const pass = x.querySelector("input.password")
     eye.addEventListener("click", () => {
         eye.classList.toggle("active")
-        if(eye.classList.contains("active")) {
+        if (eye.classList.contains("active")) {
             pass.type = "text"
         }
         else {
@@ -26,184 +26,184 @@ closeMenu.addEventListener("click", () => {
     menu.classList.toggle("show-menu")
 })
 
-function getDialogBoxContent(target) {
-    switch(target) {
-        case "AddContainer":
-            return `
-                <div class="content">
-                    <div class="text-area">
-                        <span>New Container</span>
-                        <img class="close" src="./asset/img/close.png" alt="">
-                    </div>
-                    <form action="">
-                        <div class="nfc">
-                            <span>NFC ID</span>
-                            <input type="text" placeholder="AA" maxlength="2">
-                            <span>:</span>
-                            <input type="text" placeholder="AA" maxlength="2">
-                            <span>:</span>
-                            <input type="text" placeholder="AA" maxlength="2">
-                            <span>:</span>
-                            <input type="text" placeholder="AA" maxlength="2">
-                        </div>
-                        <textarea name="" class="desc" placeholder="Container Description"></textarea>
-                        <button type="button" class="addContainer blue">Save Container</button>
-                    </form>
-                </div>
-            `
-            break
-        case "DeleteContainer":
-            return `
-                <div class="content">
-                    <div class="text-area">
-                        <span>Delete Container</span>
-                        <img class="close" src="./asset/img/close.png" alt="">
-                    </div>
-                    <form action="">
-                        <div class="nfc">
-                            <span>NFC ID</span>
-                            <input type="text" placeholder="AA" maxlength="2">
-                            <span>:</span>
-                            <input type="text" placeholder="AA" maxlength="2">
-                            <span>:</span>
-                            <input type="text" placeholder="AA" maxlength="2">
-                            <span>:</span>
-                            <input type="text" placeholder="AA" maxlength="2">
-                        </div>
-                        <button type="button" class="deleteContainer red">Delete Container</button>
-                    </form>
-                </div>
-            `
-            break
-        // case "AddUser":
-        //     return `
-        //         <div class="content">
-        //             <div class="text-area">
-        //                 <span>New User</span>
-        //                 <img class="close" src="./asset/img/close.png" alt="">
-        //             </div>
-        //             <form action="">
-        //                 <input type="text" placeholder="Name">
-        //                 <input type="text" placeholder="Nickname (Max 20 Character)" maxlength="20">
-        //                 <input type="email" placeholder="Email">
-        //                 <div class="password-field">
-        //                     <input class="password" type="Password" placeholder="Password">
-        //                     <div class="eye">
-        //                         <img class="show" src="./asset/img/view.png" alt="">
-        //                         <img class="hide" src="./asset/img/hide.png" alt="">
-        //                     </div>
-        //                 </div>
-        //                 <button type="button" class="addUser blue">Save New User</button>
-        //             </form>
-        //         </div>
-        //     `
-        //     break
-        // case "DeleteUser":
-        //     return `
-        //         <div class="content">
-        //             <div class="text-area">
-        //                 <span>Delete User</span>
-        //                 <img class="close" src="./asset/img/close.png" alt="">
-        //             </div>
-        //             <form action="">
-        //                 <input type="email" placeholder="Email">
-        //                 <button type="button" class="deleteUser red">Delete User</button>
-        //             </form>
-        //         </div>
-        //     `
-        //     break
-        case "Nickname":
-            return `
-                <div class="content">
-                    <div class="text-area">
-                        <span>Change Nickname</span>
-                        <img class="close" src="./asset/img/close.png" alt="">
-                    </div>
-                    <form action="">
-                        <input type="text" placeholder="Nickname (Max 20 Character)" maxlength="20">
-                        <button type="button" class="changeNickname blue">Save Nickname</button>
-                    </form>
-                </div>
-            `
-            break
-        case "Max Drink":
-            return `
-                <div class="content">
-                    <div class="text-area">
-                        <span>Change Max Drink</span>
-                        <img class="close" src="./asset/img/close.png" alt="">
-                    </div>
-                    <form action="">
-                        <input type="number" placeholder="Max Drink (100 - 6000mL)" min="100" max="6000">
-                        <button type="button" class="changeMaxDrink blue">Save Max Drink</button>
-                    </form>
-                </div>
-            `
-            break
-        // case "Change Password":
-        //     return `
-        //         <div class="content">
-        //             <div class="text-area">
-        //                 <span>Change Password</span>
-        //                 <img class="close" src="./asset/img/close.png" alt="">
-        //             </div>
-        //             <form action="">
-        //                 <div class="password-field">
-        //                     <input class="password oldPassword" type="Password" placeholder="Old Password">
-        //                     <div class="eye">
-        //                         <img class="show" src="./asset/img/view.png" alt="">
-        //                         <img class="hide" src="./asset/img/hide.png" alt="">
-        //                     </div>
-        //                 </div>
-        //                 <div class="password-field">
-        //                     <input class="password newPassword" type="Password" placeholder="New Password">
-        //                     <div class="eye">
-        //                         <img class="show" src="./asset/img/view.png" alt="">
-        //                         <img class="hide" src="./asset/img/hide.png" alt="">
-        //                     </div>
-        //                 </div>
-        //                 <div class="password-field">
-        //                     <input class="password rePassword" type="Password" placeholder="Re-enter new Password">
-        //                     <div class="eye">
-        //                         <img class="show" src="./asset/img/view.png" alt="">
-        //                         <img class="hide" src="./asset/img/hide.png" alt="">
-        //                     </div>
-        //                 </div>
-        //                 <button type="button" class="changePassword blue">Change Password</button>
-        //             </form>
-        //         </div>
-        //     `
-        //     break
-    }
-    return ``
-}
+// function getDialogBoxContent(target) {
+//     switch(target) {
+//         case "AddContainer":
+//             return `
+//                 <div class="content">
+//                     <div class="text-area">
+//                         <span>New Container</span>
+//                         <img class="close" src="./asset/img/close.png" alt="">
+//                     </div>
+//                     <form action="">
+//                         <div class="nfc">
+//                             <span>NFC ID</span>
+//                             <input type="text" placeholder="AA" maxlength="2">
+//                             <span>:</span>
+//                             <input type="text" placeholder="AA" maxlength="2">
+//                             <span>:</span>
+//                             <input type="text" placeholder="AA" maxlength="2">
+//                             <span>:</span>
+//                             <input type="text" placeholder="AA" maxlength="2">
+//                         </div>
+//                         <textarea name="" class="desc" placeholder="Container Description"></textarea>
+//                         <button type="button" class="addContainer blue">Save Container</button>
+//                     </form>
+//                 </div>
+//             `
+//             break
+//         case "DeleteContainer":
+//             return `
+//                 <div class="content">
+//                     <div class="text-area">
+//                         <span>Delete Container</span>
+//                         <img class="close" src="./asset/img/close.png" alt="">
+//                     </div>
+//                     <form action="">
+//                         <div class="nfc">
+//                             <span>NFC ID</span>
+//                             <input type="text" placeholder="AA" maxlength="2">
+//                             <span>:</span>
+//                             <input type="text" placeholder="AA" maxlength="2">
+//                             <span>:</span>
+//                             <input type="text" placeholder="AA" maxlength="2">
+//                             <span>:</span>
+//                             <input type="text" placeholder="AA" maxlength="2">
+//                         </div>
+//                         <button type="button" class="deleteContainer red">Delete Container</button>
+//                     </form>
+//                 </div>
+//             `
+//             break
+//         // case "AddUser":
+//         //     return `
+//         //         <div class="content">
+//         //             <div class="text-area">
+//         //                 <span>New User</span>
+//         //                 <img class="close" src="./asset/img/close.png" alt="">
+//         //             </div>
+//         //             <form action="">
+//         //                 <input type="text" placeholder="Name">
+//         //                 <input type="text" placeholder="Nickname (Max 20 Character)" maxlength="20">
+//         //                 <input type="email" placeholder="Email">
+//         //                 <div class="password-field">
+//         //                     <input class="password" type="Password" placeholder="Password">
+//         //                     <div class="eye">
+//         //                         <img class="show" src="./asset/img/view.png" alt="">
+//         //                         <img class="hide" src="./asset/img/hide.png" alt="">
+//         //                     </div>
+//         //                 </div>
+//         //                 <button type="button" class="addUser blue">Save New User</button>
+//         //             </form>
+//         //         </div>
+//         //     `
+//         //     break
+//         // case "DeleteUser":
+//         //     return `
+//         //         <div class="content">
+//         //             <div class="text-area">
+//         //                 <span>Delete User</span>
+//         //                 <img class="close" src="./asset/img/close.png" alt="">
+//         //             </div>
+//         //             <form action="">
+//         //                 <input type="email" placeholder="Email">
+//         //                 <button type="button" class="deleteUser red">Delete User</button>
+//         //             </form>
+//         //         </div>
+//         //     `
+//         //     break
+//         case "Nickname":
+//             return `
+//                 <div class="content">
+//                     <div class="text-area">
+//                         <span>Change Nickname</span>
+//                         <img class="close" src="./asset/img/close.png" alt="">
+//                     </div>
+//                     <form action="">
+//                         <input type="text" placeholder="Nickname (Max 20 Character)" maxlength="20">
+//                         <button type="button" class="changeNickname blue">Save Nickname</button>
+//                     </form>
+//                 </div>
+//             `
+//             break
+//         case "Max Drink":
+//             return `
+//                 <div class="content">
+//                     <div class="text-area">
+//                         <span>Change Max Drink</span>
+//                         <img class="close" src="./asset/img/close.png" alt="">
+//                     </div>
+//                     <form action="">
+//                         <input type="number" placeholder="Max Drink (100 - 6000mL)" min="100" max="6000">
+//                         <button type="button" class="changeMaxDrink blue">Save Max Drink</button>
+//                     </form>
+//                 </div>
+//             `
+//             break
+// case "Change Password":
+//     return `
+//         <div class="content">
+//             <div class="text-area">
+//                 <span>Change Password</span>
+//                 <img class="close" src="./asset/img/close.png" alt="">
+//             </div>
+//             <form action="">
+//                 <div class="password-field">
+//                     <input class="password oldPassword" type="Password" placeholder="Old Password">
+//                     <div class="eye">
+//                         <img class="show" src="./asset/img/view.png" alt="">
+//                         <img class="hide" src="./asset/img/hide.png" alt="">
+//                     </div>
+//                 </div>
+//                 <div class="password-field">
+//                     <input class="password newPassword" type="Password" placeholder="New Password">
+//                     <div class="eye">
+//                         <img class="show" src="./asset/img/view.png" alt="">
+//                         <img class="hide" src="./asset/img/hide.png" alt="">
+//                     </div>
+//                 </div>
+//                 <div class="password-field">
+//                     <input class="password rePassword" type="Password" placeholder="Re-enter new Password">
+//                     <div class="eye">
+//                         <img class="show" src="./asset/img/view.png" alt="">
+//                         <img class="hide" src="./asset/img/hide.png" alt="">
+//                     </div>
+//                 </div>
+//                 <button type="button" class="changePassword blue">Change Password</button>
+//             </form>
+//         </div>
+//     `
+//     break
+//     }
+//     return ``
+// }
 
-function showDialogBox(target) {
-    const dialogBox = document.querySelector("dialog")
-    const innerDialog = getDialogBoxContent(target)
-    dialogBox.innerHTML = innerDialog
-    if(innerDialog !== ``) {
-        dialogBox.show()
-        dialogBox.querySelector(".content .text-area .close").addEventListener("click", () => {
-            dialogBox.close()
-        })
-    }
-}
+// function showDialogBox(target) {
+//     const dialogBox = document.querySelector("dialog")
+//     const innerDialog = getDialogBoxContent(target)
+//     dialogBox.innerHTML = innerDialog
+//     if(innerDialog !== ``) {
+//         dialogBox.show()
+//         dialogBox.querySelector(".content .text-area .close").addEventListener("click", () => {
+//             dialogBox.close()
+//         })
+//     }
+// }
 
-//  Container
-const AddContainer = document.querySelector(".AddContainer")
-if(AddContainer !== null) {
-    AddContainer.addEventListener("click", () => {
-        showDialogBox("AddContainer")
-    })
-}
+// //  Container
+// const AddContainer = document.querySelector(".AddContainer")
+// if(AddContainer !== null) {
+//     AddContainer.addEventListener("click", () => {
+//         showDialogBox("AddContainer")
+//     })
+// }
 
-const DeleteContainer = document.querySelector(".DeleteContainer")
-if(DeleteContainer !== null) {
-    DeleteContainer.addEventListener("click", () => {
-        showDialogBox("DeleteContainer")
-    })
-}
+// const DeleteContainer = document.querySelector(".DeleteContainer")
+// if(DeleteContainer !== null) {
+//     DeleteContainer.addEventListener("click", () => {
+//         showDialogBox("DeleteContainer")
+//     })
+// }
 
 // const AddUser = document.querySelector(".AddUser")
 // if(AddUser !== null) {
@@ -219,92 +219,92 @@ if(DeleteContainer !== null) {
 //     })
 // }
 
-// Setting
-const SettingList = document.querySelector(".table-data #setting-list")
-if(SettingList !== null) {
-    SettingList.querySelectorAll("tr").forEach(i => {
-        i.addEventListener("click", () => {
-            showDialogBox(i.querySelector("td").innerText)
-        })
-    })
-}
+// // Setting
+// const SettingList = document.querySelector(".table-data #setting-list")
+// if(SettingList !== null) {
+//     SettingList.querySelectorAll("tr").forEach(i => {
+//         i.addEventListener("click", () => {
+//             showDialogBox(i.querySelector("td").innerText)
+//         })
+//     })
+// }
 
-const scheduleList = document.querySelectorAll("#schedule-list tr")
-if(scheduleList !== null) {
-    scheduleList.forEach(i => {
-        const j = i.querySelectorAll("td")
-        if(j.length > 0) {
-            i.addEventListener("click", () => {
-                const dialogBox = document.querySelector("dialog")
-                const innerDialog = `
-                    <div class="content">
-                        <div class="text-area">
-                            <span>Change Working Time - ${j[0].innerText}</span>
-                            <img class="close" src="./asset/img/close.png" alt="">
-                        </div>
-                        <form action="">
-                            <div class="time-in-out">
-                                <span>Time In</span>
-                                <input type="time" min="04:00" max="23:00" step="3600">
-                            </div>
-                            <div class="time-in-out">
-                                <span>Time Out</span>
-                                <input type="time" min="04:00" max="23:00" step="3600">
-                            </div>
-                            <div class="buttons">
-                                <button type="button" class="deleteTime red">Delete Working Time</button>
-                                <button type="button" class="changeTime blue">Save Working Time</button>
-                            </div>
-                        </form>
-                    </div>
-                `
-                dialogBox.innerHTML = innerDialog
-                if(innerDialog !== ``) {
-                    dialogBox.show()
-                    dialogBox.querySelector(".content .text-area .close").addEventListener("click", () => {
-                        dialogBox.close()
-                    })
+// const scheduleList = document.querySelectorAll("#schedule-list tr")
+// if(scheduleList !== null) {
+//     scheduleList.forEach(i => {
+//         const j = i.querySelectorAll("td")
+//         if(j.length > 0) {
+//             i.addEventListener("click", () => {
+//                 const dialogBox = document.querySelector("dialog")
+//                 const innerDialog = `
+//                     <div class="content">
+//                         <div class="text-area">
+//                             <span>Change Working Time - ${j[0].innerText}</span>
+//                             <img class="close" src="./asset/img/close.png" alt="">
+//                         </div>
+//                         <form action="">
+//                             <div class="time-in-out">
+//                                 <span>Time In</span>
+//                                 <input type="time" min="04:00" max="23:00" step="3600">
+//                             </div>
+//                             <div class="time-in-out">
+//                                 <span>Time Out</span>
+//                                 <input type="time" min="04:00" max="23:00" step="3600">
+//                             </div>
+//                             <div class="buttons">
+//                                 <button type="button" class="deleteTime red">Delete Working Time</button>
+//                                 <button type="button" class="changeTime blue">Save Working Time</button>
+//                             </div>
+//                         </form>
+//                     </div>
+//                 `
+//                 dialogBox.innerHTML = innerDialog
+//                 if(innerDialog !== ``) {
+//                     dialogBox.show()
+//                     dialogBox.querySelector(".content .text-area .close").addEventListener("click", () => {
+//                         dialogBox.close()
+//                     })
 
-                    const timeForm = document.querySelectorAll(".time-in-out input[type=time]")
-                    if(timeForm !== null) {
-                        timeForm.forEach(i => {
-                            i.addEventListener("change", () => {
-                                i.value = i.value.split(":")[0] + ":00"
-                            })
-                        })
-                    }
-                }
-            })
-        }
-    })
-}
+//                     const timeForm = document.querySelectorAll(".time-in-out input[type=time]")
+//                     if(timeForm !== null) {
+//                         timeForm.forEach(i => {
+//                             i.addEventListener("change", () => {
+//                                 i.value = i.value.split(":")[0] + ":00"
+//                             })
+//                         })
+//                     }
+//                 }
+//             })
+//         }
+//     })
+// }
 
 
 // Home
 
 const red = getComputedStyle(document.documentElement)
-.getPropertyValue("--color-invalid")
-.trim();
+    .getPropertyValue("--color-invalid")
+    .trim();
 
 const blue = getComputedStyle(document.documentElement)
-.getPropertyValue("--color-accent")
-.trim();
+    .getPropertyValue("--color-accent")
+    .trim();
 
 const grey = getComputedStyle(document.documentElement)
-.getPropertyValue("--color-foreground")
-.trim();
+    .getPropertyValue("--color-foreground")
+    .trim();
 
 const white = getComputedStyle(document.documentElement)
-.getPropertyValue("--color-secondary")
-.trim();
+    .getPropertyValue("--color-secondary")
+    .trim();
 
 const fontFamily = getComputedStyle(document.documentElement)
-  .getPropertyValue("--font-regular")
-  .trim();
+    .getPropertyValue("--font-regular")
+    .trim();
 
 const fontSize = getComputedStyle(document.documentElement)
-  .getPropertyValue("--s9")
-  .trim();
+    .getPropertyValue("--s9")
+    .trim();
 
 
 function getLabel() {
@@ -312,7 +312,7 @@ function getLabel() {
     const tempDate = new Date(month_year)
     const daytime = new Date(tempDate.getFullYear(), tempDate.getMonth() + 1, 0)
     let label = []
-    for(let i = 1; i <= daytime.getDate(); i++) {
+    for (let i = 1; i <= daytime.getDate(); i++) {
         label.push(i)
     }
     return label
@@ -321,8 +321,8 @@ function getLabel() {
 function createChart(drink, maxDrink) {
     const label = getLabel()
 
-    for(let i = maxDrink.length; i < label.length; i++) {
-        maxDrink.push(maxDrink[i-1])
+    for (let i = maxDrink.length; i < label.length; i++) {
+        maxDrink.push(maxDrink[i - 1])
         drink.push(0)
     }
 
@@ -334,13 +334,13 @@ function createChart(drink, maxDrink) {
         tooltip: {
             enabled: true,
             style: {
-              fontFamily: fontFamily,
+                fontFamily: fontFamily,
             },
             x: {
                 formatter: (value) => `${value} ${document.querySelector(".g3 .text-container span.month-year").innerText}`,
             },
             y: {
-              formatter: (value) => `${value}mL`,
+                formatter: (value) => `${value}mL`,
             },
         },
 
@@ -381,10 +381,10 @@ function createChart(drink, maxDrink) {
         grid: {
             borderColor: "rgba(0, 0, 0, 0)",
             padding: {
-              top: -10,
-              right: 0,
-              bottom: 0,
-              left: 12,
+                top: -10,
+                right: 0,
+                bottom: 0,
+                left: 12,
             },
         },
 
@@ -401,17 +401,17 @@ function createChart(drink, maxDrink) {
 
         xaxis: {
             labels: {
-              show: true,
-              floating: true,
-              style: {
-                colors: grey,
-                fontFamily: fontFamily,
-                fontSize: fontSize,
-              },
+                show: true,
+                floating: true,
+                style: {
+                    colors: grey,
+                    fontFamily: fontFamily,
+                    fontSize: fontSize,
+                },
             },
 
             axisBorder: {
-              show: false,
+                show: false,
             },
 
             axisTicks: {
@@ -419,7 +419,7 @@ function createChart(drink, maxDrink) {
             },
 
             crosshairs: {
-              show: false,
+                show: false,
             },
 
             categories: label,
@@ -431,55 +431,55 @@ function createChart(drink, maxDrink) {
 
         states: {
             normal: {
-              filter: { type: 'lighten', value: 0.03 },
+                filter: { type: 'lighten', value: 0.03 },
             },
             hover: {
-              filter: { type: 'lighten', value: 0.01 },
+                filter: { type: 'lighten', value: 0.01 },
             },
             active: {
-              filter: { type: 'none', value: 0 },
-              allowMultipleDataPointsSelection: false,
+                filter: { type: 'none', value: 0 },
+                allowMultipleDataPointsSelection: false,
             },
-          },
+        },
     }
 
     let chart = new ApexCharts(document.querySelector(".g3 .chart"), options)
     chart.render()
 }
 
-// function createDonut(x) {
-//     let data = []
-//     data.push(x)
-//     var options = {
-//         series: data,
-//         chart: {
-//             height: 'auto',
-//             width: '125%',
-//             type: 'radialBar',
-//         },
-//         plotOptions: {
-//             radialBar: {
-//                 hollow: {
-//                     size: '70%',
-//                 },
-//                 track: {
-//                     background: white,
-//                 },
-//                 dataLabels: {
-//                     show: false
-//                 }
-//             },
-//         },
-//         colors: [blue],
-//         labels: [''],
-//     };
+function createDonut(x) {
+    let data = []
+    data.push(x)
+    var options = {
+        series: data,
+        chart: {
+            height: 'auto',
+            width: '125%',
+            type: 'radialBar',
+        },
+        plotOptions: {
+            radialBar: {
+                hollow: {
+                    size: '70%',
+                },
+                track: {
+                    background: white,
+                },
+                dataLabels: {
+                    show: false
+                }
+            },
+        },
+        colors: [blue],
+        labels: [''],
+    };
 
 
-//       let chart = new ApexCharts(document.querySelector(".g5 .chart"), options);
-//       chart.render();
-// }
+    let chart = new ApexCharts(document.querySelector(".g5 .chart"), options);
+    chart.render();
+}
 
 
 // Example for Home
-// createDonut(75)
-createChart([1000, 2000, 3000, 5000, 3000, 1000, 2000, 3000, 5000, 3000, 1000, 2000, 3000, 5000, 3000, 1000, 2000, 3000, 5000, 3000, 1000, 2000, 3000, 5000, 3000,1000, 2000, 3000, 5000, 3000, 5000], [5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000])
+createDonut(percentage)
+createChart(allDrankData, allMaxDrinkData)

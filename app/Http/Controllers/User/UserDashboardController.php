@@ -142,7 +142,6 @@ class UserDashboardController extends Controller
             'allMaxDrinkData' => $allMaxDrinkData,
             'month' => $month,
             'year' => $year,
-            'dates' => $datesDrank,
         ]);
     }
 

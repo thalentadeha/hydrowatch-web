@@ -93,7 +93,6 @@
 
 @section('script')
     <script>
-        var dates = @json($dates);
         var percentage = @json($percentage);
         var allDrankData = @json($allDrankData);
         var allMaxDrinkData = @json($allMaxDrinkData);
