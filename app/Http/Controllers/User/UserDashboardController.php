@@ -45,11 +45,6 @@ class UserDashboardController extends Controller
             }
         }
 
-        $maxDrink = 0;
-        if (!empty($userData['maxDrink'])) {
-            $maxDrink = $userData['maxDrink'];
-        }
-
         $year = (string) date('Y');
         $month = (string) date('n');
         $date = (string) date('d');
@@ -65,9 +60,19 @@ class UserDashboardController extends Controller
         if (!empty($userDrinkHistory['drank'])) {
             $drankWater = $userDrinkHistory['drank'];
         }
-        $targetDrink = 2500;
 
-        $percentage = ($drankWater / $targetDrink) * 100;
+        $maxDrink = 0;
+        if (!empty($userData['maxDrink'])) {
+            $maxDrink = $userData['maxDrink'];
+        }
+
+        //save in drinkHistory document
+        $drinkHistoryDoc = $this->db->collection('user')->document($uid)->collection('drinkHistory')->document($year)->collection($month)->document($date);
+        $drinkHistoryDoc->set([
+            'maxDrink' => $maxDrink
+        ], ['merge' => true]);
+
+        $percentage = ($drankWater / $maxDrink) * 100;
 
         $dates = $userDoc->collection('drinkHistory')->document($year)->collection($month)->documents();
         $thisMonthDates = $this->getDatesForMonth($year, $month);
