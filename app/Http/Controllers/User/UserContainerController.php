@@ -57,12 +57,18 @@ class UserContainerController extends Controller
             'nfc_id2' => 'required|string|max:2',
             'nfc_id3' => 'required|string|max:2',
             'nfc_id4' => 'required|string|max:2',
+            'weight' => 'required|numeric',
+            'volume' => 'required|numeric|min:100|max:6000',
             'containerDesc' => 'nullable|string'
         ], [
             'nfc_id1.required' => 'NFC id should not be empty.',
             'nfc_id2.required' => 'NFC id should not be empty.',
             'nfc_id3.required' => 'NFC id should not be empty.',
             'nfc_id4.required' => 'NFC id should not be empty.',
+            'weight.required' => 'Weight should not be empty.',
+            'volume.required' => 'Volume should not be empty.',
+            'volume.min' => 'mL should not be less than 100.',
+            'volume.max' => 'mL should not be more than 6000.',
         ]);
 
         if ($validator->fails()) {
@@ -81,6 +87,8 @@ class UserContainerController extends Controller
                 ":" . $validated['nfc_id3'] .
                 ":" . $validated['nfc_id4'];
 
+            $containerDoc = $this->db->collection('container');
+            $containerList = $containerDoc->documents();
             $containerDoc = $this->db->collection('container');
             $containerList = $containerDoc->documents();
 
@@ -103,6 +111,7 @@ class UserContainerController extends Controller
                 'description' => $validated['containerDesc'],
             ];
 
+            $this->db->collection('container')->document(strtoupper($containerID))->set($containerData);
             $this->db->collection('container')->document(strtoupper($containerID))->set($containerData);
 
             return response()->json(['success' => 'Add container successful']);
