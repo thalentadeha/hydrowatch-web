@@ -1,5 +1,5 @@
 // Import and configure the Firebase SDK
-// importScripts('https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/10.13.1/firebase-messaging.js');
 
 
