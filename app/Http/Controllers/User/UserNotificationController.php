@@ -32,13 +32,32 @@ class UserNotificationController extends Controller
                 ['path' => 'isNotificationEnabled', 'value' => $isNotificationEnabled]
             ]);
 
-            if($isNotificationEnabled){
+            if ($isNotificationEnabled) {
                 return response()->json(['success' => 'Notification enabled.']);
             } else {
                 return response()->json(['success' => 'Notification disabled.']);
             }
         } catch (\Exception $e) {
-            return response()->json(['success' => $e->getMessage()]);
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function saveDeviceToken(Request $request)
+    {
+        $idToken = session('idToken');
+        $uid = $this->authController->getUID($idToken);
+
+        $deviceToken = $request->input('deviceToken');
+        $userDoc = $this->db->collection('user')->document($uid);
+
+        try {
+            $userDoc->update([
+                ['path' => 'deviceToken', 'value' => $deviceToken]
+            ]);
+
+            return response()->json(['success' => 'device token saved.']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
         }
     }
 }

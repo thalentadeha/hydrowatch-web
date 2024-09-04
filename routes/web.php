@@ -44,6 +44,7 @@ Route::middleware('login')->group(function () {
         Route::post('setMaxDrink', [UserManagerController::class, 'setMaxDrink'])->name('setMaxDrink_POST');
 
         //notification
+        Route::post('/save-device-token', [UserNotificationController::class, 'saveDeviceToken'])->name('saveDeviceToken_POST');
         Route::post('/update-notification-status', [UserNotificationController::class, 'updateNotificationStatus'])->name('updateNotificationStatus_POST');
     });
 

@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script type="module" src=" {{ asset('js/script.js') }}"></script>
+    @yield('head-script')
     <title>HydroWatch | Home</title>
 </head>
 
