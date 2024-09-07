@@ -239,14 +239,14 @@
 
                         if (nfcid_uppercase === currentNfcid) {
                             containerList.removeChild(currentRow);
+
+                            if(rowsArray.length === 1) {
+                                const emptyRow = document.createElement('tr');
+                                emptyRow.innerHTML = `<td colspan="4">No container found.</td>`;
+                                containerList.append(emptyRow);
+                            }
                             break;
                         }
-                    }
-
-                    if(rowsArray.length === 1) {
-                        const emptyRow = document.createElement('tr');
-                        emptyRow.innerHTML = `<td colspan="4">No container found.</td>`;
-                        containerList.append(emptyRow);
                     }
                 }
             }
