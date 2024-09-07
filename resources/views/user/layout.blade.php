@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script type="module" src=" {{ asset('js/script.js') }}"></script>
     @yield('head-script')
-    <title>HydroWatch</title>
+    <title>HydroWatch | {{ (request()->routeIs('user-dashboard') ? "Home" : (request()->routeIs('user-container') ? "Container" : (request()->routeIs('user-setting') ? "Setting" : ""))) }}</title>
 </head>
 
 <body>
