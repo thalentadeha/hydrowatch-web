@@ -28,15 +28,28 @@ class AdminDashboardController extends Controller
         $idToken = session('idToken');
 
         $userDocs = $this->db->collection('user')->documents();
+        $drinkHistories = [];
+
+        $year = (int) date('Y');
+        $month = (int) date('n');
+        $date = (int) date('d');
 
         foreach ($userDocs as $user) {
             if ($user->exists()) {
                 $users[$user->id()] = $user->data();
+                $drinkHistory = $user->reference()
+                                    ->collection('drinkHistory')
+                                    ->document($year)
+                                    ->collection($month)
+                                    ->document($date)
+                                    ->snapshot()
+                                    ->data();
+                $drinkHistories[$user->id()] = isset($drinkHistory['drank']) ? $drinkHistory['drank'] : 0;
             }
         }
 
         uasort($users, function ($a, $b) {
-            return strcmp($a['fullname'], $b['fullname']);
+            return strcmp($a['fullname'], ($b['fullname'] ?? ''));
         });
 
         $listUsersAuth = $this->auth->listUsers();
@@ -50,6 +63,7 @@ class AdminDashboardController extends Controller
         return view('admin.dashboard', [
             'users' => $users,
             'email' => $email,
+            'drinkHistories' => $drinkHistories,
         ]);
     }
 }

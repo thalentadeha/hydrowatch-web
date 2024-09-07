@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script type="module" src=" {{ asset('js/script.js') }}"></script>
     @yield('head-script')
-    <title>HydroWatch | Home</title>
+    <title>HydroWatch</title>
 </head>
 
 <body>
@@ -41,13 +41,12 @@
                 </ul>
                 <img class="close" src="{{ asset('img/close.png') }}" alt="">
             </menu>
-            {{-- @yield('profile') --}}
             <div id="profile">
                 <div class="names">
                     <span class="nickname">{{ $userData['nickname'] }}</span>
                     <span class="full-name">{{ $userData['fullname'] }}</span>
                 </div>
-                <img class="avatar" src="asset{{ asset('img/no-avatar.png') }}" alt="">
+                <img class="avatar" src="{{ asset('img/no-avatar.png') }}" alt="">
             </div>
 
         </nav>

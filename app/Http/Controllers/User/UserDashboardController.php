@@ -31,10 +31,76 @@ class UserDashboardController extends Controller
     {
         $idToken = session('idToken');
 
+        // User Data
         $uid = $this->authController->getUID($idToken);
         $userDoc = $this->db->collection('user')->document($uid);
         $userData = $userDoc->snapshot();
 
+        // User Drink History
+        $year = (int) date('Y');
+        $month = (int) date('n');
+        $date = (int) date('d');
+        $daysInMonth = (int) date('t');
+
+        $userDrankHistory = [];
+        $userMaxDrinkHistory = [];
+        $listDrinkHistory = $userDoc->collection('drinkHistory')
+                                ->document($year)
+                                ->collection($month)
+                                ->documents();
+
+        for($i = 1; $i <= $daysInMonth; $i++) {
+            $userDrankHistory[(String) $i] = 0;
+            $userMaxDrinkHistory[(String) $i] = 0;
+        }
+
+        $lastDrinkTime = '--:--';
+        $drankWater = 0;
+        $maxDrink = 0;
+        $targetDrink = 0;
+
+        if (!empty($userData['maxDrink'])) {
+            $maxDrink = $userData['maxDrink'];
+        }
+        if (!empty($userData['targetDrink'])) {
+            $targetDrink = $userData['targetDrink'];
+        }
+
+        foreach($listDrinkHistory as $drinkHistory) {
+            if ($drinkHistory->exists()) {
+                $data = $drinkHistory->data();
+                if (!empty($data['drank'])) {
+                    $userDrankHistory[$drinkHistory->id()] = (int) $data['drank'];
+                }
+                if (!empty($data['maxDrink'])) {
+                    if((int) $data['maxDrink'] > 0) {
+                        $userMaxDrinkHistory[$drinkHistory->id()] = (int) $data['maxDrink'];
+                    }
+                    else {
+                        $userMaxDrinkHistory[$drinkHistory->id()] = $targetDrink;
+                    }
+                }
+                else {
+                    $userMaxDrinkHistory[$drinkHistory->id()] = $targetDrink;
+                }
+
+                if ((int) $drinkHistory->id() === $date) {
+                    if (!empty($drinkHistory['lastDrink'])) {
+                        $lastDrinkTime = $drinkHistory['lastDrink'];
+                    }
+                    if (!empty($drinkHistory['drank'])) {
+                        $drankWater = (int) $drinkHistory['drank'];
+                    }
+                }
+            }
+        }
+
+        $percentage =  (int) ($drankWater * 100 / $targetDrink);
+        if($maxDrink != 0 && $maxDrink < $targetDrink) {
+            $percentage = (int) ($drankWater * 100 / $maxDrink);
+        }
+
+        // User Container
         $containerQuery = $this->db->collection('container')->where('userID', '=', $uid);
         $containerDocs = $containerQuery->documents();
 
@@ -45,95 +111,6 @@ class UserDashboardController extends Controller
             }
         }
 
-        $year = (string) date('Y');
-        $month = (string) date('n');
-        $date = (string) date('d');
-        $userDrinkHistory = $userDoc->collection('drinkHistory')->document($year)->collection($month)->document($date)
-            ->snapshot()->data();
-
-        $lastDrinkTime = '--:--';
-        if (!empty($userDrinkHistory['lastDrink'])) {
-            $lastDrinkTime = substr($userDrinkHistory['lastDrink'], 0, -3);
-        }
-
-        $drankWater = 0;
-        if (!empty($userDrinkHistory['drank'])) {
-            $drankWater = $userDrinkHistory['drank'];
-        }
-
-        $maxDrink = 0;
-        if (!empty($userData['maxDrink'])) {
-            $maxDrink = $userData['maxDrink'];
-        }
-
-        //save in drinkHistory document
-        $drinkHistoryDoc = $this->db->collection('user')->document($uid)->collection('drinkHistory')->document($year)->collection($month)->document($date);
-        $drinkHistoryDoc->set([
-            'maxDrink' => $maxDrink
-        ], ['merge' => true]);
-
-        $percentage = ($drankWater / $maxDrink) * 100;
-
-        $dates = $userDoc->collection('drinkHistory')->document($year)->collection($month)->documents();
-        $thisMonthDates = $this->getDatesForMonth($year, $month);
-
-        $allDrankData = [];
-        $allMaxDrinkData = [];
-        $datesDrank = [];
-        foreach ($thisMonthDates as $date) {
-            $dateExists = false;
-            foreach ($dates as $dateDoc) {
-                if ($dateDoc->exists() && $dateDoc->id() == $date) {
-                    $dateExists = true;
-                    $data = $dateDoc->data();
-                    $datesDrank[] = $date;
-
-                    $allDrankData[] = isset($data['drank']) ? $data['drank'] : "0";
-                    $allMaxDrinkData[] = isset($data['maxDrink']) ? $data['maxDrink'] : "0";
-
-                    break;
-                }
-            }
-
-            // set 0 when date is not in db
-            if (!$dateExists) {
-                $datesDrank[] = $date;
-                $allDrankData[] = "0";
-                $allMaxDrinkData[] = "0";
-            }
-        }
-
-        // foreach ($years as $yearDoc) {
-        //     if ($yearDoc->exists()) {
-        //         $months = $userDoc->collection('drinkHistory')
-        //             ->document($yearDoc->id())
-        //             ->collections();
-
-        //         foreach ($months as $monthDoc) {
-
-        //             $dates = $userDoc->collection('drinkHistory')
-        //                 ->document($yearDoc->id())
-        //                 ->collection($monthDoc->id())
-        //                 ->documents();
-
-        //             foreach ($dates as $dateDoc) {
-        //                 if ($dateDoc->exists()) {
-        //                     $data = $dateDoc->data();
-        //                     $dates[] = $dateDoc->id();
-
-        //                     if (isset($data['drank'])) {
-        //                         $allDrankData[] = $data['drank'];
-        //                     }
-
-        //                     if (isset($data['maxDrink'])) {
-        //                         $allMaxDrinkData[] = $data['maxDrink'];
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
         $month = (string) date('F');
 
         return view('user.dashboard', [
@@ -142,9 +119,10 @@ class UserDashboardController extends Controller
             'percentage' => $percentage,
             'containerList' => $containerList,
             'maxDrink' => $maxDrink,
+            'targetDrink' => $targetDrink,
             'lastDrinkTime' => $lastDrinkTime,
-            'allDrankData' => $allDrankData,
-            'allMaxDrinkData' => $allMaxDrinkData,
+            'userDrankHistory' => $userDrankHistory,
+            'userMaxDrinkHistory' => $userMaxDrinkHistory,
             'month' => $month,
             'year' => $year,
         ]);

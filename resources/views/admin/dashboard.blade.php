@@ -29,7 +29,7 @@
                                     <td>{{ $user['fullname'] }}</td>
                                     <td>{{ $email[$uid]['email'] }}</td>
                                     <td>{{ $user['nickname'] }}</td>
-                                    <td>{{ $user['maxDrink'] ?? '0' }}</td>
+                                    <td>{{ $drinkHistories[$uid]}}</td>
                                 </tr>
                             @endif
                         @endforeach
@@ -86,22 +86,14 @@
                                 <form action="{{ route('register_POST') }}" method="POST">
                                     @csrf
 
-                                    <input type="text" placeholder="Name" name="fullname" required>
-                                    <input type="text" placeholder="Nickname (Max 20 Character)" maxlength="20" name="nickname" required>
-                                    <input type="email" placeholder="Email" name="email" required>
+                                    <input type="text" placeholder="Name" name="fullname">
+                                    <input type="text" placeholder="Nickname (Max 20 Character)" maxlength="20" name="nickname">
+                                    <input type="email" placeholder="Email" name="email">
                                     <div class="password-field">
-                                        <input class="password" type="password" name="password" placeholder="Password" required>
+                                        <input class="password" type="password" name="password" placeholder="Password">
                                         <div class="eye">
                                             <img class="show" src="{{ asset('img/view.png') }}" alt="">
                                            <img class="hide" src="{{ asset('img/hide.png') }}" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="radio-group">
-                                        <label>Role:</label>
-                                        <div class="options">
-                                            <label><input type="radio" name="role" value="user" required> User</label>
-                                            <label><input type="radio" name="role" value="admin" required> Admin</label>
-                                            <label><input type="radio" name="role" value="dispenser" required> Dispenser</label>
                                         </div>
                                     </div>
                                     <input type="hidden" name="idToken" value="{{ session('idToken') }}">
@@ -119,7 +111,7 @@
                                 <form action="{{ route('deleteUser_POST') }}" method="POST">
                                     @csrf
 
-                                    <input type="email" placeholder="Email" name="email" required>
+                                    <input type="email" placeholder="Email" name="email">
                                     <input type="hidden" name="idToken" value="{{ session('idToken') }}">
                                     <button type="submit" class="deleteUser red">Delete User</button>
                                 </form>

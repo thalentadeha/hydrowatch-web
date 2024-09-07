@@ -38,6 +38,23 @@
             })
         }
 
+        function passwordShowHidden() {
+            const passField = document.querySelectorAll(".password-field")
+            passField.forEach(x => {
+                const eye = x.querySelector(".eye")
+                const pass = x.querySelector("input.password")
+                eye.addEventListener("click", () => {
+                    eye.classList.toggle("active")
+                    if (eye.classList.contains("active")) {
+                        pass.type = "text"
+                    }
+                    else {
+                        pass.type = "password"
+                    }
+                })
+            })
+        }
+
         function showDialogBox() {
             const dialogBox = document.querySelector("dialog")
             const innerDialog = getDialogBoxContent()
@@ -53,6 +70,10 @@
                     event.preventDefault();
                     submitForm(new FormData(form));
                 });
+
+                if(target === "Change Password") {
+                    passwordShowHidden();
+                }
             }
         }
 
@@ -67,21 +88,21 @@
                         @csrf
 
                         <div class="password-field">
-                            <input class="password oldPassword" type="Password" placeholder="Old Password" name="oldPassword" required>
+                            <input class="password oldPassword" type="Password" placeholder="Old Password" name="oldPassword">
                             <div class="eye">
                                 <img class="show" src="{{ asset('img/view.png') }}" alt="">
                                 <img class="hide" src="{{ asset('img/hide.png') }}" alt="">
                             </div>
                         </div>
                         <div class="password-field">
-                            <input class="password newPassword" type="Password" placeholder="New Password" name="newPassword" required>
+                            <input class="password newPassword" type="Password" placeholder="New Password" name="newPassword">
                             <div class="eye">
                                 <img class="show" src="{{ asset('img/view.png') }}" alt="">
                                 <img class="hide" src="{{ asset('img/hide.png') }}" alt="">
                             </div>
                         </div>
                         <div class="password-field">
-                            <input class="password rePassword" type="Password" placeholder="Re-enter new Password" name="rePassword" required>
+                            <input class="password rePassword" type="Password" placeholder="Re-enter new Password" name="rePassword">
                             <div class="eye">
                                 <img class="show" src="{{ asset('img/view.png') }}" alt="">
                                 <img class="hide" src="{{ asset('img/hide.png') }}" alt="">
@@ -95,6 +116,9 @@
         }
 
         function submitForm(formData) {
+            let button = document.querySelector('dialog form button[type="submit"]');
+            button.disabled = true;
+
             fetch('{{ route('resetPassword_POST') }}', {
                     method: 'POST',
                     headers: {
@@ -119,6 +143,7 @@
                 })
                 .catch(error => {
                     if (error.errors) {
+                        button.disabled = false;
                         showErrors(error.errors);
                     }
                 });

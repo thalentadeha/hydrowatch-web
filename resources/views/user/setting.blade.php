@@ -19,6 +19,13 @@
                                     <img class="arrow" src="{{ asset('img/next.png') }}" alt="">
                                 </td>
                             </tr>
+                            <tr class="TargetDrink">
+                                <td>Target Drink</td>
+                                <td>
+                                    <span>{{ $targetDrink }}mL</span>
+                                    <img class="arrow" src="{{ asset('img/next.png') }}" alt="">
+                                </td>
+                            </tr>
                             <tr class="MaxDrink">
                                 <td>Max Drink</td>
                                 <td>
@@ -115,6 +122,23 @@
             })
         }
 
+        function passwordShowHidden() {
+            const passField = document.querySelectorAll(".password-field")
+            passField.forEach(x => {
+                const eye = x.querySelector(".eye")
+                const pass = x.querySelector("input.password")
+                eye.addEventListener("click", () => {
+                    eye.classList.toggle("active")
+                    if (eye.classList.contains("active")) {
+                        pass.type = "text"
+                    }
+                    else {
+                        pass.type = "password"
+                    }
+                })
+            })
+        }
+
         function showDialogBox(target) {
             const dialogBox = document.querySelector("dialog")
             const innerDialog = getDialogBoxContent(target)
@@ -130,6 +154,10 @@
                     event.preventDefault();
                     submitForm(new FormData(form), target);
                 });
+
+                if(target === "Change Password") {
+                    passwordShowHidden();
+                }
             }
         }
 
@@ -150,6 +178,21 @@
                             </form>
                         </div>
                     `
+                case "Target Drink":
+                    return `
+                        <div class="content">
+                            <div class="text-area">
+                                <span>Change Target Drink</span>
+                                <img class="close" src="{{ asset('img/close.png') }}" alt="">
+                            </div>
+                            <form action="{{ route('setTargetDrink_POST') }}" method="POST">
+                                @csrf
+                                <input type="number" placeholder="Target Drink (1000 - 6000mL)" name="targetDrink">
+                                <input type="hidden" name="idToken" value="{{ session('idToken') }}">
+                                <button type="submit" class="changeTargetDrink blue">Save Target Drink</button>
+                            </form>
+                        </div>
+                    `
                 case "Max Drink":
                     return `
                         <div class="content">
@@ -159,7 +202,7 @@
                             </div>
                             <form action="{{ route('setMaxDrink_POST') }}" method="POST">
                                 @csrf
-                                <input type="number" placeholder="Max Drink (100 - 6000mL)" name="maxDrink">
+                                <input type="number" placeholder="Max Drink (0 or 100 - 6000mL)" name="maxDrink">
                                 <input type="hidden" name="idToken" value="{{ session('idToken') }}">
                                 <button type="submit" class="changeMaxDrink blue">Save Max Drink</button>
                             </form>
@@ -176,21 +219,21 @@
                                 @csrf
 
                                 <div class="password-field">
-                                    <input class="password oldPassword" type="Password" placeholder="Old Password" name="oldPassword" required>
+                                    <input class="password oldPassword" type="Password" placeholder="Old Password" name="oldPassword">
                                     <div class="eye">
                                         <img class="show" src="{{ asset('img/view.png') }}" alt="">
                                         <img class="hide" src="{{ asset('img/hide.png') }}" alt="">
                                     </div>
                                 </div>
                                 <div class="password-field">
-                                    <input class="password newPassword" type="Password" placeholder="New Password" name="newPassword" required>
+                                    <input class="password newPassword" type="Password" placeholder="New Password" name="newPassword">
                                     <div class="eye">
                                         <img class="show" src="{{ asset('img/view.png') }}" alt="">
                                         <img class="hide" src="{{ asset('img/hide.png') }}" alt="">
                                    </div>
                                </div>
                                <div class="password-field">
-                                    <input class="password rePassword" type="Password" placeholder="Re-enter new Password" name="rePassword" required>
+                                    <input class="password rePassword" type="Password" placeholder="Re-enter new Password" name="rePassword">
                                     <div class="eye">
                                         <img class="show" src="{{ asset('img/view.png') }}" alt="">
                                         <img class="hide" src="{{ asset('img/hide.png') }}" alt="">
@@ -265,10 +308,16 @@
                 case "Max Drink":
                     ACTION_URL = '{{ route('setMaxDrink_POST') }}';
                     break;
+                case "Target Drink":
+                    ACTION_URL = '{{ route('setTargetDrink_POST') }}';
+                    break;
                 case "Change Password":
                     ACTION_URL = '{{ route('resetPassword_POST') }}';
                     break;
             }
+
+            let button = document.querySelector('dialog form button[type="submit"]');
+            button.disabled = true;
 
 
             fetch(ACTION_URL, {
@@ -319,11 +368,19 @@
                                 maxDrinkElement.textContent = `${formData.get('maxDrink')}mL`;
                             }
                         }
+
+                        if (formData.has('targetDrink')) {
+                            const maxDrinkElement = document.querySelector('.TargetDrink span');
+                            if (maxDrinkElement) {
+                                maxDrinkElement.textContent = `${formData.get('targetDrink')}mL`;
+                            }
+                        }
                     }
                 })
                 .catch(error => {
                     if (error.errors) {
                         showErrors(error.errors);
+                        button.disabled = false;
                     }
                 });
         }

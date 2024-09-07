@@ -53,22 +53,24 @@ class UserContainerController extends Controller
     public function addContainer(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nfc_id1' => 'required|string|max:2',
-            'nfc_id2' => 'required|string|max:2',
-            'nfc_id3' => 'required|string|max:2',
-            'nfc_id4' => 'required|string|max:2',
-            'weight' => 'required|numeric',
-            'volume' => 'required|numeric|min:100|max:6000',
+            'nfc_id1' => ['required', 'string', 'size:2', 'regex:/[A-Fa-f0-9]+$/'],
+            'nfc_id2' => ['required', 'string', 'size:2', 'regex:/[A-Fa-f0-9]+$/'],
+            'nfc_id3' => ['required', 'string', 'size:2', 'regex:/[A-Fa-f0-9]+$/'],
+            'nfc_id4' => ['required', 'string', 'size:2', 'regex:/[A-Fa-f0-9]+$/'],
             'containerDesc' => 'nullable|string'
         ], [
             'nfc_id1.required' => 'NFC id should not be empty.',
             'nfc_id2.required' => 'NFC id should not be empty.',
             'nfc_id3.required' => 'NFC id should not be empty.',
             'nfc_id4.required' => 'NFC id should not be empty.',
-            'weight.required' => 'Weight should not be empty.',
-            'volume.required' => 'Volume should not be empty.',
-            'volume.min' => 'mL should not be less than 100.',
-            'volume.max' => 'mL should not be more than 6000.',
+            'nfc_id1.size' => 'NFC id should be 8 character.',
+            'nfc_id2.size' => 'NFC id should be 8 character.',
+            'nfc_id3.size' => 'NFC id should be 8 character.',
+            'nfc_id4.size' => 'NFC id should be 8 character.',
+            'nfc_id1.regex' => 'NFC id should be only consist A-F or 0-9.',
+            'nfc_id2.regex' => 'NFC id should be only consist A-F or 0-9.',
+            'nfc_id3.regex' => 'NFC id should be only consist A-F or 0-9.',
+            'nfc_id4.regex' => 'NFC id should be only consist A-F or 0-9.',
         ]);
 
         if ($validator->fails()) {
@@ -87,10 +89,7 @@ class UserContainerController extends Controller
                 ":" . $validated['nfc_id3'] .
                 ":" . $validated['nfc_id4'];
 
-            $containerDoc = $this->db->collection('container');
-            $containerList = $containerDoc->documents();
-            $containerDoc = $this->db->collection('container');
-            $containerList = $containerDoc->documents();
+            $containerList = $this->db->collection('container')->documents();
 
             $containerAvail = false;
             foreach ($containerList as $containerDoc) {
@@ -106,9 +105,7 @@ class UserContainerController extends Controller
 
             $containerData = [
                 'userID' => $uid,
-                'volume' => -1,
-                'weight' => -1,
-                'description' => $validated['containerDesc'],
+                'description' => $validated['containerDesc'] === null ? "" : $validated['containerDesc'],
             ];
 
             $this->db->collection('container')->document(strtoupper($containerID))->set($containerData);
@@ -122,15 +119,23 @@ class UserContainerController extends Controller
     public function deleteContainer(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nfc_id1' => 'required|string|max:2',
-            'nfc_id2' => 'required|string|max:2',
-            'nfc_id3' => 'required|string|max:2',
-            'nfc_id4' => 'required|string|max:2',
+            'nfc_id1' => ['required', 'string', 'size:2', 'regex:/[A-Fa-f0-9]+$/'],
+            'nfc_id2' => ['required', 'string', 'size:2', 'regex:/[A-Fa-f0-9]+$/'],
+            'nfc_id3' => ['required', 'string', 'size:2', 'regex:/[A-Fa-f0-9]+$/'],
+            'nfc_id4' => ['required', 'string', 'size:2', 'regex:/[A-Fa-f0-9]+$/'],
         ], [
             'nfc_id1.required' => 'NFC id should not be empty.',
             'nfc_id2.required' => 'NFC id should not be empty.',
             'nfc_id3.required' => 'NFC id should not be empty.',
             'nfc_id4.required' => 'NFC id should not be empty.',
+            'nfc_id1.size' => 'NFC id should be 8 character.',
+            'nfc_id2.size' => 'NFC id should be 8 character.',
+            'nfc_id3.size' => 'NFC id should be 8 character.',
+            'nfc_id4.size' => 'NFC id should be 8 character.',
+            'nfc_id1.regex' => 'NFC id should be only consist A-F or 0-9.',
+            'nfc_id2.regex' => 'NFC id should be only consist A-F or 0-9.',
+            'nfc_id3.regex' => 'NFC id should be only consist A-F or 0-9.',
+            'nfc_id4.regex' => 'NFC id should be only consist A-F or 0-9.',
         ]);
 
         if ($validator->fails()) {

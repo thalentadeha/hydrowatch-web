@@ -213,16 +213,27 @@ button {
     outline: none;
     font-size: var(--s7);
     font-family: var(--font-semibold);
+    transition: background-color ease .2s;
 }
 
 button.blue {
     color: var(--color-primary);
     background-color: var(--color-accent);
+    transition: background-color ease .2s;
 }
 
 button.red {
     color: var(--color-primary);
     background-color: var(--color-invalid);
+    transition: background-color ease .2s;
+}
+
+button:disabled, button[disabled],
+button:disabled.red, button[disabled].red,
+button:disabled.blue, button[disabled].blue {
+    color: var(--color-primary);
+    background-color: #504D5B;
+    transition: background-color ease .2s;
 }
 
 main {
@@ -679,10 +690,6 @@ main.home section .g2 .table-data tr td:nth-child(2) {
     text-align: right;
 }
 
-main.home section .g2 .table-data tr td:nth-child(2)::after {
-    content: "mL";
-}
-
 main.home section .g2 .text-container {
     display: flex;
     align-items: center;
@@ -706,6 +713,7 @@ main.home section .g3 {
     grid-area: b3;
     display: flex;
     flex-direction: column;
+    justify-content: left;
     color: var(--color-background);
     background-color: var(--color-secondary);
 }
@@ -715,14 +723,9 @@ main.home section .g3 .text-container {
     flex-grow: 1;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     font-size: var(--s6);
-}
-
-main.home section .g3 .text-container img {
-    cursor: pointer;
-    height: var(--s7);
 }
 
 main.home section .g5 {

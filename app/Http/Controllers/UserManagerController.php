@@ -43,8 +43,7 @@ class UserManagerController extends Controller
                 'regex:/[A-Z]/',      //atleast 1 uppercase
                 'regex:/[0-9]/',      //atleast 1 number
                 'regex:/[@$!%*?&]/', //atleast 1 symbol
-            ],
-            'role' => 'required|string'
+            ]
         ], [
             'fullname.required' => 'The fullname field is required.',
             'fullname.string' => 'The fullname must be a string.',
@@ -60,9 +59,6 @@ class UserManagerController extends Controller
             'password.string' => 'The password must be a string.',
             'password.min' => 'The password must be at least 8 characters.',
             'password.regex' => 'The password must include at least one lowercase letter, one uppercase letter, one number, and one symbol.',
-
-            'role.required' => 'The role field is required.',
-            'role.string' => 'The role must be a string.',
         ]);
 
         if ($validator->fails()) {
@@ -77,7 +73,9 @@ class UserManagerController extends Controller
             $userData = [
                 'fullname' => $validated['fullname'],
                 'nickname' => $validated['nickname'],
-                'role' => $validated['role'],
+                'role' => "user",
+                'maxDrink' => 0,
+                'targetDrink' => 2500,
             ];
 
             $this->db->collection('user')->document($user->uid)->set($userData);
@@ -207,9 +205,11 @@ class UserManagerController extends Controller
         $validator = Validator::make($request->all(), [
             'nickname' => [
                 'string',
+                'min:2',
                 'max:20',
             ]
         ], [
+            'nickname.min' => 'Nickname need more than 2 characters.',
             'nickname.max' => 'Nickname exceeded maximum characters (20).',
         ]);
 
@@ -240,12 +240,14 @@ class UserManagerController extends Controller
         $validator = Validator::make($request->all(), [
             'maxDrink' => [
                 'numeric',
-                'min:100',
-                'max:6000'
+                function ($attribute, $value, $fail) {
+                    if ((int) $value !== 0 && ((int) $value < 100 || (int) $value > 6000)) {
+                        $fail('Max Drink should be either 0 or between 100 and 6000.');
+                    }
+                }
             ]
         ], [
-            'maxDrink.min' => 'mL should not be less than 100.',
-            'maxDrink.max' => 'mL should not be more than 6000.',
+            'maxDrink.numeric' => 'The :attribute must be a number.',
         ]);
 
         if ($validator->fails()) {
@@ -262,19 +264,57 @@ class UserManagerController extends Controller
             //save in user document
             $userDoc = $this->db->collection('user')->document($uid);
             $userDoc->update([
-                ['path' => 'maxDrink', 'value' => $validated['maxDrink']]
+                ['path' => 'maxDrink', 'value' => (int) $validated['maxDrink']]
             ]);
 
             //save in drinkHistory document
-            $year = (string) date('Y');
-            $month = (string) date('n');
-            $date = (string) date('d');
+            $year = (int) date('Y');
+            $month = (int) date('n');
+            $date = (int) date('d');
             $drinkHistoryDoc = $this->db->collection('user')->document($uid)->collection('drinkHistory')->document($year)->collection($month)->document($date);
             $drinkHistoryDoc->set([
-                'maxDrink' => $validated['maxDrink']
+                'maxDrink' => (int) $validated['maxDrink']
             ], ['merge' => true]);
 
             return response()->json(['success' => 'Set max drink successful']);
+        } catch (Exception $e) {
+            return response()->json(['errors' => [$e->getMessage()]], 422);
+        }
+    }
+
+    public function setTargetDrink(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'targetDrink' => [
+                'numeric',
+                function ($attribute, $value, $fail) {
+                    if ((int) $value < 1000 || (int) $value > 6000) {
+                        $fail('Target Drink should be between 1000 and 6000.');
+                    }
+                }
+            ]
+        ], [
+            'targetDrink.numeric' => 'The :attribute must be a number.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->first()], 422);
+        }
+
+        $idToken = session('idToken');
+
+        $uid = $this->authController->getUID($idToken);
+
+        try {
+            $validated = $validator->validate();
+
+            //save in user document
+            $userDoc = $this->db->collection('user')->document($uid);
+            $userDoc->update([
+                ['path' => 'targetDrink', 'value' => (int) $validated['targetDrink']]
+            ]);
+
+            return response()->json(['success' => 'Set target drink successful']);
         } catch (Exception $e) {
             return response()->json(['errors' => [$e->getMessage()]], 422);
         }

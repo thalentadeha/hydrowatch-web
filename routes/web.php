@@ -42,6 +42,7 @@ Route::middleware('login')->group(function () {
         Route::get('/setting', [UserSettingController::class, 'index'])->name('user-setting');
         Route::post('changeNickname', [UserManagerController::class, 'changeNickname'])->name('changeNickname_POST');
         Route::post('setMaxDrink', [UserManagerController::class, 'setMaxDrink'])->name('setMaxDrink_POST');
+        Route::post('setTargetDrink', [UserManagerController::class, 'setTargetDrink'])->name('setTargetDrink_POST');
 
         //notification
         Route::post('/save-device-token', [UserNotificationController::class, 'saveDeviceToken'])->name('saveDeviceToken_POST');

@@ -27,11 +27,12 @@
                             @foreach ($containerList as $nfcid => $containerData)
                                 <tr>
                                     <td>{{ $nfcid }}</td>
-                                    <td>{{ $containerData['weight'] !== -1 ? $containerData['weight'] : 'set weight at dispenser!' }}
+                                    <td>{{ isset($containerData['weight']) ? (String) $containerData['weight']: 'Not set!' }}
                                     </td>
-                                    <td>{{ $containerData['volume'] !== -1 ? $containerData['volume'] : 'set volume at dispenser!' }}
+                                    <td>{{ isset($containerData['volume']) ? (String) $containerData['volume']: 'Not set!' }}
                                     </td>
-                                    <td>{{ $containerData['description'] }}</td>
+                                    <td>{{ isset($containerData['description']) ? $containerData['description'] : '' }}
+                                    </td>
                                 </tr>
                             @endforeach
                         @else
@@ -93,19 +94,13 @@
                         @csrf
                         <div class="nfc">
                             <span>NFC ID</span>
-                            <input type="text" placeholder="AA" maxlength="2" name="nfc_id1" required>
+                            <input type="text" placeholder="AA" maxlength="2" name="nfc_id1">
                             <span>:</span>
-                            <input type="text" placeholder="AA" maxlength="2" name="nfc_id2" required>
+                            <input type="text" placeholder="AA" maxlength="2" name="nfc_id2">
                             <span>:</span>
-                            <input type="text" placeholder="AA" maxlength="2" name="nfc_id3" required>
+                            <input type="text" placeholder="AA" maxlength="2" name="nfc_id3">
                             <span>:</span>
-                            <input type="text" placeholder="AA" maxlength="2" name="nfc_id4" required>
-                        </div>
-                        <div class="container">
-                            <span>Container Weight</span>
-                            <input type="number" placeholder="gram" name="weight" required>
-                            <span>Container Volume</span>
-                            <input type="number" placeholder="(100 - 6000)mL" name="volume" required>
+                            <input type="text" placeholder="AA" maxlength="2" name="nfc_id4">
                         </div>
                         <textarea name="containerDesc" class="desc" placeholder="Container Description"></textarea>
                         <input type="hidden" name="idToken" value="{{ session('idToken') }}">
@@ -124,13 +119,13 @@
                         @csrf
                         <div class="nfc">
                             <span>NFC ID</span>
-                            <input type="text" placeholder="AA" maxlength="2" name="nfc_id1" required>
+                            <input type="text" placeholder="AA" maxlength="2" name="nfc_id1">
                             <span>:</span>
-                            <input type="text" placeholder="AA" maxlength="2" name="nfc_id2" required>
+                            <input type="text" placeholder="AA" maxlength="2" name="nfc_id2">
                             <span>:</span>
-                            <input type="text" placeholder="AA" maxlength="2" name="nfc_id3" required>
+                            <input type="text" placeholder="AA" maxlength="2" name="nfc_id3">
                             <span>:</span>
-                            <input type="text" placeholder="AA" maxlength="2" name="nfc_id4" required>
+                            <input type="text" placeholder="AA" maxlength="2" name="nfc_id4">
                         </div>
                         <input type="hidden" name="idToken" value="{{ session('idToken') }}">
                         <button type="submit" class="deleteContainer red">Delete Container</button>
@@ -142,6 +137,9 @@
 
         function submitForm(formData, target) {
             let ACTION_URL;
+
+            let button = document.querySelector('dialog form button[type="submit"]');
+            button.disabled = true;
 
             switch (target) {
                 case "AddContainer":
@@ -178,6 +176,7 @@
                 })
                 .catch(error => {
                     if (error.errors) {
+                        button.disabled = false;
                         showErrors(error.errors);
                     }
                 });
@@ -191,24 +190,11 @@
             const nfcid_uppercase = nfcid.toUpperCase();
 
             if (target === "AddContainer") {
-                const weight = 'set weight at dispenser!';
-                const volume = 'set volume at dispenser!';
-                const description = formData.get('containerDesc') != null ? formData.get('description') : '';
-
-                // console.log('NFC ID:', nfcid);
-                // console.log('Weight:', weight);
-                // console.log('Volume:', volume);
-                // console.log('Description:', description);
+                const weight = 'Not set!';
+                const volume = 'Not set!';
+                const description = formData.get('containerDesc') === "" || formData.get('containerDesc') === null ? "" : formData.get('containerDesc');
 
                 const containerList = document.querySelector('.table-data #container-list tbody');
-                const containerList = document.querySelector('.table-data #container-list tbody');
-                // console.log('containerList:', containerList);
-                if (containerList) {
-                    const newRow = document.createElement('tr');
-                    newRow.innerHTML = '<td>' + nfcid_uppercase + '</td>' +
-                        '<td>' + weight + '</td>' +
-                        '<td>' + volume + '</td>' +
-                        '<td>' + description + '</td>';
                 if (containerList) {
                     const newRow = document.createElement('tr');
                     newRow.innerHTML = '<td>' + nfcid_uppercase + '</td>' +
@@ -218,38 +204,24 @@
 
                     // Get existing rows and convert to array
                     const rowsArray = Array.from(containerList.querySelectorAll('tr'));
-                    // Get existing rows and convert to array
-                    const rowsArray = Array.from(containerList.querySelectorAll('tr'));
 
                     // Insert the new row in the correct position
                     let inserted = false;
                     for (let i = 0; i < rowsArray.length; i++) {
                         const currentRow = rowsArray[i];
                         const currentNfcid = currentRow.cells[0].textContent.toUpperCase();
-                    // Insert the new row in the correct position
-                    let inserted = false;
-                    for (let i = 0; i < rowsArray.length; i++) {
-                        const currentRow = rowsArray[i];
-                        const currentNfcid = currentRow.cells[0].textContent.toUpperCase();
 
-                        if (nfcid_uppercase < currentNfcid) {
-                            containerList.insertBefore(newRow, currentRow);
-                            inserted = true;
-                            break;
+                        if(currentNfcid.toLowerCase() === "No container found.".toLowerCase()) {
+                            containerList.removeChild(currentRow);
                         }
-                    }
-                        if (nfcid_uppercase < currentNfcid) {
+
+                        else if (nfcid_uppercase < currentNfcid) {
                             containerList.insertBefore(newRow, currentRow);
                             inserted = true;
                             break;
                         }
                     }
 
-                    // If the new row is not inserted (meaning it is the last row), append it
-                    if (!inserted) {
-                        containerList.appendChild(newRow);
-                    }
-                }
                     // If the new row is not inserted (meaning it is the last row), append it
                     if (!inserted) {
                         containerList.appendChild(newRow);
@@ -270,6 +242,12 @@
                             break;
                         }
                     }
+
+                    if(rowsArray.length === 1) {
+                        const emptyRow = document.createElement('tr');
+                        emptyRow.innerHTML = `<td colspan="4">No container found.</td>`;
+                        containerList.append(emptyRow);
+                    }
                 }
             }
         }
@@ -289,23 +267,3 @@
         }
     </script>
 @endsection
-
-<style>
-    .container {
-        display: flex;
-        gap: 10px;
-    }
-
-    .container span {
-        font-size: var(--s7);
-        color: var(--color-primary);
-        font-family: var(--font-semibold);
-    }
-
-    .container input {
-        flex: 1;
-        padding: 10px;
-        margin: 5px;
-        box-sizing: border-box;
-    }
-</style>
