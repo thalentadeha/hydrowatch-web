@@ -99,6 +99,7 @@ class UserDashboardController extends Controller
         if($maxDrink != 0 && $maxDrink < $targetDrink) {
             $percentage = (int) ($drankWater * 100 / $maxDrink);
         }
+        $percentage = $percentage > 100 ? 100 : $percentage;
 
         // User Container
         $containerQuery = $this->db->collection('container')->where('userID', '=', $uid);

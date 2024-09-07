@@ -390,7 +390,5 @@
             };
             new Notification(noteTitle, noteOptions);
         });
-
-        var percentage = @json($percentage);
     </script>
 @endsection
