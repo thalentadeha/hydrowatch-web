@@ -77,7 +77,6 @@
                         </tbody>
                     </table>
                 </div>
-                <button type="button" class="SaveWorkingTime blue">Save Working Time</button>
             </div>
         </section>
     </main>
@@ -224,7 +223,7 @@
         let scheduleList = document.querySelectorAll("#schedule-list tbody tr");
 
         if (scheduleList !== null) {
-            scheduleList.forEach(i => {
+            scheduleList.forEach((i, index) => {
                 const j = i.querySelectorAll("td")
                 if (j.length > 0) {
                     i.addEventListener("click", () => {
@@ -235,18 +234,23 @@
                             <span>Change Working Time - ${j[0].innerText}</span>
                             <img class="close" src="{{ asset('img/close.png') }}" alt="">
                         </div>
-                        <form action="">
-                            <div class="time-in-out">
+                        <form action="{{ route('saveSchedule_POST') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="idToken" value="{{ session('idToken') }}">
+                        <input type="hidden" name="day" value=${index}>
+                        <input type="hidden" class="timeIn" name="in" value="">
+                        <input type="hidden" class="timeOut" name="out" value="">    
+                        <div class="time-in-out">
                                 <span>Time In</span>
-                                <input type="time" min="04:00" max="23:00" step="3600">
+                                <input type="time" name="timeIn" min="04:00" max="23:00" step="3600">
                             </div>
                             <div class="time-in-out">
                                 <span>Time Out</span>
-                                <input type="time" min="04:00" max="23:00" step="3600">
+                                <input type="time" name="timeOut" min="04:00" max="23:00" step="3600">
                             </div>
                             <div class="buttons">
-                                <button type="button" class="deleteTime red">Delete Working Time</button>
-                                <button type="button" class="changeTime blue">Save Working Time</button>
+                                <button type="reset" class="deleteTime red">Delete Working Time</button>
+                                <button type="submit" class="changeTime blue">Save Working Time</button>
                             </div>
                         </form>
                     </div>
@@ -254,11 +258,9 @@
                         dialogBox.innerHTML = innerDialog
                         if (innerDialog !== ``) {
                             dialogBox.show()
-                            dialogBox.querySelector(".content .text-area .close").addEventListener("click",
-                                () => {
+                            dialogBox.querySelector(".content .text-area .close").addEventListener("click", () => {
                                     dialogBox.close()
-                                })
-
+                            })
                             const timeForm = document.querySelectorAll(".time-in-out input[type=time]")
                             if (timeForm !== null) {
                                 timeForm.forEach(i => {
@@ -267,31 +269,24 @@
                                     })
                                 })
                             }
-
-                            const deleteTime = document.querySelector("button.deleteTime")
-                            const changeTime = document.querySelector("button.changeTime")
-
-                            deleteTime.addEventListener('click', () => {
-                                j[1].innerHTML = "OFF"
-                                j[2].innerHTML = "OFF"
-                                dialogBox.close()
-                            })
-                            changeTime.addEventListener('click', () => {
-                                if(String(timeForm[0].value) === "") {
-                                    showErrors("'Time in' cannot be empty")
-                                }
-                                else if(String(timeForm[1].value) === "") {
-                                    showErrors("'Time out' cannot be empty")
-                                }
-                                else if(parseInt(timeForm[1].value) <= parseInt(timeForm[0].value)) {
-                                    showErrors("'Time in' must be earlier than the 'Time out'")
-                                }
-                                else {
-                                    j[1].innerHTML = timeForm[0].value
-                                    j[2].innerHTML = timeForm[1].value
-                                    dialogBox.close()
-                                }
-                            })
+                            
+                            const form = dialogBox.querySelector('form');
+                            form.addEventListener('submit', function(event) {
+                                event.preventDefault();
+                                const inputTimeIn = document.querySelector("input.timeIn");
+                                inputTimeIn.value = String(timeForm[0].value);
+                                const inputTimeOut = document.querySelector("input.timeOut");
+                                inputTimeOut.value = String(timeForm[1].value);
+                                submitForm(new FormData(form), "Save Working Time");
+                            });
+                            form.addEventListener('reset', function(event) {
+                                event.preventDefault();
+                                const inputTimeIn = document.querySelector("input.timeIn");
+                                inputTimeIn.value = "OFF";
+                                const inputTimeOut = document.querySelector("input.timeOut");
+                                inputTimeOut.value = "OFF";
+                                submitForm(new FormData(form), "Save Working Time");
+                            });
                         }
                     })
                 }
@@ -337,8 +332,12 @@
             }
 
             let button = document.querySelector('dialog form button[type="submit"]');
+            let buttonRst = document.querySelector('dialog form button[type="reset"]');
             if(button != null && button != undefined) {
                 button.disabled = true;
+            }
+            if(buttonRst != null && buttonRst != undefined) {
+                buttonRst.disabled = true;
             }
 
             fetch(ACTION_URL, {
@@ -354,14 +353,11 @@
                             throw data;
                         });
                     }
-                    console.log(response)
                     return response.json();
                 })
                 .then(data => {
                     if (data.success) {
-                        if(target !== "Save Working Time") {
-                            document.querySelector('dialog').close();
-                        }
+                        document.querySelector('dialog').close();
                         alert(data.success);
 
                         if (formData.has('nickname')) {
@@ -399,22 +395,25 @@
                                 maxDrinkElement.textContent = `${formData.get('targetDrink')}mL`;
                             }
                         }
+
+                        if (target === "Save Working Time") {
+                            const list = document.querySelectorAll("#schedule-list tbody tr");
+                            let schedule = list[formData.get('day')].querySelectorAll("td");
+                            schedule[1].innerHTML = formData.get('in');
+                            schedule[2].innerHTML = formData.get('out');
+                        }
                     }
-                    console.log(data)
                 })
                 .catch(error => {
                     if (error.errors) {
-                        if("Save Working Time" === target) {
-                            alert(error.errors);
-                        }
-                        else {
-                            showErrors(error.errors);
-                        }
+                        showErrors(error.errors);
                         
                         if(button != null && button != undefined) {
-                            button.disabled = true;
+                            button.disabled = false;
                         }
-                        console.log(response)
+                        if(buttonRst != null && buttonRst != undefined) {
+                            buttonRst.disabled = false;
+                        }
                     }
                 });
         }
@@ -432,46 +431,6 @@
                 form.appendChild(errorSpan);
             }
         }
-
-        let buttonSave = document.querySelector("button.SaveWorkingTime");
-        buttonSave.addEventListener('click', () => {
-            let schedules = checkScheduleChange();
-            if(schedules["list"].length > 0) {
-                buttonSave.disabled = true;
-
-                schedules["list"].forEach(i => {
-                    const form = document.createElement('form');
-                    form.action = '{{ route('saveSchedule_POST') }}';
-                    form.method = "POST";
-
-                    const day = document.createElement('input');
-                    day.type = 'text';
-                    day.name = 'day';
-                    day.defaultValue = i;
-
-                    const timeIn = document.createElement('input');
-                    timeIn.type = 'text';
-                    timeIn.name = 'in';
-                    timeIn.defaultValue = schedules[i]["timeIn"];
-
-                    const timeOut = document.createElement('input');
-                    timeOut.type = 'text';
-                    timeOut.name = 'out';
-                    timeOut.defaultValue = schedules[i]["timeOut"];
-
-                    const btn = document.createElement('button');
-                    btn.type = 'submit';
-                    btn.name = 'submit';
-
-                    form.appendChild(day);
-                    form.appendChild(timeIn);
-                    form.appendChild(timeOut);
-                    form.appendChild(btn);
-
-                    submitForm(new FormData(form), "Save Working Time")
-                })
-            }
-        })
         
 
         //NOTIFICATION

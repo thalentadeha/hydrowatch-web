@@ -365,6 +365,10 @@ form textarea {
     transition: opacity .4s ease, background-color .5s ease;
 }
 
+form input.hidden {
+    display: none;
+}
+
 form input:not(:placeholder-shown),
 form textarea:not(:placeholder-shown) {
     opacity: 1;

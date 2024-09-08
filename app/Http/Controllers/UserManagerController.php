@@ -341,17 +341,21 @@ class UserManagerController extends Controller
         $uid = $this->authController->getUID($idToken);
         try {
             $validated = $validator->validate();
+
             if($validated['in'] === "OFF") {
-                $this->db->collection('user')->documents($uid)->collection('schedule')->documents($validated['day'])->delete();
+                $this->db->collection('user')->document($uid)->collection('schedule')->document($validated['day'])->delete();
+            }
+            else if($validated["in"] >= $validated["out"]) {
+                return response()->json(['errors' => 'Time in must be earlier than Time out'], 422);
             }
             else {
                 $scheduleData = [
                     'timeIn' => $validated["in"],
                     'timeOut' => $validated["out"],
                 ];
-                $this->db->collection('user')->documents($uid)->collection('schedule')->documents($validated['day'])->set($containerData);
+                $this->db->collection('user')->document($uid)->collection('schedule')->document($validated['day'])->set($scheduleData);
             }
-            return response()->json(['success' => (String) $request]);
+            return response()->json(['success' => 'Change schedule successful']);
         } catch (Exception $e) {
             return response()->json(['errors' => [$e->getMessage()]], 422);
         }

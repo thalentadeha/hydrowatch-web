@@ -55,6 +55,13 @@ class UserSettingController extends Controller
             $notificationTimeOut[$notificationDay[$i]] = "OFF";
         }
 
+        $notificationTimeList = $this->db->collection('user')->document($uid)->collection('schedule')->documents();
+        foreach ($notificationTimeList as $notificationTime) {
+            $notificationTimeIn[$notificationDay[$notificationTime->id()]] = $notificationTime['timeIn'];
+            $notificationTimeOut[$notificationDay[$notificationTime->id()]] = $notificationTime['timeOut'];
+        }
+
+
         return view('user.setting', [
             'userData' => $userData,
             'email' => $email,
