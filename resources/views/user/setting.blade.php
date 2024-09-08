@@ -67,41 +67,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Monday</td>
-                                <td>08:00</td>
-                                <td>17:00</td>
-                            </tr>
-                            <tr>
-                                <td>Tuesday</td>
-                                <td>08:00</td>
-                                <td>17:00</td>
-                            </tr>
-                            <tr>
-                                <td>Wednesday</td>
-                                <td>08:00</td>
-                                <td>17:00</td>
-                            </tr>
-                            <tr>
-                                <td>Thursday</td>
-                                <td>08:00</td>
-                                <td>17:00</td>
-                            </tr>
-                            <tr>
-                                <td>Friday</td>
-                                <td>08:00</td>
-                                <td>17:00</td>
-                            </tr>
-                            <tr>
-                                <td>Saturday</td>
-                                <td>08:00</td>
-                                <td>17:00</td>
-                            </tr>
-                            <tr>
-                                <td>Sunday</td>
-                                <td>08:00</td>
-                                <td>17:00</td>
-                            </tr>
+                            @foreach ($notificationTimeIn as $day => $startTime)
+                                <tr>
+                                    <td>{{ $day }}</td>
+                                    <td>{{ $startTime }}</td>
+                                    <td>{{ $notificationTimeOut[$day] }}</td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -247,7 +219,10 @@
             }
         }
 
-        const scheduleList = document.querySelectorAll("#schedule-list tr")
+        let notifTimeIn = @json($notificationTimeOut);
+        let notifTimeOut = @json($notificationTimeOut);
+        let scheduleList = document.querySelectorAll("#schedule-list tbody tr");
+
         if (scheduleList !== null) {
             scheduleList.forEach(i => {
                 const j = i.querySelectorAll("td")
@@ -292,10 +267,52 @@
                                     })
                                 })
                             }
+
+                            const deleteTime = document.querySelector("button.deleteTime")
+                            const changeTime = document.querySelector("button.changeTime")
+
+                            deleteTime.addEventListener('click', () => {
+                                j[1].innerHTML = "OFF"
+                                j[2].innerHTML = "OFF"
+                                dialogBox.close()
+                            })
+                            changeTime.addEventListener('click', () => {
+                                if(String(timeForm[0].value) === "") {
+                                    showErrors("'Time in' cannot be empty")
+                                }
+                                else if(String(timeForm[1].value) === "") {
+                                    showErrors("'Time out' cannot be empty")
+                                }
+                                else if(parseInt(timeForm[1].value) <= parseInt(timeForm[0].value)) {
+                                    showErrors("'Time in' must be earlier than the 'Time out'")
+                                }
+                                else {
+                                    j[1].innerHTML = timeForm[0].value
+                                    j[2].innerHTML = timeForm[1].value
+                                    dialogBox.close()
+                                }
+                            })
                         }
                     })
                 }
             })
+        }
+
+        function checkScheduleChange() {
+            let changeList = {};
+            changeList["list"] = []
+            let list = document.querySelectorAll("#schedule-list tbody tr");
+            list.forEach(function (i, index) {
+                const j = i.querySelectorAll("td")
+                let day = j[0].innerHTML
+                if(j[1].innerHTML !== notifTimeIn[day] || j[2].innerHTML !== notifTimeOut[day]) {
+                    changeList["list"].push(index)
+                    changeList[index] = {}
+                    changeList[index]["timeIn"] = j[1].innerHTML;
+                    changeList[index]["timeOut"] = j[2].innerHTML;
+                }
+            })
+            return changeList;
         }
 
         function submitForm(formData, target) {
@@ -314,11 +331,15 @@
                 case "Change Password":
                     ACTION_URL = '{{ route('resetPassword_POST') }}';
                     break;
+                case "Save Working Time":
+                    ACTION_URL = '{{ route('saveSchedule_POST') }}';
+                    break;
             }
 
             let button = document.querySelector('dialog form button[type="submit"]');
-            button.disabled = true;
-
+            if(button != null && button != undefined) {
+                button.disabled = true;
+            }
 
             fetch(ACTION_URL, {
                     method: 'POST',
@@ -333,11 +354,14 @@
                             throw data;
                         });
                     }
+                    console.log(response)
                     return response.json();
                 })
                 .then(data => {
                     if (data.success) {
-                        document.querySelector('dialog').close();
+                        if(target !== "Save Working Time") {
+                            document.querySelector('dialog').close();
+                        }
                         alert(data.success);
 
                         if (formData.has('nickname')) {
@@ -376,11 +400,21 @@
                             }
                         }
                     }
+                    console.log(data)
                 })
                 .catch(error => {
                     if (error.errors) {
-                        showErrors(error.errors);
-                        button.disabled = false;
+                        if("Save Working Time" === target) {
+                            alert(error.errors);
+                        }
+                        else {
+                            showErrors(error.errors);
+                        }
+                        
+                        if(button != null && button != undefined) {
+                            button.disabled = true;
+                        }
+                        console.log(response)
                     }
                 });
         }
@@ -398,6 +432,47 @@
                 form.appendChild(errorSpan);
             }
         }
+
+        let buttonSave = document.querySelector("button.SaveWorkingTime");
+        buttonSave.addEventListener('click', () => {
+            let schedules = checkScheduleChange();
+            if(schedules["list"].length > 0) {
+                buttonSave.disabled = true;
+
+                schedules["list"].forEach(i => {
+                    const form = document.createElement('form');
+                    form.action = '{{ route('saveSchedule_POST') }}';
+                    form.method = "POST";
+
+                    const day = document.createElement('input');
+                    day.type = 'text';
+                    day.name = 'day';
+                    day.defaultValue = i;
+
+                    const timeIn = document.createElement('input');
+                    timeIn.type = 'text';
+                    timeIn.name = 'in';
+                    timeIn.defaultValue = schedules[i]["timeIn"];
+
+                    const timeOut = document.createElement('input');
+                    timeOut.type = 'text';
+                    timeOut.name = 'out';
+                    timeOut.defaultValue = schedules[i]["timeOut"];
+
+                    const btn = document.createElement('button');
+                    btn.type = 'submit';
+                    btn.name = 'submit';
+
+                    form.appendChild(day);
+                    form.appendChild(timeIn);
+                    form.appendChild(timeOut);
+                    form.appendChild(btn);
+
+                    submitForm(new FormData(form), "Save Working Time")
+                })
+            }
+        })
+        
 
         //NOTIFICATION
         document.getElementById('notificationToggle').addEventListener('change', function() {

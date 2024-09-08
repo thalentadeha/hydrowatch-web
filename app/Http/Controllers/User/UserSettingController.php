@@ -47,11 +47,21 @@ class UserSettingController extends Controller
             $targetDrink = $userData['targetDrink'];
         }
 
+        $notificationDay = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        $notificationTimeIn = [];
+        $notificationTimeOut = [];
+        for($i = 0; $i < 7; $i++) {
+            $notificationTimeIn[$notificationDay[$i]] = "OFF";
+            $notificationTimeOut[$notificationDay[$i]] = "OFF";
+        }
+
         return view('user.setting', [
             'userData' => $userData,
             'email' => $email,
             'maxDrink' => $maxDrink,
             'targetDrink' => $targetDrink,
+            'notificationTimeIn' => $notificationTimeIn,
+            'notificationTimeOut' => $notificationTimeOut,
             'isNotificationEnabled' => $isNotificationEnabled
         ]);
     }

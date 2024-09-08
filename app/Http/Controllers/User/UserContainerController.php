@@ -109,7 +109,6 @@ class UserContainerController extends Controller
             ];
 
             $this->db->collection('container')->document(strtoupper($containerID))->set($containerData);
-            $this->db->collection('container')->document(strtoupper($containerID))->set($containerData);
 
             return response()->json(['success' => 'Add container successful']);
         } catch (Exception $e) {

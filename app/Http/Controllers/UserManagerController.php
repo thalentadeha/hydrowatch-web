@@ -319,4 +319,41 @@ class UserManagerController extends Controller
             return response()->json(['errors' => [$e->getMessage()]], 422);
         }
     }
+
+    public function saveSchedule(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'day' => ['required', 'string'],
+            'in' => ['required', 'string'],
+            'out' => ['required', 'string'],
+        ], [
+            'day.required' => 'day should not be empty.',
+            'in.required' => 'Time in should not be empty.',
+            'out.required' => 'Time out should not be empty.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->first()], 422);
+        }
+
+        $idToken = session('idToken');
+
+        $uid = $this->authController->getUID($idToken);
+        try {
+            $validated = $validator->validate();
+            if($validated['in'] === "OFF") {
+                $this->db->collection('user')->documents($uid)->collection('schedule')->documents($validated['day'])->delete();
+            }
+            else {
+                $scheduleData = [
+                    'timeIn' => $validated["in"],
+                    'timeOut' => $validated["out"],
+                ];
+                $this->db->collection('user')->documents($uid)->collection('schedule')->documents($validated['day'])->set($containerData);
+            }
+            return response()->json(['success' => (String) $request]);
+        } catch (Exception $e) {
+            return response()->json(['errors' => [$e->getMessage()]], 422);
+        }
+    }
 }

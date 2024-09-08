@@ -1022,7 +1022,6 @@ main.setting section .schedule button {
     left: 60%;
 }
 
-
 @media (hover: hover) {
     button {
         opacity: 0.8;
