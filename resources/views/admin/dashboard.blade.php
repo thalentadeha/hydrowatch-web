@@ -122,6 +122,8 @@
 
         function submitForm(formData, target) {
             let ACTION_URL;
+            let button = document.querySelector('dialog form button[type="submit"]');
+            button.disabled = true;
 
             switch (target) {
                 case "AddUser":
@@ -131,7 +133,6 @@
                     ACTION_URL = '{{ route('deleteUser_POST') }}';
                     break;
             }
-
 
             fetch(ACTION_URL, {
                     method: 'POST',
@@ -158,6 +159,7 @@
                 })
                 .catch(error => {
                     if (error.errors) {
+                        button.disabled = false;
                         showErrors(error.errors);
                     }
                 });
