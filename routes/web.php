@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\UserManagerController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\User\UserContainerController;
 use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\User\UserNotificationController;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'showLogin'])->name('login_GET');
 Route::post('/login', [AuthController::class, 'login'])->name('login_POST');
+Route::get('send-email', [EmailController::class, 'sendReminderEmail']);
 
 Route::middleware('login')->group(function () {
     //ADMIN
