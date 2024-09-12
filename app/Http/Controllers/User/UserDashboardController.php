@@ -14,7 +14,6 @@ class UserDashboardController extends Controller
 {
     protected $auth;
     protected $db;
-    protected $tokenController;
     protected $authController;
 
     public function __construct(

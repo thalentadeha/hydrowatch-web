@@ -242,11 +242,11 @@
                         <input type="hidden" class="timeOut" name="out" value="">    
                         <div class="time-in-out">
                                 <span>Time In</span>
-                                <input type="time" name="timeIn" min="04:00" max="23:00" step="3600">
+                                <input type="time" name="timeIn" min="06:00" max="22:00" step="3600">
                             </div>
                             <div class="time-in-out">
                                 <span>Time Out</span>
-                                <input type="time" name="timeOut" min="04:00" max="23:00" step="3600">
+                                <input type="time" name="timeOut" min="06:00" max="22:00" step="3600">
                             </div>
                             <div class="buttons">
                                 <button type="reset" class="deleteTime red">Delete Working Time</button>
@@ -291,23 +291,6 @@
                     })
                 }
             })
-        }
-
-        function checkScheduleChange() {
-            let changeList = {};
-            changeList["list"] = []
-            let list = document.querySelectorAll("#schedule-list tbody tr");
-            list.forEach(function (i, index) {
-                const j = i.querySelectorAll("td")
-                let day = j[0].innerHTML
-                if(j[1].innerHTML !== notifTimeIn[day] || j[2].innerHTML !== notifTimeOut[day]) {
-                    changeList["list"].push(index)
-                    changeList[index] = {}
-                    changeList[index]["timeIn"] = j[1].innerHTML;
-                    changeList[index]["timeOut"] = j[2].innerHTML;
-                }
-            })
-            return changeList;
         }
 
         function submitForm(formData, target) {
@@ -365,11 +348,6 @@
                             if (nicknameElement) {
                                 nicknameElement.textContent = formData.get('nickname');
                             }
-
-                            // const dialogNicknameInput = document.querySelector('input[name="nickname"]');
-                            // if (dialogNicknameInput) {
-                            //     dialogNicknameInput.value = formData.get('nickname');
-                            // }
 
                             const profileNicknameElement = document.querySelector('.profile .text-area .name');
                             if (profileNicknameElement) {
@@ -432,14 +410,11 @@
             }
         }
         
-
-        //NOTIFICATION
-        document.getElementById('notificationToggle').addEventListener('change', function() {
+        const notificationToggle = document.getElementById('notificationToggle');
+        notificationToggle.addEventListener('change', function() {
             const isEnabled = this.checked;
+            notificationToggle.disabled = true;
             const sessionToken = this.getAttribute('idToken');
-            console.log('isEnabled:', isEnabled);
-            // console.log('sessionToken:', sessionToken);
-
             updateNotificationStatus(isEnabled, sessionToken);
         });
 

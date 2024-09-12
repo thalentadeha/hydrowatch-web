@@ -40,14 +40,11 @@ Route::middleware('login')->group(function () {
 
         //setting
         Route::get('/setting', [UserSettingController::class, 'index'])->name('user-setting');
-        Route::post('changeNickname', [UserManagerController::class, 'changeNickname'])->name('changeNickname_POST');
-        Route::post('setMaxDrink', [UserManagerController::class, 'setMaxDrink'])->name('setMaxDrink_POST');
-        Route::post('setTargetDrink', [UserManagerController::class, 'setTargetDrink'])->name('setTargetDrink_POST');
-        Route::post('saveSchedule', [UserManagerController::class, 'saveSchedule'])->name('saveSchedule_POST');
-
-        //notification
-        Route::post('/save-device-token', [UserNotificationController::class, 'saveDeviceToken'])->name('saveDeviceToken_POST');
-        Route::post('/update-notification-status', [UserNotificationController::class, 'updateNotificationStatus'])->name('updateNotificationStatus_POST');
+        Route::post('changeNickname', [UserSettingController::class, 'changeNickname'])->name('changeNickname_POST');
+        Route::post('setMaxDrink', [UserSettingController::class, 'setMaxDrink'])->name('setMaxDrink_POST');
+        Route::post('setTargetDrink', [UserSettingController::class, 'setTargetDrink'])->name('setTargetDrink_POST');
+        Route::post('saveSchedule', [UserSettingController::class, 'saveSchedule'])->name('saveSchedule_POST');
+        Route::post('updateNotificationStatus', [UserSettingController::class, 'updateNotificationStatus'])->name('updateNotificationStatus_POST');
     });
 
     Route::post('changePassword', [UserManagerController::class, 'changePassword'])->name('resetPassword_POST');
