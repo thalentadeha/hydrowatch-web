@@ -67,22 +67,43 @@ class UserManagerController extends Controller
 
         $validated = $validator->validate();
 
-        $user = $this->auth->createUserWithEmailAndPassword($validated['email'], $validated['password']);
-
         try {
+            $user = $this->auth->createUserWithEmailAndPassword($validated['email'], $validated['password']);
             $userData = [
                 'fullname' => $validated['fullname'],
                 'nickname' => $validated['nickname'],
                 'role' => "user",
                 'maxDrink' => 0,
                 'targetDrink' => 2500,
+                'isNotificationEnabled' => false,
             ];
 
             $this->db->collection('user')->document($user->uid)->set($userData);
 
             return response()->json(['success' => 'User registered successfully.']);
-        } catch (\Throwable $th) {
+        } catch (\Kreait\Firebase\Exception\Auth\EmailExists $e) {
+            return response()->json(['errors' => ['The email is already registered.']], 422);
+        }
+        catch (\Throwable $th) {
             return response()->json(['errors' => ['Something went wrong.']], 422);
+        }
+          
+    }
+
+    private function deleteAllUserContainer(Request $request, $uid)
+    {
+        try {
+            $containers = $this->db->collection('container')->where('userID', '=', $uid)->documents();
+
+            if ($containers->isEmpty()) {
+                return response()->json(['errors' => ['No containers found for the given user.']], 422);
+            }
+
+            foreach ($containers as $container) {
+                $container->reference()->delete();
+            }
+        } catch (Exception $e) {
+            return response()->json(['errors' => ['User Not Found.']], 422);
         }
     }
     

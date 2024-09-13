@@ -56,6 +56,23 @@
             })
         }
 
+        function passwordShowHidden() {
+            const passField = document.querySelectorAll(".password-field")
+            passField.forEach(x => {
+                const eye = x.querySelector(".eye")
+                const pass = x.querySelector("input.password")
+                eye.addEventListener("click", () => {
+                    eye.classList.toggle("active")
+                    if (eye.classList.contains("active")) {
+                        pass.type = "text"
+                    }
+                    else {
+                        pass.type = "password"
+                    }
+                })
+            })
+        }
+
         function showDialogBox(target) {
             const dialogBox = document.querySelector("dialog")
             const innerDialog = getDialogBoxContent(target)
@@ -65,6 +82,10 @@
                 dialogBox.querySelector(".content .text-area .close").addEventListener("click", () => {
                     dialogBox.close()
                 })
+
+                if(target === "AddUser") {
+                    passwordShowHidden();
+                }
 
                 const form = dialogBox.querySelector('form');
                 form.addEventListener('submit', function(event) {

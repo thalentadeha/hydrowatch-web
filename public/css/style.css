@@ -184,6 +184,8 @@ header nav #profile .names {
     flex-direction: column;
     text-align: right;
     margin-right: var(--s7);
+    width: max-content;
+    max-width: 30vw;
 }
 
 header nav #profile .names .nickname {

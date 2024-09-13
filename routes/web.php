@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'showLogin'])->name('login_GET');
 Route::post('/login', [AuthController::class, 'login'])->name('login_POST');
-Route::get('send-email', [EmailController::class, 'sendReminderEmail']);
 
 Route::middleware('login')->group(function () {
     //ADMIN

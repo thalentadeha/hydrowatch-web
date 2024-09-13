@@ -23,6 +23,7 @@ class AdminDashboardController extends Controller
         $this->db = $firestore->database();
         $this->authController = $authController;
     }
+
     public function index(Request $request)
     {
         $idToken = session('idToken');
