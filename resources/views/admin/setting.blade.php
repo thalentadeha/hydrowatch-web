@@ -71,9 +71,7 @@
                     submitForm(new FormData(form));
                 });
 
-                if(target === "Change Password") {
-                    passwordShowHidden();
-                }
+                passwordShowHidden();
             }
         }
 

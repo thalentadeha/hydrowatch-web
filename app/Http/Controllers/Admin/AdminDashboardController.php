@@ -28,7 +28,7 @@ class AdminDashboardController extends Controller
     {
         $idToken = session('idToken');
 
-        $userDocs = $this->db->collection('user')->documents();
+        $userDocs = $this->db->collection('user')->where('role', '=', 'user')->documents();
         $drinkHistories = [];
 
         $year = (int) date('Y');
@@ -50,7 +50,7 @@ class AdminDashboardController extends Controller
         }
 
         uasort($users, function ($a, $b) {
-            return strcmp($a['fullname'], ($b['fullname'] ?? ''));
+            return strcmp($a['fullname'], ($b['fullname']));
         });
 
         $listUsersAuth = $this->auth->listUsers();
