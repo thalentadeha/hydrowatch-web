@@ -30,35 +30,38 @@ class AdminDashboardController extends Controller
 
         $userDocs = $this->db->collection('user')->where('role', '=', 'user')->documents();
         $drinkHistories = [];
+        $users= [];
 
         $year = (int) date('Y');
         $month = (int) date('n');
         $date = (int) date('d');
 
-        foreach ($userDocs as $user) {
-            if ($user->exists()) {
-                $users[$user->id()] = $user->data();
-                $drinkHistory = $user->reference()
-                                    ->collection('drinkHistory')
-                                    ->document($year)
-                                    ->collection($month)
-                                    ->document($date)
-                                    ->snapshot()
-                                    ->data();
-                $drinkHistories[$user->id()] = isset($drinkHistory['drank']) ? $drinkHistory['drank'] : 0;
+        if(!empty($userDocs)) {
+            foreach ($userDocs as $user) {
+                if ($user->exists()) {
+                    $users[$user->id()] = $user->data();
+                    $drinkHistory = $user->reference()
+                                        ->collection('drinkHistory')
+                                        ->document($year)
+                                        ->collection($month)
+                                        ->document($date)
+                                        ->snapshot()
+                                        ->data();
+                    $drinkHistories[$user->id()] = isset($drinkHistory['drank']) ? $drinkHistory['drank'] : 0;
+                }
             }
-        }
-
-        uasort($users, function ($a, $b) {
-            return strcmp($a['fullname'], ($b['fullname']));
-        });
-
-        $listUsersAuth = $this->auth->listUsers();
-        $email = [];
-        foreach ($listUsersAuth as $userAuth) {
-            $email[$userAuth->uid] = [
-                'email' => $userAuth->email,
-            ];
+            
+            uasort($users, function ($a, $b) {
+                return strcmp($a['fullname'], ($b['fullname']));
+            });
+    
+            $listUsersAuth = $this->auth->listUsers();
+            $email = [];
+            foreach ($listUsersAuth as $userAuth) {
+                $email[$userAuth->uid] = [
+                    'email' => $userAuth->email,
+                ];
+            }
         }
 
         return view('admin.dashboard', [

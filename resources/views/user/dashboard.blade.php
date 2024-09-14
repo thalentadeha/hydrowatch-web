@@ -1,9 +1,5 @@
 @extends('user.layout')
 
-{{-- @section('head-script')
-    <script type="module" src=" {{ asset('js/firebase.js') }}"></script>
-@endsection --}}
-
 @section('content')
     <main class="home">
         <section>

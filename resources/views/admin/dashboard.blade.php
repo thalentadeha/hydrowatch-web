@@ -23,16 +23,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($users as $uid => $user)
-                            @if ($user['role'] === 'user')
+                        
+
+                        @if (!empty($users))
+                            @foreach ($users as $uid => $user)
                                 <tr>
                                     <td>{{ $user['fullname'] }}</td>
                                     <td>{{ $email[$uid]['email'] }}</td>
                                     <td>{{ $user['nickname'] }}</td>
                                     <td>{{ $drinkHistories[$uid]}}</td>
                                 </tr>
-                            @endif
-                        @endforeach
+                            @endforeach
+                        @else
+                            <tr>
+                                <td colspan="4" style="font-family: var(--font-regular);">No registered user.</td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>
@@ -195,7 +201,6 @@
                 const drinkWater = '0';
 
                 const userList = document.querySelector('.table-data #user-list tbody');
-                // console.log('userList:', userList);
                 if (userList) {
                     const newRow = document.createElement('tr');
                     newRow.innerHTML = '<td>' + fullname + '</td>' +
@@ -212,7 +217,10 @@
                         const currentRow = rowsArray[i];
                         const currentFullname = currentRow.cells[0].textContent.trim().toUpperCase();
 
-                        if (fullname.trim().toUpperCase() < currentFullname) {
+                        if(currentFullname.toLowerCase() === "No registered user.".toLowerCase()) {
+                            userList.removeChild(currentRow);
+                        }
+                        else if (fullname.trim().toUpperCase() < currentFullname) {
                             userList.insertBefore(newRow, currentRow);
                             inserted = true;
                             break;
@@ -236,6 +244,12 @@
 
                         if (email === currentEmail) {
                             userList.removeChild(currentRow);
+
+                            if(rowsArray.length === 1) {
+                                const emptyRow = document.createElement('tr');
+                                emptyRow.innerHTML = `<td colspan="4">No registered user.</td>`;
+                                userList.append(emptyRow);
+                            }
                             break;
                         }
                     }

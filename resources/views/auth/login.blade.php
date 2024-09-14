@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, , maximum-scale=1.0">
     <link rel="icon" type="image/x-icon" href="{{ asset('img/icon.png') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
-    <script src="{{ asset('js/firebase.js') }}"></script>
     <title>HydroWatch | Login</title>
 </head>
 <body>
