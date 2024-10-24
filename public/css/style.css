@@ -1285,6 +1285,10 @@ main.setting section .schedule button {
         font-size: var(--s6);
     }
 
+    main.home section .g6 .text-container {
+        font-size: var(--s6);
+    }
+
     main.home section .g6 .table-data tr {
         font-size: var(--s7);
     }

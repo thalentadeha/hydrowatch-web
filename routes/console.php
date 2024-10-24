@@ -12,7 +12,6 @@ Schedule::command('email:send')->name('Send_Email')
                                 ->withoutOverlapping(25)
                                 ->timezone('Asia/Jakarta')
                                 ->between('6:00', '23:00')
-                                ->everyThirtyMinutes()
                                 ->after(function () {
                                     Artisan::command('cache:clear');
                                 });
