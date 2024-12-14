@@ -170,6 +170,11 @@ class UserDashboardController extends Controller
 
         $userDrankHistory = [];
         $userMaxDrinkHistory = [];
+        $targetDrink = 0;
+
+        if (!empty($userData['targetDrink'])) {
+            $targetDrink = $userData['targetDrink'];
+        }
 
         foreach ($listDrinkHistory as $drinkHistory) {
             if ($drinkHistory->exists()) {
@@ -181,10 +186,10 @@ class UserDashboardController extends Controller
                     if ((int) $data['maxDrink'] > 0) {
                         $userMaxDrinkHistory[$drinkHistory->id()] = (int) $data['maxDrink'];
                     } else {
-                        $userMaxDrinkHistory[$drinkHistory->id()] = 2000;
+                        $userMaxDrinkHistory[$drinkHistory->id()] = $targetDrink;
                     }
                 } else {
-                    $userMaxDrinkHistory[$drinkHistory->id()] = 2000;
+                    $userMaxDrinkHistory[$drinkHistory->id()] = $targetDrink;
                 }
             }
         }

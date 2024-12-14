@@ -141,12 +141,12 @@
         function createChart(userDrink, userMaxDrink) {
             const month_year = document.querySelector(".g3 .text-container span.month-year").innerText;
             const tempDate = new Date(month_year);
-            const daytime = new Date(tempDate.getFullYear(), tempDate.getMonth() + 1, 0).getDate();
+            const date = new Date(tempDate.getFullYear(), tempDate.getMonth() + 1, 0).getDate();
             let drink = [];
             let maxDrink = [];
 
             let label = [];
-            for (let i = 1; i <= daytime; i++) {
+            for (let i = 1; i <= date; i++) {
                 label.push(i)
                 drink.push(userDrink[String(i)] !== undefined ? userDrink[String(i)] : 0);
                 maxDrink.push(userMaxDrink[String(i)] !== undefined ? userMaxDrink[String(i)] : 0);
@@ -294,12 +294,11 @@
                 button.addEventListener('click', function() {
                     const action = this.dataset.action; // "prev" or "next"
 
-                    // Prepare AJAX request
                     fetch('/update-month', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
                             },
                             body: JSON.stringify({
                                 action: action,
@@ -311,13 +310,13 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                // Update the displayed month and year
+                                // update the month and year
                                 year = data.year;
                                 month = data.month;
                                 monthYearElement.textContent = data.monthName + ' ' + year;
 
-                                // Update the charts and other elements with new data
-                                // Clear existing charts
+                                // update the charts and other elements with new data
+                                // clear existing charts
                                 document.querySelector(".g3 .chart").innerHTML = '';
 
                                 console.log(data.userDrankHistory);
