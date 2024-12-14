@@ -8,7 +8,7 @@
                     <span>Drank Water</span>
                     <div class="text-container">
                         <span>{{ $drankWater }}</span>
-                        <span>/ {{ ($maxDrink < $targetDrink && $maxDrink > 0 ? $maxDrink : $targetDrink) }}mL</span>
+                        <span>/ {{ $maxDrink < $targetDrink && $maxDrink > 0 ? $maxDrink : $targetDrink }}mL</span>
                     </div>
                 </div>
                 <div class="g12">
@@ -20,7 +20,9 @@
             </div>
             <div class="grid-item g3">
                 <div class="text-container">
-                    <span class="month-year">{{ $month . ' ' . $year }}</span>
+                    <img class="prev" src="{{ asset('img/prev.png') }}" alt="" data-action="prev">
+                    <span class="month-year">{{ $monthName . ' ' . $year }}</span>
+                    <img class="next" src="{{ asset('img/next_b.png') }}" alt="" data-action="next">
                 </div>
                 <div class="chart">
 
@@ -39,7 +41,7 @@
                                 @foreach ($containerList as $nfcid => $containerData)
                                     <tr>
                                         <td>{{ $nfcid }}</td>
-                                        <td>{{ isset($containerData['volume']) ? (((String) $containerData['volume']) . "mL"): 'Not set' }}
+                                        <td>{{ isset($containerData['volume']) ? ((string) $containerData['volume']) . 'mL' : 'Not set' }}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -135,17 +137,19 @@
             let chart = new ApexCharts(document.querySelector(".g5 .chart"), options);
             chart.render();
         }
-        
+
         function createChart(userDrink, userMaxDrink) {
-            const today = new Date(new Date().getFullYear(), (new Date().getMonth() + 1), 0).getDate();
+            const month_year = document.querySelector(".g3 .text-container span.month-year").innerText;
+            const tempDate = new Date(month_year);
+            const daytime = new Date(tempDate.getFullYear(), tempDate.getMonth() + 1, 0).getDate();
             let drink = [];
             let maxDrink = [];
-            
+
             let label = [];
-            for(let i = 1; i <=today; i++) {
+            for (let i = 1; i <= daytime; i++) {
                 label.push(i)
-                drink.push(userDrink[String(i)])
-                maxDrink.push(userMaxDrink[String(i)])
+                drink.push(userDrink[String(i)] !== undefined ? userDrink[String(i)] : 0);
+                maxDrink.push(userMaxDrink[String(i)] !== undefined ? userMaxDrink[String(i)] : 0);
             }
 
             let options = {
@@ -159,15 +163,15 @@
                         fontFamily: fontFamily,
                     },
                     x: {
-                        formatter: (value) => `${value} ${document.querySelector(".g3 .text-container span.month-year").innerText}`,
+                        formatter: (value) =>
+                            `${value} ${document.querySelector(".g3 .text-container span.month-year").innerText}`,
                     },
                     y: {
                         formatter: (value) => `${value}mL`,
                     },
                 },
 
-                series: [
-                    {
+                series: [{
                         name: "Drank",
                         type: 'bar',
                         data: drink,
@@ -253,13 +257,22 @@
 
                 states: {
                     normal: {
-                        filter: { type: 'lighten', value: 0.03 },
+                        filter: {
+                            type: 'lighten',
+                            value: 0.03
+                        },
                     },
                     hover: {
-                        filter: { type: 'lighten', value: 0.01 },
+                        filter: {
+                            type: 'lighten',
+                            value: 0.01
+                        },
                     },
                     active: {
-                        filter: { type: 'none', value: 0 },
+                        filter: {
+                            type: 'none',
+                            value: 0
+                        },
                         allowMultipleDataPointsSelection: false,
                     },
                 },
@@ -270,9 +283,67 @@
         }
     </script>
     <script>
-        createDonut({{$percentage}});
+        document.addEventListener('DOMContentLoaded', function() {
+            const prevNextButtons = document.querySelectorAll('.prev, .next');
+            const monthYearElement = document.querySelector('.month-year');
+
+            // console.log({{ $year }});
+            // console.log({{ $month }});
+
+            prevNextButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = this.dataset.action; // "prev" or "next"
+
+                    // Prepare AJAX request
+                    fetch('/update-month', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token
+                            },
+                            body: JSON.stringify({
+                                action: action,
+                                idToken: '{{ session('idToken') }}',
+                                year: year,
+                                month: month
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Update the displayed month and year
+                                year = data.year;
+                                month = data.month;
+                                monthYearElement.textContent = data.monthName + ' ' + year;
+
+                                // Update the charts and other elements with new data
+                                // Clear existing charts
+                                document.querySelector(".g3 .chart").innerHTML = '';
+
+                                console.log(data.userDrankHistory);
+                                console.log(data.userMaxDrinkHistory);
+
+                                createChart(data.userDrankHistory, data.userMaxDrinkHistory);
+                            } else {
+                                alert('Failed to load data. Please try again.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                });
+            });
+        });
+
+        var year = {{ $year }};
+        var month = {{ $month }}
+        createDonut({{ $percentage }});
         let drink = @json($userDrankHistory);
         let maxDrink = @json($userMaxDrinkHistory);
+
+        // console.log($userDrankHistory);
+        console.log(drink);
+
         createChart(drink, maxDrink);
     </script>
 @endsection

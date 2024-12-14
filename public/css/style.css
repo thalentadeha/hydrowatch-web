@@ -719,9 +719,14 @@ main.home section .g3 {
     grid-area: b3;
     display: flex;
     flex-direction: column;
-    justify-content: left;
+    /* justify-content: left; */
     color: var(--color-background);
     background-color: var(--color-secondary);
+}
+
+main.home section .g3 .text-container img {
+    cursor: pointer;
+    height: var(--s7);
 }
 
 main.home section .g3 .text-container {
@@ -729,7 +734,7 @@ main.home section .g3 .text-container {
     flex-grow: 1;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     font-size: var(--s6);
 }

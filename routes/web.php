@@ -33,6 +33,7 @@ Route::middleware('login')->group(function () {
     Route::middleware('user')->group(function () {
         //dashboard
         Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user-dashboard');
+        Route::post('/update-month', [UserDashboardController::class, 'updateMonth']);
 
         //container
         Route::get('/container', [UserContainerController::class, 'index'])->name('user-container');
