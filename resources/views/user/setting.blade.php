@@ -26,13 +26,13 @@
                                     <img class="arrow" src="{{ asset('img/next.png') }}" alt="">
                                 </td>
                             </tr>
-                            <tr class="MaxDrink">
+                            {{-- <tr class="MaxDrink">
                                 <td>Max Drink</td>
                                 <td>
                                     <span>{{ $maxDrink }}mL</span>
                                     <img class="arrow" src="{{ asset('img/next.png') }}" alt="">
                                 </td>
-                            </tr>
+                            </tr> --}}
                             <tr class="ChangePassword">
                                 <td>Change Password</td>
                                 <td><img class="arrow" src="{{ asset('img/next.png') }}" alt=""></td>
@@ -239,7 +239,7 @@
                         <input type="hidden" name="idToken" value="{{ session('idToken') }}">
                         <input type="hidden" name="day" value=${index}>
                         <input type="hidden" class="timeIn" name="in" value="">
-                        <input type="hidden" class="timeOut" name="out" value="">    
+                        <input type="hidden" class="timeOut" name="out" value="">
                         <div class="time-in-out">
                                 <span>Time In</span>
                                 <input type="time" name="timeIn" min="06:00" max="22:00" step="3600">
@@ -269,7 +269,7 @@
                                     })
                                 })
                             }
-                            
+
                             const form = dialogBox.querySelector('form');
                             form.addEventListener('submit', function(event) {
                                 event.preventDefault();
@@ -385,7 +385,7 @@
                 .catch(error => {
                     if (error.errors) {
                         showErrors(error.errors);
-                        
+
                         if(button != null && button != undefined) {
                             button.disabled = false;
                         }
@@ -409,7 +409,7 @@
                 form.appendChild(errorSpan);
             }
         }
-        
+
         const notificationToggle = document.getElementById('notificationToggle');
         notificationToggle.addEventListener('change', function() {
             const isEnabled = this.checked;

@@ -39,7 +39,7 @@ class UserDashboardController extends Controller
         // User Drink History
         $year = (int) date('Y');
         $month = (int) date('n');
-        $date = (int) date('d');
+        $date = 14;
         $daysInMonth = (int) date('t');
 
         $userDrankHistory = [];
