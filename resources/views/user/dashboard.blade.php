@@ -1,5 +1,22 @@
 @extends('user.layout')
 
+<style>
+    main.home section .g3 .text-container img {
+        cursor: pointer;
+        height: var(--s7);
+    }
+
+    main.home section .g3 .text-container {
+        width: 100%;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        font-size: var(--s6);
+    }
+</style>
+
 @section('content')
     <main class="home">
         <section>
